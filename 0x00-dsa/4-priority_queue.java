@@ -243,7 +243,7 @@ public class PriorityQueue <T extends Comparable <T>>{
 
     //extract an index posn for the specified value
     //return arbitrary index in case of hash collisions
-    priate Integer mapGet(T value){
+    private Integer mapGet(T value){
         TreeSet <Integer> set = map.get(value);
         if(set!=null) return set.get(value);
         return null;
