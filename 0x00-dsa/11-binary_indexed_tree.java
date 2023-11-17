@@ -54,7 +54,7 @@ public class FenwickTree{
     }
 
     // set index i to k; one based
-    public vois set(int i, long k){
+    public void set(int i, long k){
         long value = sum(i, i);
         add(i, k-value);
     }
