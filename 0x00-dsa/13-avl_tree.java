@@ -1,26 +1,26 @@
 public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable <T>{
-    class Node implements TreePrinter.PrintableNode{}
+    class Node implements TreePrinter.PrintableNode{
+        int bf; //balance factor
+        T value; //value/data contained in node
+        int height; //height of node in tree
+        Node left, right;
 
-    int bf; //balance factor
-    T value; //value/data contained in node
-    int height; //height of node in tree
-    Node left, right;
+        public Node(T value){
+            this.value = value;
+        }
 
-    public Node(T value){
-        this.value = value;
-    }
-
-    @Override
-    public Node getLeft(){
-        return left;
-    }
-    @Override
-    public Node getRight(){
-        return right;
-    }
-    @Override
-    public Node getText(){
-        return String.valueOf(value);
+        @Override
+        public Node getLeft(){
+            return left;
+        }
+        @Override
+        public Node getRight(){
+            return right;
+        }
+        @Override
+        public Node getText(){
+            return String.valueOf(value);
+        }
     }
 
     //root of AVL tree
@@ -188,9 +188,89 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable <T>{
             } else if(node.right==null){//only a left st or no subtree
                 return node.right
             } else {
-                if(node.left.height>node.right.height){}
+                if(node.left.height>node.right.height){
+                    T successorValue = findMax(node.left);
+                    node.value = successorValue;
+
+                    node.left = remove(node.left, successorValue);
+                } else {
+                    T successorValue = findMin(node.right);
+                    node.value = successorValue;
+                    node.right = remove(node.right, successorValue);
+                }
             }
         }
+        update(node);
+        return balance(node);
+    }
 
+    //find the leftmost node (the min val)
+    private T findMin(Node node){
+        while(node.left!=null)
+            node = node.left;
+        return node.value;
+    }
+    //find the rightmost value (the max value)
+    private T findMax(Node node){
+        while(node.right!==null)
+            node = node.right;
+        return node.value;
+    }
+
+    //iterator to traverse the tree in order
+    public java.util.Iterator<T> iterator(){
+        final int expectedNodeCount = nodeCount;
+        final java.util.Stack<Node> stack = new java.util.Stack<>();
+        stack.push(root);
+
+        return new java.util.Iterator<T>(){
+            Node trav = root;
+            @Override
+            public boolean hasNext(){
+                if(expectedNodeCount!=nodeCount)
+                    throw new java.util.ConcurrentModificationException();
+                return root != null && !stack.isEmpty(); 
+            }
+            @Override
+            public T next(){
+                if(expectedNodeCount!=nodeCount)
+                    throw new java.util.ConcurrentModificationException();
+                while(trav!=null && trav.left!=null){
+                    stack.push(trav.left);
+                    trav = trav.left;
+                }
+
+                Node node = stack.pop();
+
+                if(node.right!=null){
+                    stack.push(node.right);
+                    trav = node.right;
+                }
+                return node.value;
+            }
+            @Overridepublic void remove(){
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+
+    //make sure all left child nodes are smaller than the  right ones
+    //make sure the converse is true
+    //used only for testing purposes
+    boolean validateBSTInvariant(Node node){
+        if(node==null) return true;
+        T val = node.value;
+        boolean isValid = true;
+        if(node.left!=null) isValid = isValid && node.left.value.compareTo(val) < 0;
+        if(node.right!=null) isValid = isValid && node.right.value.compareTo(val) > 0;
+        return isValid && validateBSTInvariant(node.left) && validateBSTInvariant(node.right);
+    }
+
+    //example avl tree
+    public static void main(String[] args){
+        AVLTreeRecursive<Integer> tree = new AVLTreeRecursive<>();
+        for(int i=0; i<22; i++)
+            tree.insert((int)(Math.random() * 100));
+        tree.display();
     }
 }
