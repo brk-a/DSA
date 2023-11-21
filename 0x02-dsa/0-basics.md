@@ -5,13 +5,13 @@
 also, called vertices)
 * think of a node as a *thing* and an edge as the *relationship*
 between two *things*
-* directed vs undirected graphs
+* *directed* vs *undirected* graphs
     * edges in a directed graph have a *direction*; those in an
     undirected graph do not
 * *neighbour nodes* are nodes that can be accessed from a particular
 node, of course, following the direction rules of the graph
 * an *adjacency list* is a great way to represent a graph in code
-    * example
+    * example 1 (undirected graph)
 
         ```javascript
             {
@@ -45,3 +45,34 @@ of the ultimate parent. repeat recursively
     * output (skip duplicates): a, b, c, d, e
     * cannot get to `f`
 * imlements a queue (FIFO)
+
+### cyclic vs acyclic
+* cyclic graphs have a *cycle*
+    * one can get back to a node by following the edges
+    * example 2 (direction-agnostic)
+
+        ```javascript
+            {
+                a: ["b", "c"],
+                b: ["a", "b"],
+                c: ["a", "b"],
+            }
+        ```
+
+    * does not matter if directed or not; one can get back to a start node
+* acyclic graphs do not have *cycles*
+    * cannot get back to starting point in any way
+    * example 3 (directed graph)
+
+        ```javascript
+            {
+                f: ["g", "i"],
+                g: ["h"],
+                h: [],
+                i: ["g", "k"],
+                j: ["i"],
+                k: [],
+            }
+        ```
+
+    * pick a node. follow the edges. can you end up at the start? *(Hint: no)*

@@ -22,18 +22,38 @@ const depthFirstLoop = (graph, startNode) => {
     return result
 
 }
+
 const depthFirstRecursive = (graph, startNode) => {
+    //implicit base case: empty array
+    // no recursive call is made on an empty array
     const result = []
     result.push(startNode)
     
     for( let neighbour of graph[startNode]){
-        depthFirstRecursive(graph, neighbour)
-        result.push(...neighbour)
+        result.push(...depthFirstRecursive(graph, neighbour))
     }
 
     return result
-
 }
 
-console.info(depthFirstLoop(graph, 'a'))
-console.info(depthFirstRecursive(graph, 'a'))
+/**breadth-firt is possible iteratively, not recursively
+ * because it implements a queue, not a stack
+*/
+const breadthFirstLoop = (graph, startNode) => {
+    const queue = [startNode]
+    const result = []
+
+    while(queue.length>0){
+        const current = queue.shift()
+        result.push(current)
+        for(let neighbour of graph[current]){
+            queue.push(neighbour)
+        }
+    }
+
+    return result
+}
+
+console.info("depth-first, iterative", depthFirstLoop(graph, 'a'))
+console.info("depth-first, recursive", depthFirstRecursive(graph, 'a'))
+console.info("breadth-first, iterative", breadthFirstLoop(graph, "a"))
