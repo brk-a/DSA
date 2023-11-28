@@ -36,7 +36,14 @@ const depthFirstIterative = root => {
     return result.map(obj => (obj.val))
 }
 
-const depthFirstRecursive = root => {}
+const depthFirstRecursive = root => {
+    if(root===null) return []
 
-console.info(depthFirstIterative("depth-first iterative", a))
-console.info(depthFirstRecursive("depth-first recursive", a))
+    const leftValues = depthFirstRecursive(root.left)
+    const rightValues = depthFirstRecursive(root.right)
+
+    return [root.val, ...leftValues, ...rightValues]
+}
+
+console.info("depth-first iterative", depthFirstIterative(a))
+console.info("depth-first recursive", depthFirstRecursive(a))
