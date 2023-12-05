@@ -30,4 +30,17 @@ const traverseList = head => {
     return result
 }
 
+const traverseListRecursive = head => {
+    if (head === null) return
+    if(head.next===null) return head.val
+
+    const result = []
+    result.push(head.val)
+
+    traverseListRecursive(head.next)
+
+    return result
+}
+
 console.info("traverseList", traverseList(a))
+console.info("traverseListRecursive", traverseListRecursive(a))
