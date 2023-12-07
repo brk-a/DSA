@@ -31,14 +31,18 @@ const traverseList = head => {
 }
 
 const traverseListRecursive = head => {
-    let result = []
+    const result = []
 
-    if (head === null) return
+    traverseListRecursiveHelper(head, result)
 
-    const a = traverseListRecursive(head.next)
-    result = [...a]
+    return result
+}
 
-    return result.map(i => i===undefined ? null : i.val)
+const traverseListRecursiveHelper = (head, result) => {
+    if(head===null) return
+
+    result.push(head.val)
+    traverseListRecursiveHelper(head.next, result)
 }
 
 console.info("traverseList", traverseList(a))
