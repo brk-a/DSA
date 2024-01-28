@@ -54,26 +54,28 @@ aka networks
 * the cost to move to self is zero (which make sense because a node is itself)
 * example
 
-    \[
-        \[0, 4, 1, 0\]
-        \[0, 0, 6, 0\]
-        \[4, 1, 0, 2\]
-        \[0, 0, 0, 0\]
-    \]
+    ```text
+    [
+        [0, 4, 1, 0]
+        [0, 0, 6, 0]
+        [4, 1, 0, 2]
+        [0, 0, 0, 0]
+    ]
+    ```
 
 |pros|cons|
 |:---:|:---:|
-|space-efficient when representing dense graphs|requires O(V^2^) space|
-|edge weight look-up is O(1)|iterating over all edges takes O(V^2^) time|
+|space-efficient when representing dense graphs|requires O(V<sup>2</sup>) space|
+|edge weight look-up is O(1)|iterating over all edges takes O(V<sup>2</sup>) time|
 |simplest way to represent a graph||
 
 ##### 2. adjacency list
 * a map of nodes to lists of edges \[and weights\]
 * example
 
-    A &rarr; \[*(B, 4), (C, 1)\]
-    B &rarr; \[*(C, 6)\]
-    C &rarr; \[*(A, 4), (B, 1), (D, 2)\]
+    A &rarr; \[(B, 4), (C, 1)\]
+    B &rarr; \[(C, 6)\]
+    C &rarr; \[(A, 4), (B, 1), (D, 2)\]
     D &rarr; \[\]
 
     * node C can reach
@@ -98,7 +100,7 @@ pros|cons|
 
 |pros|cons|
 |:---:|:---:|
-|space-efficient when representing sparse graphs|ess space-efficient for dense graphs|
+|space-efficient when representing sparse graphs|less space-efficient for dense graphs|
 |iterating over all edges is efficient|edge weight look-up is O(E)|
 |simple way to represent a graph||
 
