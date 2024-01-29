@@ -35,9 +35,9 @@
     <li>- [] sparse</li>
     </ul>
 
-    not directed because different rules for directed and undirected
-    weight does not matter
-    neither sparse or dense because variable input size
+    - not directed because different rules for directed and undirected
+    - weight does not matter
+    - neither sparse or dense because variable input size
 
 * algos to use
     * BFS, DFS or any other  search algo
@@ -53,7 +53,7 @@
     <li>- [] sparse</li>
     </ul>
 
-    neither sparse or dense because variable input size
+    - neither sparse or dense because variable input size
 
 * algos to use
     * Bellman-Ford
@@ -68,8 +68,9 @@
     <li>- [] weighted</li>
     <li>- [] sparse</li>
     </ul>
-    weight does not matter
-    neither sparse or dense because variable input size
+
+    - weight does not matter
+    - neither sparse or dense because variable input size
 
 * algos to use
     * Tarjan's
@@ -83,7 +84,8 @@
     <li>- [x] weighted</li>
     <li>- [] sparse</li>
     </ul>
-    neither sparse or dense because variable input size
+
+    - neither sparse or dense because variable input size
 
 * algos to use
     * Held-Karp
@@ -99,7 +101,8 @@
     <li>- [] weighted</li>
     <li>- [] sparse</li>
     </ul>
-    neither sparse or dense because variable input size
+
+    - neither sparse or dense because variable input size
 
 * algos to use
     * Held-Karp
