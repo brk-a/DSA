@@ -13,8 +13,10 @@
     <ul>
     <li>- [x] directed</li>
     <li>- [x] weighted</li>
-    <li>- [] sparse</li> &rarr; variable input size
+    <li>- [] sparse</li> 
     </ul>
+
+    neither sparse or dense because variable input size
 
 * algos to use
     * BFS &rarr; unweighted graph
@@ -28,10 +30,14 @@
 * given a graph, does there exist a path between node X and Y?
 
     <ul>
-    <li>- [] directed</li> &rarr; different rules for directed and undirected
-    <li>- [] weighted</li> &rarr; does not matter
-    <li>- [] sparse</li> &rarr; variable input size
+    <li>- [] directed</li>
+    <li>- [] weighted</li>
+    <li>- [] sparse</li>
     </ul>
+
+    not directed because different rules for directed and undirected
+    weight does not matter
+    neither sparse or dense because variable input size
 
 * algos to use
     * BFS, DFS or any other  search algo
@@ -44,8 +50,10 @@
     <ul>
     <li>- [x] directed</li>
     <li>- [x] weighted</li>
-    <li>- [] sparse</li> &rarr; variable input size
+    <li>- [] sparse</li>
     </ul>
+
+    neither sparse or dense because variable input size
 
 * algos to use
     * Bellman-Ford
@@ -57,9 +65,11 @@
 
     <ul>
     <li>- [x] directed</li>
-    <li>- [] weighted</li> &rarr; does not matter
-    <li>- [] sparse</li> &rarr; variable input size
+    <li>- [] weighted</li>
+    <li>- [] sparse</li>
     </ul>
+    weight does not matter
+    neither sparse or dense because variable input size
 
 * algos to use
     * Tarjan's
@@ -71,8 +81,25 @@
     <ul>
     <li>- [x] directed</li>
     <li>- [x] weighted</li>
-    <li>- [] sparse</li> &rarr; variable input size
+    <li>- [] sparse</li>
     </ul>
+    neither sparse or dense because variable input size
+
+* algos to use
+    * Held-Karp
+    * branch-and-bound
+    * ...
+
+#### bridges problem
+* given a graph, is there a bridge (cut edge)?
+    * a bridge is any edge in a graph whose removal increases the number of connected components (increases the number of graphs)
+
+    <ul>
+    <li>- [] directed</li>
+    <li>- [] weighted</li>
+    <li>- [] sparse</li>
+    </ul>
+    neither sparse or dense because variable input size
 
 * algos to use
     * Held-Karp
