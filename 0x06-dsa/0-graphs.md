@@ -104,5 +104,12 @@ pros|cons|
 |iterating over all edges is efficient|edge weight look-up is O(E)|
 |simple way to represent a graph||
 
+###  how to approach graph problems
+* ask yourself:
+    1. is the graph directed? (directed/undirected)
+    2. are the edges of the graph weighted? (weighted/unweighted)
+    3. will the graph you encounter be sparse? (sparse/dense)
+    4. should you use an adjacency matrix, adjacency list, edge list or some other structure to represent the graph? (matrix/list/edge list/other)
+
 [def]: https://math.libretexts.org/Bookshelves/PreAlgebra/Prealgebra_1e_(OpenStax)/07%3A_The_Properties_of_Real_Numbers/7.05%3A_Properties_of_Identity_Inverses_and_Zero
 [def2]: https://math.libretexts.org/Bookshelves/PreAlgebra/Prealgebra_1e_(OpenStax)/07%3A_The_Properties_of_Real_Numbers/7.05%3A_Properties_of_Identity_Inverses_and_Zero
