@@ -13,7 +13,7 @@
     <ul>
     <li>- [x] directed</li>
     <li>- [x] weighted</li>
-    <li>- [] sparse</li> 
+    <li>- [] sparse</li>
     </ul>
 
     neither sparse or dense because variable input size
