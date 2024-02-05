@@ -1,6 +1,6 @@
 # depth-first search
 * does as its name suggests: traverses the edges/nodes of a graph depth first
-    * depth first: pick a node, follow one edge and son on until the terminal node. return to the highest-level unexplored node. repeat process w/o visiting already visited nodes 
+    * depth first: pick a node, follow one edge and so on until the terminal node. return to the highest-level unexplored node. repeat process w/o visiting already visited nodes 
 * time complexity is O(V+E) where *V* is the #vertices (nodes) and *E* is #edges
 
 ### how it works
@@ -38,6 +38,13 @@
     * explore neighbours of the node
         * get all the neighbours from the adjacency list
         * call the algo on each (this is the recursion part)
+* utilises a stack to track the nodes
+    * current node is added to stack
+    * tracker pointer points to current node
+    * one child node is added to stack
+    * tracker pointer moves to next item on stack
+    * one of its children is added to stack IFF it is not on the stack
+    * repeat process until all nodes are on the stack
 
 ### use case: connected components
 #### problem
