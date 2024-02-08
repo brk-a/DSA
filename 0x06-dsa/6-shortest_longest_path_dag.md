@@ -27,6 +27,11 @@
             * if no: carry on
         5. set current node to be the next node in the mapping
         6. repeat steps 3 to 5 until all nodes in mapping are covered
+
+            |0|3|6|5|8|7|3|11|11|12|
+            |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+            |A|B|C|D|E|F|G|H|I|J|
+
 ### longest path on DAG
 * on a non-DAG graph, the problem is NP-hard, however, on DAGs the problem can be solved in O(V+E) time
 * idea is simple:
