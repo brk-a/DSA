@@ -146,4 +146,66 @@
                 
     ```
 
+#### drawbacks
+* inefficient for dense graphs because of how it inserts duplicate key-value pairs in the PQ
+    * now, it is more efficient to insert a new k-v pair (O(lon(n)) time) in the PQ than it is to update an existing key's value (O(n) time)
+    * this has a vulnerability: there will be stale (outdated) k-v pairs in the PQ
+    * vulnerability manifests in dense graphs
+### eager djikstra's algo
+* fixes the drawbacks of the lazy dijkstra's algo: O(n) time to update k-v pairs in a PQ
+* how?
+    * glad you asked: by updating the k-v pairs in O(log(n)) time
+    * how?
+        * eeaaa...sy! IPQs (indexed priority queues)
+* WTF is an IPQ?
+    * a PQ that implements reads in O(1) time and writes in O(log(n)) time
+* pseudo-code
+
+    ```text
+        //runs dijkstra's algo and returns the shortest distance between the start and every other node
+        // g -> adjacency list that reps weighted graph
+        // n - #nodes in graph
+        // s -> index of start node (0 <= s < n) 
+        function dijkstra(g, n, s):
+            vis = [false, ..., false] //size n
+            dist = [inf, ..., inf] //size n
+            dist[s] = 0
+            ipq = empty IPQ
+            ipq.insert(s, 0)
+
+            while ipq.size()!=0:
+                index, minValue = ipq.poll()
+                vis[index] = true
+                if dist[index]<minValue:
+                    continue
+                for (edhe: g[index]):
+                    if(vis[edge.to]):
+                        continue
+                    newDist = dist[index] + edge.cost
+                    if newDist<dist[edge.to]:
+                        dist[edge.to] = newDist
+                        if !ipq.contains(edge.to):
+                            ipq.insert(edge.to)
+                        else:
+                            ipq.decreaseKey(edge.to, newDist)
+            return dist
+    ```
+
+### D-ary heap optimisation
+* for dense graphs, there are more updates (ie decreaseKey operations) to k-v pairs than there are dequeue (poll operations)
+* a D-ary heap can optimise operations
+    * a D-ary heap is a heap variant where each node has, at most, D children
+    * the children speed up decreaseKey ops at the expense of costlier removals
+* what is the optimal D-ary heap degree (what is the optimal value of D) to maximise the performance of dijkstra's algo?
+    * TLDR: generally, D = E/V, however, there better be very few, if any, decreaseKey ops
+    * generally, D = E/V is the best degree to use to balance between removals decreaseKey ops
+    * the algo's time complexity will be O(log<sub>E/V</sub>(V)). this is alright for dense graphs that have a lot of decreaseKey ops
+* is there a way to tell if a graph will have many decreaseKey ops?
+    * i do not know
+* **fibonacci heap**
+    * this is the state-of-the-art (Sun, 11 Feb, 2024) optimisation
+    * gives the algo a time complexity of O(E + Vlog(V))
+    * in practice, however, it is difficult to implement and has a large enough constant armotised overhead to make it impractical unless the graph is quite large
+        * big data? AI? quantum comps?
+
 [def]: https://www.oxfordlearnersdictionaries.com/definition/english/efficiency
