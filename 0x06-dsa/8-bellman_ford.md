@@ -6,6 +6,7 @@
     * it can detect negative cycles
     * application: in finance to perform arbitrage between two markets
 * negative cycle &rarr; a cycle whose net cost is less than zero
+    *  negative cycle has occurred if an algo can find a better path beyond the optimal solution
 
 ### bf algo
 
