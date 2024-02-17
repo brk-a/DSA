@@ -68,3 +68,75 @@
     * the new recurrence relation viz:
         * *dp[i][j]* = *m[i][j]* IFF k=0
         * *dp[i][j]* = min(*dp[i][j]*, *dp[i][k]* + *dp[k][j]*) when k!=0
+
+### pseudo-code
+
+    ```code
+        //global/class scope vars
+        n = size of adjacency matrix
+        dp = memo table that contains APSP solution
+        next = matrix used to  reconstruct shortest paths
+
+        function floydWarshall(m):
+            setup(m)
+
+            //execute FW APSP algo
+            for(k:=0; k<n; k++):
+                for(i:=0; i<n; i++):
+                    for(j:=0; j<n; j++):
+                        if(dp[i][k]+dp[k][j]<dp[i][j]):
+                            dp[i][j] = dp[i][k]+dp[k][j]
+                            next[i][j] = next[i][k]
+            
+            //detect -ve cycles
+            propagateNegativeCycles(dp, n)
+
+            //return APSP matrix
+            return dp
+        
+        function setup(m):
+            dp = empty matrix of  size n * n
+
+            //should contain null values by default
+            next = empty integer matrix of size n * n
+
+            //deep copy of  input matrix and set up `next` matrix for path reconstruction
+            for(i:=0; i<n; i++):
+                for(j:=0; j<n; j++):
+                    dp[i][j] = m[i][j]
+                    if(m[i][j]!=+inf):
+                        next[i][j] = j
+
+        function propagateNegativeCycles(dp, n):
+            //execute FW APSP algo again, however, set the distance between teo nodes to 
+            //negative infinity if the it can be improved. every edge, (i, j), marked
+            //with -inf is either part of a negative cycle or reaches into said cycle
+            for(k:=0; k<n; k++):
+                for(i:=0; i<n; i++):
+                    for(j:=0; j<n; j++):
+                        if(dp[i][k]+dp[k][j]<dp[i][j]):
+                            dp[i][j] = -inf
+                            next[i][j] = -1
+
+        function reconstructPath(start, end):
+            //reconstructs the shortest path between nodes `start` and `end`
+            //run the `floydWarshall` solver before calling this method
+            //returns null if path is affected by -ve cycle
+            
+            path = []
+
+            //check if there is a path between start and end node
+            if(dp[start][end]==+inf):
+                return path
+            
+            at := start
+            //reconstruct path from `next` matrix
+            for(; at!=end; at=next[at][end]):
+                if(at==-1):
+                    return
+                path.add(at)
+            
+            if(next[at][end]==-1):
+                path.add(end)
+                return path
+    ```
