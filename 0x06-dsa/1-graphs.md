@@ -95,7 +95,7 @@
 #### bridges problem
 * given a graph, is there a bridge (cut edge)?
     * a bridge is any edge in a graph whose removal increases the number of connected components (increases the number of graphs)
-    * bridges hint at weaknesses , bottlenecks, vulnerabilities etc
+    * bridges hint at weaknesses, bottlenecks, vulnerabilities etc
 
     <ul>
     <li>- [] directed</li>
@@ -111,7 +111,7 @@
 #### articulation points problem
 * given a graph, are there articulation points (cut vertex)?
     * an articulation point is any vertex in a graph whose removal increases the number of connected components (increases the number of graphs)
-    * articulation points hint at weaknesses , bottlenecks, vulnerabilities etc
+    * articulation points hint at weaknesses, bottlenecks, vulnerabilities etc
 
     <ul>
     <li>- [] directed</li>
