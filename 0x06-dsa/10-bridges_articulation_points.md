@@ -56,3 +56,46 @@
     - V more DFSs to find all low-link values
 * we can optimise the algo if we update the low-link values in one pass
 * the optimisation results in O(V+E) time
+### pseudo-code
+
+    ```code
+        id = 0
+        g = adjacency list with undirected edges
+        n = size of graph
+
+        //in these arrays, index i is the node i
+        ids = [0, 0, ..., 0] //size n
+        low = [0, 0, ..., 0] //size n
+        visited = [false, false, ..., false] //size n
+
+        function findBridges():
+            bridges = []
+            //find all bridges in graph across various connected components
+            for(i:=0; i<n; i++):
+                if(!visited[i]):
+                    dfs(i, -1, bridges)
+            return bridges
+        
+        function dfs(at, parent, bridges):
+            //perform DFS to find bridges
+            //at -> current node, parent -> prev node
+            //`bridges` array has an even length always and
+            // indices (2*i, 2*i +1) form a bridge
+            //par example: nodes at indices (0, 1) are a bridge, as are (2, 3) etc
+            visited[at] = true
+            id += 1
+            low[at] = ids[at] = id
+
+            //for each node from node `at` to node `to`
+            for(to: g[at]):
+                if(to==parent):
+                    continue
+                if(!visited[to]):
+                    dfs(to, at, bridges)
+                    low[at] = min(low[at], low[to])
+                    if(ids[at]<low[to]):
+                        bridges.add(at)
+                        bridges.add(to)
+                else:
+                    low[at] = min(low[at], ids[to])  
+    ```
