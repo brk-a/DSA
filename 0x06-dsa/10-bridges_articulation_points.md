@@ -99,3 +99,62 @@
                 else:
                     low[at] = min(low[at], ids[to])  
     ```
+### articulation points
+* on a connected components with three or more vertices, if an edge, *(u, v)*, is a bridge, then either node *u* or *v* is an articulation point
+    *  this condition is not sufficient for all articulation points
+    * consider the following graph
+
+        ```text
+            [
+                (0, 1),
+                (0, 2),
+                (1, 2),
+                (2, 3),
+                (2, 4),
+                (3, 4),
+            ]
+        ```
+
+    * node 2 is an articulation point even though there are no bridges
+*  recall, when finding a bridge, we find a cycle and set the low-link value as the lesser of `low[at]` and `ids[to]` during the callback
+    * notice that, at the end of the stack frame, all the lo-link values are equal to the id of the parent node (one which started the cycle)
+    * that, right there, is an insight: a cycle will be a node whose id is equal to its low-link value after the stack frame has cleared
+    * the start of that cycle is the articulation point
+* in other words
+
+    ```text
+        if(id(e.from)==lowlink(e.to)) {
+            //we have a cycle
+        }
+
+        //e must be an articulation point
+    ```
+
+* a cycle is an indication of a strongly connected component. if one removes the start node, assuming it was connected to another component, then there will be at least two components. the start node, by definition, is an articulation point
+    * EXCEPTION: start node has zero or 1 outgoing directed edges. either the node is a singleton/stand-alone (zero case) or part of(trapped in) the cycle (1 case)
+    * the `id(e.from)==lowlink(e.to)` is met but the node has either zero or 1 outgoing edges
+    * example
+
+        ```text
+            [
+                (0, 1),
+                (1, 2),
+                (2, 3),
+                (3, 0),
+            ]
+        ```
+
+    * say node zero is the start node. it is not an articulation point because it is part of the cycle not the parent (matter of fact, there is no parent here)
+    * say we added another node, 4, from zero viz:
+
+        ```text
+            [
+                (0, 1),
+                (0, 4),
+                (1, 2),
+                (2, 3),
+                (3, 0),
+            ]
+        ```
+
+    * node zero becomes an articulation point
