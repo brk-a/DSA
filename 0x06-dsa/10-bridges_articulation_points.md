@@ -56,7 +56,7 @@
     - V more DFSs to find all low-link values
 * we can optimise the algo if we update the low-link values in one pass
 * the optimisation results in O(V+E) time
-### pseudo-code
+### pseudo-code: finding bridges
 
     ```code
         id = 0
@@ -99,6 +99,7 @@
                 else:
                     low[at] = min(low[at], ids[to])  
     ```
+
 ### articulation points
 * on a connected components with three or more vertices, if an edge, *(u, v)*, is a bridge, then either node *u* or *v* is an articulation point
     *  this condition is not sufficient for all articulation points
@@ -158,3 +159,53 @@
         ```
 
     * node zero becomes an articulation point
+### pseudo-code: finding articulation points
+
+    ```code
+        id = 0
+        g = adjacency list with undirected edges
+        n = size of graph
+        outEdgeCount = 0
+
+        //in these arrays, index i is the node i
+        ids = [0, 0, ..., 0] //size n
+        low = [0, 0, ..., 0] //size n
+        visited = [false, false, ..., false] //size n
+        isArt = [false, ..., false] //size n
+
+        function findBridges():
+            bridges = []
+            //find all bridges in graph across various connected components
+            for(i:=0; i<n; i++):
+                if(!visited[i]):
+                    outEdgeCount = 0 //reset edge count
+                    dfs(i, i, -1)
+                    isArt[i] = (outEdgeCount > 1)
+            return isArt
+        
+        function dfs(root, at, parent):
+            //perform DFS to find bridges
+            //at -> current node, parent -> prev node
+            if(parent==root):
+                return outEdgeCount++
+            
+            visited[at] = true
+            id += 1
+            low[at] = ids[at] = id
+
+            //for each node from node `at` to node `to`
+            for(to: g[at]):
+                if(to==parent):
+                    continue
+                if(!visited[to]):
+                    dfs(root, to, at)
+                    low[at] = min(low[at], low[to])
+                    //articulation point found via bridge
+                    if(ids[at]<low[to]):
+                        isArt[at] = true
+                    //articulation point found via cycle
+                    if(ids[at]==low[to]):
+                        isArt[at] =true
+                else:
+                    low[at] = min(low[at], ids[to])  
+    ```
