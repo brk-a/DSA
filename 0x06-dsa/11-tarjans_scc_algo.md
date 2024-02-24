@@ -15,8 +15,58 @@
             2. node *v* must be on the stack
 ### complexity
 * instead of updating the low-link values *ex post facto* (in the call stack when the DFS callbacks return), said values will be updated *on the fly* (when the node is visited), therefore, time complexity will be O(V+E)
+### overview of algo
+* mark each node as unvisited
+* start DFS
+* upon visiting a node:
+    - assign it an id and a low-link value equal to the id
+    - mark node as visited
+    - add node to stack invariant
+* on DFS callback, if the previous node is on the stack, set the current node's low-link val to the last(parent) node's low-link val
+    - this allows low-link vals to propagate throughout cycles
+* once all neighbours are visited, if the current node started a connected component (its id = its low-link value), pop all the nodes in the connected component off the stack except the current one
 ### pseudo-code
 
     ```
-        
+        UNVISITED = -1
+        n =  #nodes in graph
+        g = adjacency list with directed edges
+        id = 0 //used to give each node an id
+        scCount = 0 //used to count #SCCs found
+
+        //index `i` represents node i
+        ids = [0, ..., 0] //size n
+        low = [0, ..., 0] //size n
+        onStack = [false, ..., false] //size n
+        stack = an empty stack
+
+        function findSccs():
+            for(i=0; i<n; i++):
+                id[i] = UNVISITED
+            for(i=0; i<n; i++):
+                if(ids[i]==UNVISITED):
+                    dfs(i)
+            return low
+
+        function dfs(at):
+            stack.push(at)
+            onStack[at] = true
+            ids[at] = low[at] = id++
+
+            //visit all neighbours
+            for(to: g[at]):
+                if(ids[to]==UNVISITED):
+                    dfs(to)
+                if(onStack[to]):
+                    low[at] = min(low[at], low[to])
+            
+            //after visiting all the neighbours' `at`, if we are at the start of
+            //a SCC, empty the stack invariant until the node that starts the SCC
+            if(ids[at]==low[at]):
+                for(node=stack.pop(; ;node=stack.pop())):
+                    onStack[node] = false
+                    low[node] = ids[at]
+                    if(node==at):
+                        break
+                sccCount++
     ```
