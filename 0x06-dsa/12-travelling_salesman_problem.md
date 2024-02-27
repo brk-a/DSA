@@ -35,6 +35,25 @@
 
     - these form the DP state
     - there are N possible nodes that could have been visited last and 2<sup>N</sup> possible sub-sets of visited nodes, therefore, the space needed to store the answer to each sub-problem is bounded by O(N2<sup>N</sup>)
-* 
+* visited nnodes as a bit field
+    * the best way to represent the set of visited nodes is to use a single 32-bit integer; it is compact, quick and is easy to cache in a memo table
+    * flip the *i*th bit of the *i*th node node to 1 when said node is visited
+        - say there are four nodes in a graph. starting at node zero, we move to node 1
+        - the binary representation will be viz: 0011<sub>2</sub> = 3, assuming the least significant bit is on the right
+        - same graph; visit node zero and 3
+        - the binary representation will be viz: 1001<sub>2</sub> = 9, assuming the least significant bit is on the right
+        - same graph; visit node zero and 2
+        - the binary representation will be viz: 0101<sub>2</sub> = 5, assuming the least significant bit is on the right
+* what happens when 3 <- n <= N?
+    * eaa...sy! take the solved sub-paths from n-1 and add another edge extending to a node which has not already been visited from the last visited node (which has been saved)
+        - par example: say there are four nodes in a graph. starting at node zero, we move to node 3
+        - the binary representation will be viz: 1001<sub>2</sub> = 9, assuming the least significant bit is on the right
+        - notice that, from node 3's perspective, nodes 1 and 2 are unvisited. this means two states, 1011<sub>2</sub>=11 and 1101<sub>2</sub>=13, will be created and added to the memo table
+        - for n nodes that have two unvisted nodes, this will be 2<sup>n</sup> entries in the memo table
+        - keep doing this until allnodes have been visited
+* completing the TSP tour
+    * loop over to the end state in the memo table for every possible end position
+        - end state is where the binary representation is all 1s, eg, 1111
+    * minimise the look-up value plus the cost of going back to S, the starting point
 
 [def]: https://www.britannica.com/science/NP-complete-problem
