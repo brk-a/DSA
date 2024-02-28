@@ -55,5 +55,114 @@
     * loop over to the end state in the memo table for every possible end position
         - end state is where the binary representation is all 1s, eg, 1111
     * minimise the look-up value plus the cost of going back to S, the starting point
+### pseudo-code
+
+    ```text
+        //finds the minimum TSP tour cost
+        // m -> 2D adjacency matrix representing a graph
+        // S -> start node (0<= S < N)
+        function tsp(m, S):
+            N = m.size
+
+            //initialise memo table
+            //fill it with null vals or +inf
+            memo = 2D table of size N by 2^N
+            setup(m, memo, S, N)
+            solve(m, memo, S, N)
+            minCost = findMinCost(m, memo, S, N)
+            tour = findOptimalTour(m, memo, S, N)
+
+            return (minCost, tour)
+
+            function setup():
+                //initialises memo table by caching
+                //the optimal solution from the start node to every other node
+                for(i:=0; i<N; i++):
+                    if(i==S):
+                        continue
+                    //store the optimal value from node S to each node i
+                    //(this is given as input in the adjacency matrix, m)
+                    memo[i[1<<S | 1<<i]] = m[S][i]
+
+            function solve():
+                for(r:=3; r<=N; r++):
+                    //combinations function generates all bit sets of
+                    //size N with r bits set to 1
+                    //eg. combination (3, 4) base 10 = {0111, 1011, 1101, 1110} base 2
+                    for subset in combinations(r, N):
+                        if(notInS, subset):
+                            continue
+                        for(next:=0; next<N; next++):
+                            if(next==S || notIn(next, subset)):
+                                continue
+                            //the subset state w/o the next node
+                            state = subset ^ (1<<next)
+                            minDist = +inf
+                            //`e` is short for `end node`
+                            for(e=0; e<N; e++):
+                                if(e==S || e==next || notIn(e, subset)):
+                                    continue
+                                newDistance = memo[e][state] + m[e][next]
+                                if(newDistance<minDist):
+                                    minDist = newDistance
+                            memo[next][subset] = minDist
+
+            function findOptimalCost(m,memo, S, N):
+                //the end state is the bit mask with N
+                //bits set to 1 (think 2^N - 1 )
+                END_STATE = (1<<N) - 1
+
+                minTourCost = +inf
+                for(e=0; e<N; e++):
+                    if(e==S):
+                        continue
+                    tourCost = memo[e][END_STATE] + m[e][S]
+                    if(tourCost<minTourCost):
+                        minTourCost =  tourCost
+                return minTourCost
+
+            function findOptimalTour(m, memo, S, N):
+                lastIndex = S
+                state = (1<<N) - 1 //end state
+                tour = array of size N+1
+
+                for(i:=N-1; i>=1; i--):
+                    index = -1
+                    for(j=0; j<N; j++):
+                        if(j==S || notIn(j, state)):
+                            continue
+                        prevDist = memo[index][state] + m[index][lastIndex]
+                        newDist = memo[j][state] + m[j][lastIndex]
+                        if(newDist<prevDist):
+                            index = j
+                    tour[i] = index
+                    state = state ^ (1<<index)
+                    lastIndex = index
+                tour[0] = tour[N] = S
+                return tour
+
+            function combinations(r, n):
+                //generates all bit sets of size n with r bits set to 1
+                subsets = []
+                combinations(0, 0, r, n, subsets)
+                return subsets
+
+            function combinations(set, at, r, n, subsets):
+                //recursive method to generate bit sets
+                if(r=0):
+                    subsets.add(set)
+                else:
+                    for(i=at; i<n; i++):
+                        //flip the ith bit
+                        set = set | (1<<i)
+                        combinations(set, i+1, r-1, n, subsets)
+
+                        //backtrack and flip off ith bit
+                        set = set & ~(1<<i)
+
+            function notIn(i, subset):
+                //returns `true` when ith bit in `subset` is not set
+                return ((1<<i) & subset) = 0
+    ```
 
 [def]: https://www.britannica.com/science/NP-complete-problem
