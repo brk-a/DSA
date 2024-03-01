@@ -14,7 +14,7 @@ public class BridgeAdjacencyList {
 
     public BridgeAdjacencyList(List<List<Integer>> graph, int n) {
         if(graph==null || n<=0 || graph.size()!=n)
-            throw new IllegalArgumentWException();
+            throw new IllegalArgumentException();
         this.graph = graph;
         this.n = n;
     }
