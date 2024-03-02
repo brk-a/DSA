@@ -146,5 +146,23 @@ public class TspDynamicProgrammingIterative {
     public static void main(String[] args){
         //create adjacency matrix
         int n = 6;
+        double[][] distanceMatrix = new double[n][n];
+        for (double[] row : distanceMatrix) java.util.Arrays.fill(row, 10000);
+        distanceMatrix[5][0] = 10;
+        distanceMatrix[1][5] = 12;
+        distanceMatrix[4][1] = 2;
+        distanceMatrix[2][4] = 4;
+        distanceMatrix[3][2] = 6;
+        distanceMatrix[0][3] = 8;
+
+        int startNode = 0;
+        TspDynamicProgrammingIterative solver =
+            new TspDynamicProgrammingIterative(startNode, distanceMatrix);
+
+        // Prints: [0, 3, 2, 4, 1, 5, 0]
+        System.out.println("Tour: " + solver.getTour());
+
+        // Prints: 42.0
+        System.out.println("Tour cost: " + solver.getTourCost());
     }
 }
