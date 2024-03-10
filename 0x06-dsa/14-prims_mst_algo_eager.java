@@ -1,7 +1,7 @@
 package com.brk_a.algorithms.graphtheory;
 
 import static java.lang.Math.*;
-import java.util;
+import java.util.*;
 
 public class EagerPrimsAdjacencyList {
     static class Edge implements Comparable<Edge> {
@@ -278,4 +278,295 @@ public class EagerPrimsAdjacencyList {
         }
     }
 
+    private static void example6() {
+        int n = 7;
+        List<List<Edge>> g = createEmptyGraph(n);
+
+        addDirectedEdge(g, 0, 2, 0);
+        addDirectedEdge(g, 0, 5, 7);
+        addDirectedEdge(g, 0, 3, 5);
+        addDirectedEdge(g, 0, 1, 9);
+
+        addDirectedEdge(g, 2, 0, 0);
+        addDirectedEdge(g, 2, 5, 6);
+
+        addDirectedEdge(g, 3, 0, 5);
+        addDirectedEdge(g, 3, 1, -2);
+        addDirectedEdge(g, 3, 6, 3);
+        addDirectedEdge(g, 3, 5, 2);
+
+        addDirectedEdge(g, 1, 0, 9);
+        addDirectedEdge(g, 1, 3, -2);
+        addDirectedEdge(g, 1, 6, 4);
+        addDirectedEdge(g, 1, 4, 3);
+
+        addDirectedEdge(g, 5, 2, 6);
+        addDirectedEdge(g, 5, 0, 7);
+        addDirectedEdge(g, 5, 3, 2);
+        addDirectedEdge(g, 5, 6, 1);
+
+        addDirectedEdge(g, 6, 5, 1);
+        addDirectedEdge(g, 6, 3, 3);
+        addDirectedEdge(g, 6, 1, 4);
+        addDirectedEdge(g, 6, 4, 6);
+
+        addDirectedEdge(g, 4, 1, 3);
+        addDirectedEdge(g, 4, 6, 6);
+
+        EagerPrimsAdjacencyList solver = new EagerPrimsAdjacencyList(g);
+        Long cost = solver.getMstCost();
+
+        if(cost==null) {
+            System.out.println("No MST exists");
+        } else {
+            System.out.println("MST cost: " + cost);
+            for(Edge e: solver.getMst()) {
+                System.out.println(String.format("from: %d to %d cost: %d", e.from, e.to, e.cost));
+            }
+        }
+    }
+
+    static Random random = new Random()
+
+    private static void lazyEagerAnalysis() {
+        int n = 500;
+        List<List<EagerPrimsAdjacencyList.Edge>> g1 = EagerPrimsAdjacencyList.createEmptyGraph(n);
+        List<List<LazyPrimsAdjacencyList.Edge>> g2 = LazyPrimsAdjacencyList.createEmptyGraph(n);
+
+        for(int i=0; i<n; i++){
+            for(int j=i+1; j<n; j++) {
+                int r = random.nextInt() % 10;
+                EagerPrimsAdjacencyList.addUndirectedEdge(g1, i, j, r);
+                LazyPrimsAdjacencyList.addUndirectedEdge(g2, i, j, r);
+            }
+        }
+
+        EagerPrimsAdjacencyList eagerSolver = new EagerPrimsAdjacencyList(g1);
+        LazyPrimsAdjacencyList lazySolver = new LazyPrimsAdjacencyList(g2);
+
+        long startTime = System.nanoTime();
+        long eagerCost = eagerSolver.getMstCost();
+        long endTime = System.nanoTime();
+        System.out.println("Eager algo: " + (endTime - startTime));
+
+        long startTime = System.nanoTime();
+        long lazyCost = lazySolver.getMstCost();
+        long endTime = System.nanoTime();
+        System.out.println("Lazy algo: " + (endTime - startTime));
+    }
+
+
+
+    /** supporting IPQ */
+    private static class MinIndexedDHeap<T extends Comparable<T>>{
+        //current #elems in heap
+        private int sz;
+        //max #elems in heap
+        private final int N;
+        //degree of each node in heap
+        private final int D;
+        //lookup arrays to track the child-parent indces of each node
+        private final int[] child, parent;
+        //pos'n map (pm) maps key indices (ki) to where the posn of that key is
+        //rep'd in the PQ in the domain [0, sz)
+        public final int[] pm;
+        //inverse map (im) stores the indices of the keys in the range [0, sz) which
+        //make up the PQ. `im` is the inverse of `pm` & vv: pm[im[i]] = im[pm[i]] = i
+        public final int[] im;
+        //values assoc'd w. keys. indexed by key indices, `ki`
+        public final Object[] values;
+        //initialises a D-ary heap with a max cap of `maxSize`
+        public MinIndexedDHeap(int degree, int maxSize){
+            if(maxSize<=0) throw new IllegalArgumentException("maxSize cannot be less than 1");
+
+            D = max(2, degree);
+            N = max(D+1, maxSize);
+
+            im = new int(N);
+            pm  new int[N];
+            child = new Int[N];
+            parent = new Int[N];
+            values = new Object[N];
+
+            for(inti=0; i<N; i++){
+                parent[i] = (i-1) / D;
+                child[i] = i*D + 1;
+                pm[i] = im[i] = -1;
+            }
+        }
+
+        public int size(){
+            return sz;
+        }
+
+        public boolean isEmpty(){
+            return sz == 0;
+        }
+
+        public boolean contains(int ki){
+            keyInBoundsOrThrow(ki);
+            return pm[ki] != -1;
+        }
+
+        public int peekMinKeyIndex(){
+            isNotEmptyOrThrow();
+            return im[0];
+        }
+
+        public int pollMinKeyIndex(){
+            int minKi = peekMinKeyIndex();
+            delete(minKi);
+            return minKi;
+        }
+
+        @SuppressWarnings("unchecked")
+        public T peekMinValue(){
+            isNotEmptyOrThrow();
+            return (T) values[im[0]];
+        }
+
+        public T pollMinValue(){
+            T minValue = peekMinValue();
+            delete(peekMinKeyIndex());
+            return minValue;
+        }
+
+        public void insert(int ki, T value){
+            if(contains(ki)) throw new IllegalArgumentException("index already exists. received: " + ki);
+            valueNotNullOrThrow(value);
+            pm[ki] = sz;
+            im[sz] = ki;
+            values[ki] = value;
+            swim(sz++);
+        }
+
+        @SuppressWarnings("unchecked")
+        public T valueOf(int ki) {
+            keyExistsOrThrow(ki);
+            return (T) values[ki];
+        }
+
+        @SuppressWarnings("unchecked")
+        public T delete(int ki){
+            keyExistsOrThrow(ki);
+            final int i = pm[ki];
+            swap(i, sz--);
+            sink(i);
+            swim(i);
+            T value = (T) values[ki];
+            values[ki] = null;
+            pm[ki] = -1;
+            im[sz] = -1;
+        }
+
+        @SuppressWarnings("unchecked")
+        public T update(int ki, T value){
+            keyExistsAndValueNotNullOrThrow(ki, value);
+            final int i = pm[ki];
+            T oldValue = (T) values[ki];
+            values[ki] = value;
+            sink(i);
+            swim(i);
+            return oldValue;
+        }
+
+        //strictly decreases the val assoc'd w. `ki` to `value`
+        public void decrease(int ki, T value){
+            keyExistsAndValueNotNullOrThrow(ki, value);
+            if(less(value, values[ki])){
+                values[ki] = value;
+                swim(pm[ki]);
+            }
+        }
+
+        //strictly increases the val assoc'd w. `ki` to `value`
+        public void increase(int ki, T value){
+            keyExistsAndValueNotNullOrThrow(ki, value);
+            if(less(value, values[ki])){
+                values[ki] = value;
+                sink(pm[ki]);
+            }
+        }
+
+        /**helper functions */
+        private void sink(int i){
+            for(int j=minChild(i); j!=-1;){
+                swap(i, j);
+                i = j;
+                j = minChild(i);
+            }
+        }
+
+        private void swim(int i){
+            while(less(i, parent[i])){
+                swap(i, parent[i]);
+                i = parent[i];
+            }
+        }
+
+        //from parent node at index i, find the min child below it
+        private int minChild(int i) {
+            int index = -1, from = child[i], to = min(sz, from+D);
+            for(int j=from; j<to; j++) if(less(j, i)) index = i = j;
+            return index;
+        }
+
+        private void swap(int i, int j){
+            pm[im[j]] = i;
+            pm[im[i]] = j;
+            int tmp = im[j];
+            im[i] = im[j];
+            im[j] = tmp;
+        }
+
+        //tests whether the val of node `i` < `j`
+        @SuppressWarnings("unchecked")
+        private boolean less(int i, int j){
+            return ((Comparable<? super T>) values[im[i]]).compareTo((T) values[im[j]]) < 0;
+        }
+
+        @Override
+        public String toString() {
+            List<Integer> lst = new ArrayList<>(sz);
+            for(int i=0; i<sz; i++) lst.add(im[i]);
+            return lst.toString();
+        }
+
+        /**make the code readable */
+        private void isNotEmptyOrThrow(){
+            if(isEmpty()) throw NoSuchElementException("PQ underflow");
+        }
+
+        private void keyExistsAndValueNotNullOrThrow(int ki, Object value){
+            keyExistsOrThrow(ki);
+            valueNotNullOrThrow(value);
+        }
+
+        private void keyExistsOrThrow(int ki){
+            if(!contains(ki)) throw NoSuchElementException("index does not exist; received: " + ki);
+        }
+
+        private void valueNotNullOrThrow(Object value) {
+            if(value==null) throw IllegalArgumentException("value cannot be null");
+        }
+
+        private void keyInBoundsOrThrow(int ki){
+            if(ki<0 || ki>=N)
+                throw IllegalArgumentException("index is out of bounds; received: " + ki);
+        }
+
+        /**test fns */
+        //checks if heap is a min heap; validates the heap invariant
+        public boolean isMinHeap(){
+            return isMinHeap(0);
+        }
+        private boolean isMinHeap(int i){
+            int from = child[i], to = min(sz, from+D);
+            for(int j=from; j<to; j++){
+                if(!less(i, j)) return false;
+                if(!isMinHeap(j)) return false;
+            }
+            return true;
+        }
+    }
 }
