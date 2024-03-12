@@ -11,6 +11,10 @@
     - for residual edges, this means **decreasing** the flow by the bottleneck value
 * residual edges &rarr; a path of edges in a residual graph that travel in the reverse order of the residual path
     - residual edges exist to *undo* bad/sub-optimal augmenting paths (those that do not lead to max flow)
+* residual graph &rarr; the graph which contains residual edges. aka flow graph
+* remaining capacity &rarr; the difference between an edge's capacity and flow for an edge, *e*, in a graph, *g*
+    ${\displaystyle capacity_{remaining} = e_{capacity} - e_{flow} \forall e \in g}$
+* :bulb: the sum of botlenecks found in each augmenting path is the max flow
 ### how it works
 * Let *G( V , E )*  be a graph
 * for each edge from *u* to *v*, let *c( u , v )* be the capacity and *f( u , v )*  be the flow
@@ -37,3 +41,11 @@
 
 * "←" denotes assignment. for instance, "largest ← item" means that the value of *largest* changes to the value of *item*
 * "return" terminates the algo and outputs the value that follows
+### complexity
+* assuming one uses a DFS to find and augmenting path, the algo runs at O(fE) time where *f* is max flow and *E* is #edges of graph
+* there are faster algos and heuristics
+    - edmonds-karp algo uses BFS and runs at O(E<sup>2</sup>V)
+    - capacity scaling adds a heuristic on top of ford-fulkerson to pick larger paths first; runs at O(E<sup>2</sup>log(U))
+    - dinic's algo uses a combination of DFS and BFS to find augmenting paths; runs at O(V<sup>2</sup>E)
+    - push-relabel algo uses a concept of maintaining a *pre-flow* instead of finding augmenting paths to achieve a max-flow solution; O(V<sup>2</sup>E) or O(V<sup>2</sup>E<sup>1/2</sup>) variant
+    - **important**: the time complexities for flow algos are quite pessimistic; said algos operate quicker in practice. this makes it hard to compare the performance of flow algos solely based on complexity
