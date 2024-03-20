@@ -12,7 +12,7 @@
 * output any valid answer if there are multiple ones; output *impossible* if there is no valid answer
 ### example
 
-    ```
+    ```text
         1 ◻ 1 = ◻ 
         -1 ◻ 6 = ◻ 
         4 ◻ -5 = ◻ 
@@ -25,11 +25,11 @@
 * is there a way to reduce this problem to a bipartite graph?
 * how does one detect *impossible* sets of pairs?
 * how will multiple, repeated pairs be handled?
-> 💡 there will be, at most, three unique solutions for every pair
-> example: -1 ◻ 6 = ◻
->> -1 + 6 = 5
->> -1 - 6 = -7
->> -1 * 6 = -6
+> 💡 there will be, at most, three unique solutions for every pair<br /> 
+> example: -1 ◻ 6 = ◻<br />  
+>> -1 + 6 = 5<br /> 
+>> -1 - 6 = -7<br /> 
+>> -1 * 6 = -6<br /> 
 > this makes it easy to formulate the flow graph as a bipartite graph: input pairs on one side and solutions on the other
 ### method
 1. have a bipartite graph that has *(a, b)* pairs on one side and possible answers on the other
@@ -49,7 +49,7 @@
 * using the example above this is the network flow diagram:
 
     ```mermaid
-    graph LR;
+    graph LR
         ((s))--0/1-->((1, 1));
         ((s))--0/1-->((-1, 6));
         ((s))--0/1-->((4, -5));
@@ -82,7 +82,7 @@
 * edge case: *(a, b)* = (0, 0): there will be one, and only one valid answer: zero, therefore, there will be one, and only one edge to that answer
 
     ```mermaid
-    graph LR;
+    graph LR
         ((s))-->((0, 0));
         ((0, 0))-->((0));
         ((0))-->((t));
@@ -91,7 +91,7 @@
 * edge case: *(a, b)* = (2, 2): there will be two, and only two valid answers: zero and 4, therefore, there will be two, and only two edges
 
     ```mermaid
-    graph LR;
+    graph LR
         ((s))-->((2, 2));
         ((2, 2))-->((0));
         ((2, 2))-->((4));
