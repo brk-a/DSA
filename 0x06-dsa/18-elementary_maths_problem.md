@@ -49,7 +49,7 @@
 * using the example above this is the network flow diagram:
 
     ```mermaid
-    graph LR
+    graph LR;
         ((s))--0/1-->((1, 1));
         ((s))--0/1-->((-1, 6));
         ((s))--0/1-->((4, -5));
@@ -82,7 +82,7 @@
 * edge case: *(a, b)* = (0, 0): there will be one, and only one valid answer: zero, therefore, there will be one, and only one edge to that answer
 
     ```mermaid
-    graph LR
+    graph LR;
         ((s))-->((0, 0));
         ((0, 0))-->((0));
         ((0))-->((t));
@@ -91,7 +91,7 @@
 * edge case: *(a, b)* = (2, 2): there will be two, and only two valid answers: zero and 4, therefore, there will be two, and only two edges
 
     ```mermaid
-    graph LR
+    graph LR;
         ((s))-->((2, 2));
         ((2, 2))-->((0));
         ((2, 2))-->((4));
