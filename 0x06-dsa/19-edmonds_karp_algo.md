@@ -1,4 +1,4 @@
-# edmonds-karp algorith
+# edmonds-karp algorithm
 * from a network flow perspective
 * is a max-flow algo that repeatedly finds the shortest augmenting paths from the source, *s*, to the sink, *t* in terms of the #edges used each iteration
     - instead of repeatedly finding augmenting paths from *s* to *t* in the flow graph and augmenting the flow until no more paths exist as in the ford-fulkerson algo
