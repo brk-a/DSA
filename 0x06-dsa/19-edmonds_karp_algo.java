@@ -64,10 +64,11 @@ public class EdmondsKArpAdjacencyList extends NetworkFlowSolverBase {
     /**example */
     private static void main(String[] args) {
         example1();
+        example2();
     }
 
     private static void example1(){
-        int n = 6;
+        int n = 6; // #nodes, including s and t
         int s = n - 1;
         int t = n - 2;
 
@@ -90,6 +91,53 @@ public class EdmondsKArpAdjacencyList extends NetworkFlowSolverBase {
         solver.addEdge(3, 2, 6);
 
         System.out.println(solver.getMaxFlow()); //19
+
+        //display all edges of residual graph
+        List<Edge>[] resultGraph = solver.getGraph();
+        for(List<Edge> edges: resultGraph)
+            for(Edge e: edges)
+                System.out.println(e.toString(s, t));
+    }
+
+    private static void example2(){
+        int n = 11; // #nodes, including s and t
+        int s = n - 1;
+        int t = n - 2;
+
+        EdmondsKArpAdjacencyList solver;
+        solver = new EdmondsKArpAdjacencyList(n, s, t);
+
+        //source edges
+        solver.addEdge(s, 0, 5);
+        solver.addEdge(s, 1, 10);
+        solver.addEdge(s, 2, 5);
+
+        //sink edges
+        solver.addEdge(6, t, 5);
+        solver.addEdge(7, t, 15);
+        solver.addEdge(8, t, 10);
+
+        //middle edges
+        solver.addEdge(0, 3, 10);
+        solver.addEdge(1, 0, 15);
+        solver.addEdge(1, 4, 20);
+        solver.addEdge(2, 5, 10);
+        solver.addEdge(3, 4, 25);
+        solver.addEdge(3, 6, 10);
+        solver.addEdge(4, 2, 5);
+        solver.addEdge(4, 7, 30);
+        solver.addEdge(5, 7, 5);
+        solver.addEdge(5, 8, 10);
+        solver.addEdge(7, 3, 15);
+        solver.addEdge(7, 8, 5);
+
+        System.out.println(solver.getMaxFlow());
+
+        //display all edges of residual graph
+        List<Edge>[] resultGraph = solver.getGraph();
+        for(List<Edge> edges: resultGraph)
+            for(Edge e: edges)
+                System.out.println(e.toString(s, t));
     }
 
     /**network flow solver code */
