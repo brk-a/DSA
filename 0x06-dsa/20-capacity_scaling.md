@@ -42,5 +42,5 @@
 8. calculate the max flow
     - max flow is the sum of all *bottleneck* values found during each iteration
     - two ways to find max flow
-        - $flow_{max} = \displaystyle\sum_{i}val_{bottleneck}_i$ where *i* is the i<sup>th</sup> iteration
+        - $flow_{max} = \displaystyle\sum_{i}val_{bottleneck_{i}}$ where *i* is the i<sup>th</sup> iteration
         - $flow_{max} = \displaystyle\sum_{i}flow_i$ where *i* is an edge that goes directly to the sink node, *t*
