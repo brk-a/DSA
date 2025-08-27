@@ -21,8 +21,8 @@ def locate_card_binary(cards: list, query: int) -> int:
     if len(cards) == 0:
         return -1
     
-    low, high= 0, len(cards) - 1
-    while low<=high:
+    low, high = 0, len(cards) - 1
+    while low <= high:
         mid: int = low + (high - low) // 2
         if cards[mid] == query:
             return mid
