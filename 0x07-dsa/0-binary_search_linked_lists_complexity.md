@@ -58,7 +58,20 @@
 [0-binary_search_linked_lists_complexity.py][def]
 
 ## discussion
-* binary search is an efficient search algorithm for sorted arrays or lists, reducing the search space by half with each card turned over
+* say B can only turn one card per second and that there are N cards where N &ge; 0 and  that the number of interest is at the rightmost position (recall: B moves L-R; this is the worst-case scenario) 
+    - using the **first method**, B will take N seconds to achieve the objective
+    - this is not efficient from a time perspective: what happens when N = 1 lakh crore!?
+    - this is efficient from a space perspective: B only has to track the position of the card being checked against `query`
+* say that the worst-case scenario above holds
+    - using the **second method**, the number of cards B has to choose from halves with each unsuccessful turn: N, N/2, N/4, N/8 ... N/2<sup>N</sup> (the sum of which is 2N, by the way)
+    - B takes log<sub>2</sub>(N) seconds to achieve the goal in the worst-case scenario
+    - B only has to track the position of the card being checked against `query`
+* the **first method** has a time complexity of *O(N)* and space complexity of *O(1)* in big O notation terms
+    - time complexity is the time taken to achieve the objective
+    - space complexity is, in this case, the amount of memory space required to hold the variables
+* the **second method** has a time complexity of *O(log N)* and space complexity of *O(1)*
+    - the base of the logarithm is irrelevant; all that matters is that it takes logarithmic time and space
+* binary search is an efficient search algorithm for sorted arrays or lists; it reduces the search space by half with each card turned over
 * the best method is to use a binary search algorithm given that the cards are arranged in a sorted (decreasing) order
 * since the sequence is sorted in decreasing order, the binary search should be adapted to compare and move either left or right accordingly
 
