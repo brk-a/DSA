@@ -11,6 +11,7 @@ def locate_card_linear(cards: list, query: int) -> int:
     for i in range(len(cards)):
         if cards[i] == query:
             return i
+
     return -1
 
 
@@ -25,7 +26,10 @@ def locate_card_binary(cards: list, query: int) -> int:
     while low <= high:
         mid: int = low + (high - low) // 2
         if cards[mid] == query:
-            return mid
+            if mid - 1 >= 0 and cards[mid-1] == query:
+                high = mid - 1
+            else:
+                return mid
         elif cards[mid] > query:
             low = mid + 1
         else:
@@ -66,15 +70,22 @@ if __name__ == "__main__":
         },
         "duplicate_query": {
             "input": {"cards": [13, 11, 10, 7, 7, 4, 3, 1, 0, -2], "query": 7},
-            "output": [3, 4],  # accept either index
+            "output": 3,  # accept leftmost only
         },
         "duplicate_non_query_elements": {
             "input": {
                 "cards": [13, 13, 13, 11, 10, 7, 7, 4, 3, 3, 3, 3, 3, 3, 1, 0, -2],
                 "query": 7,
             },
-            "output": [5, 6],  # accept either index
+            "output": 5,  # accept leftmost only
         },
+        "multiple_occurrences_of_query_on_either_side": {
+            "input": {
+                "cards": [13, 13, 7, 7, 7, 7, 7, 7, 7, 3, 3, 3, 3, 3, 1, 0, -2],
+                "query": 7,
+            },
+            "output": 2,  # accept leftmost only
+        }
     }
 
     for name, test in tests.items():
