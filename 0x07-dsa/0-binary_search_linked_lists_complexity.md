@@ -31,10 +31,12 @@
     - `cards` is empty &rarr; []
     - `query` appears more than once in `cards` &rarr; [13, 11, 10, 7, 7, 4, 3, 1, 0, -2]
     - `cards` has duplicate elements which may or may not be `query` &rarr; [13, 13, 13, 11, 10, 7, 7, 4, 3, 3, 3, 3, 3, 3, 1, 0, -2]
+    - `cards` has multiple occurrences of `query` &rarr; [13, 13, 7, 7, 7, 7, 7, 7, 7, 3, 3, 3, 3, 3, 1, 0, -2]
     - ...
 ### assumptions
 - returns -1 when `query` is not in `cards`
-- returns the index of the first occurrence of `query` when there are duplicates of `query`
+- returns the index of the first occurrence of `query` when there are duplicates/ multiple occurrences of `query`
+    - first occurrence is the leftmost one
 - limit of length of `cards` is finitely large
 ## method
 ### method 1: turn over the cards one by one until the desired result is found
@@ -51,8 +53,8 @@
 
 ## solution
 ### possible solutions
-1. **binary Search Implementation**: this is the optimal approach with time complexity *O(log n)*, where *n* is the number of cards. the number of cards turned over is minimal compared to a linear search
-2. **linear Search**: simply flip cards from one end to the other to find the target card which is inefficient with *O(n)* time complexity and many cards turned over
+1. **linear Search**: simply flip cards from one end to the other to find the target card which is inefficient with *O(n)* time complexity and many cards turned over
+2. **binary Search Implementation**: this is the optimal approach with time complexity *O(log n)*, where *n* is the number of cards. the number of cards turned over is minimal compared to a linear search
 
 ### implemented solution
 [0-binary_search_linked_lists_complexity.py][def]
@@ -65,7 +67,13 @@
 * say that the worst-case scenario above holds
     - using the **second method**, the number of cards B has to choose from halves with each unsuccessful turn: N, N/2, N/4, N/8 ... N/2<sup>N</sup> (the sum of which is 2N, by the way)
     - B takes log<sub>2</sub>(N) seconds to achieve the goal in the worst-case scenario
-    - B only has to track the position of the card being checked against `query`
+    - B only has to track the position of the card being checked against `query` and the oundary of the search area
+    - let the starting index of `cards`, index 0, be `low` and the ending index, index N-1, be `high`
+    - let the middle index/position in said array be `mid`
+    - the boundary will be the first and last index of the sub-array being considered
+        - first pass: boundary will be index **0** and index **N-1** (python is a zero-indexed language)
+        - second pass: boundary will be index **0** and index **`mid` less 1** if `query` &gt; `cards[i]` else index **`mid` + 1** and **N-1**
+        - N<sup>th</sup> pass (general case): boundary will be index **0** and index **`mid` less 1** if `query` &gt; `cards[i]` else index **`mid` + 1** and **N-1** IFF the `low` &le; `high`
 * the **first method** has a time complexity of *O(N)* and space complexity of *O(1)* in big O notation terms
     - time complexity is the time taken to achieve the objective
     - space complexity is, in this case, the amount of memory space required to hold the variables
