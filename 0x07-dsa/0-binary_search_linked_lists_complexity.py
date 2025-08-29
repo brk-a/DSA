@@ -39,6 +39,7 @@ def locate_card_binary(cards: list, query: int) -> int:
 
 
 if __name__ == "__main__":
+    print(f"#################### BEGIN TESTS ####################")
     tests = {
         "middle_element": {
             "input": {"cards": [13, 11, 10, 7, 4, 3, 1, 0, -2], "query": 7},
@@ -85,12 +86,18 @@ if __name__ == "__main__":
                 "query": 7,
             },
             "output": 2,  # accept leftmost only
-        }
+        },
+        "finitely_large_input": {
+            "input": {
+                "cards": list(range(10000000, 0, -1)),
+                "query": 7,
+            },
+            "output": 9999993,
+        },
     }
 
     for name, test in tests.items():
         result_linear = locate_card_linear(**test["input"])
-        result_binary = locate_card_binary(**test["input"])
         expected = test["output"]
         if isinstance(expected, list):
             match = result_linear in expected
@@ -98,13 +105,17 @@ if __name__ == "__main__":
             match = result_linear == expected
         print(f"======== results for linear algo ==========")
         print(
-            f"Test '{name}': {'Match' if match else 'No match'} (Got: {result_linear}, Expected: {expected})"
+            f"Test '{name}': {'Match ✅' if match else 'No match ❌'} (Got: {result_linear}, Expected: {expected})"
         )
+
+        result_binary = locate_card_binary(**test["input"])
         if isinstance(expected, list):
             match = result_binary in expected
         else:
             match = result_binary == expected
         print(f"======== results for binary algo ==========")
         print(
-            f"Test '{name}': {'Match' if match else 'No match'} (Got: {result_binary}, Expected: {expected})"
+            f"Test '{name}': {'Match ✅' if match else 'No match ❌'} (Got: {result_binary}, Expected: {expected})"
         )
+    
+    print(f"#################### END OF TESTS ####################")
