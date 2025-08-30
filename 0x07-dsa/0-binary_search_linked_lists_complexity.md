@@ -192,4 +192,6 @@
             return first_position(cards, target), last_position(cards, target)
     ```
 
+* notice how `binary search does not change when the problem changes
+
 [def]: ./0-binary_search_linked_lists_complexity.py
