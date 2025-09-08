@@ -72,7 +72,20 @@
         - 5 &gt; 4, therefore add 1 to `k`
     - fourth pass: `k` is 3 and `k+1` is 4, therefore, compare `li[4]` to `li[3]`
         - -1 &lt; 5, therefore return 4
-* 2:17:33
+* the code
+
+    ```python
+        nums = nums if nums and isinstance(nums, list) else []
+
+        if len(nums) > 1:
+            i = 0
+            max_len = len(nums)
+            while i+1 < max_len:
+                if nums[i+1] < nums[i]:
+                    return i + 1
+                i += 1
+        return 0
+    ```
 ### **method 2: break the list into half. check one list then the other**
 * the list is of size 5, that is, `n` &equals; 5
 * have a variable `k` initialised to zero
@@ -84,6 +97,9 @@
 ### implemented solution
 * [1-binary_search_linked_lists_complexity.py][def]
 ## discussion
+### *method 1: linear search**
+* time complexity of *O(N)*
+### *method 2: binary search**
 ### generalise the solution
 
 [def]: ./1-binary_search_linked_lists_complexity.py
