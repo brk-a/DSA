@@ -1,4 +1,7 @@
-def count_rotations(nums):
+#!/usr/bin/python3
+
+
+def count_rotations(nums: list[int]) -> int:
     """
     Given a sorted list that has been rotated, find the number of times it
     has been rotated. Rotation is defined as taking the last element and
@@ -11,6 +14,8 @@ def count_rotations(nums):
     Returns:
         int: Number of rotations.
     """
+    nums = nums if nums and isinstance(nums, list) else []
+
     if not nums:
         return 0  # empty list, no rotations
 
