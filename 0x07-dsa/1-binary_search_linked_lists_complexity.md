@@ -75,18 +75,60 @@
 * the code
 
     ```python
-        nums = nums if nums and isinstance(nums, list) else []
+        def count_rotations(nums: list) -> int:
+            nums = nums if nums and isinstance(nums, list) else []
 
-        if len(nums) > 1:
-            i = 0
-            max_len = len(nums)
-            while i+1 < max_len:
-                if nums[i+1] < nums[i]:
-                    return i + 1
-                i += 1
-        return 0
+            if len(nums) > 1:
+                k = 0
+                max_len = len(nums)
+                while k + 1 < max_len:
+                    if nums[k+1] < nums[i]:
+                        return k + 1
+                    k += 1
+
+            return 0
     ```
-### **method 2: break the list into half. check one list then the other**
+### **method 2: break the list into half; check one list then the other**
+* *but how do it know...* when to check what sub-list?
+    - glad you asked...
+    - say we have two lists: list A, `[7, 8, 1, 3, 4, 5, 6]`, and list B `[1, 2, 3, 4, 5, -1, 0]`
+    - the number of rotations of list A is 2; that of B is 5
+    - the answer lies to the **left** of the middle element in list A and on the **right** of the middle element in list B
+    - consider list A: the middle element is 3
+        - is 3 greater than the element, if any, to its right or less than the element, if any on its left? if yes, check the sub-list to its right, else, check the one to its left
+        - sub-lists of A are: `[7, 8, 1, 3]` and `[4, 5, 6]`
+        - 3 &lt; 4, therefore, check the sub-list to 3's left, that is, `[7, 8, 1, 3]`
+        - repeat the steps with the sub-list: mid element is 1 and sub-lists are `[7, 8, 1]` and `[3]`
+            - 1 &lt; 7, therefore, stop
+        - what index is element `1` in list A? *Ans:* 2. this is the correct answer
+        - **recall:** input list has no duplicates, therefore, no need to account for those
+    - consider list B: the middle element is 4
+        - is 4 greater than the element, if any, to its right or less than the element, if any on its left? if yes, check the sub-list to its right, else, check the one to its left
+        - sub-lists of B are: `[1, 2, 3, 4]` and `[5, -1, 0]`
+        - 4 &lt; 5, therefore, check the sub-list to 4's left, that is, `[1, 2, 3, 4]`
+        - ***we hebben een serieus probleem*** because we know that the algo should choose thelist to element `4`'s right, that is, `[5, -1, 0]`
+            - this algo does not work when the answer lies to thr right of the middle element
+    - **new algo:** see if the middle element is smaller than the rightmost element
+        - if yes, answer lies in the left sub-list, else, right sub-list
+        - repeat until the rightmost element is the smallest
+    - consider list B again: the middle element is 4
+        - is 4 greater than the rightmost element, if any? if yes, check the sub-list to its left, else, check the one to its right
+        - sub-lists of B are: `[1, 2, 3, 4]` and `[5, -1, 0]`
+        - 4 &gt; 0, therefore, check the sub-list to 4's right, that is, `[5, -1, 0]`
+        - repeat the steps with the sub-list: mid element is -1 and sub-lists are `[5, -1]` and `[0]`
+            - -1 &lt; 0, therefore, check the sub-list to `-1`'s left, that is, `[5, -1]`
+            - mid element is -1 again; sub-list to consider is `[5, -1]`
+                - -1 is the rightmost element, therefore, stop
+        - what index is element `-1` in list B? *Ans:* 5. this is the correct answer
+    - verify new algo using list A: the middle element is 3
+        - is 3 greater than the rightmost element, if any? if yes, check the sub-list to its left, else, check the one to its right
+        - sub-lists of A are: `[7, 8, 1, 3]` and `[4, 5, 6]`
+        - 3 &lt; 6, therefore, check the sub-list to 3's left, that is, `[7, 8, 1, 3]`
+        - mid element is 1 and sub-lists to consider is `[7, 8, 1]`
+            - 1 is the rightmost element, therefore, stop
+        - what index is element `1` in list A? *Ans:* 2. this is the correct answer
+    - it appears that the new algo works in both scenarios
+* 2:22:21
 * the list is of size 5, that is, `n` &equals; 5
 * have a variable `k` initialised to zero
 * have a variable `mid` that will be the mid-point of the list in question
@@ -98,7 +140,7 @@
 * [1-binary_search_linked_lists_complexity.py][def]
 ## discussion
 ### *method 1: linear search**
-* time complexity of *O(N)*
+* time complexity of *O(N)*; space complexity of *O(1)*
 ### *method 2: binary search**
 ### generalise the solution
 
