@@ -57,10 +57,10 @@
 * a list of size zero cannot be rotated
 * a list of size 1 cannot be rotated
 * the first three patterns hold IFF n &gt; 1
-> **rule(s)** <br/> - find the length of the list, `li`: if length is zero or 1 return 0, else, compare the value of `li[k+1]` to `li[k]` <br/> - if `li[k+1]` &le; `li[k]` return `k`, else, add one to `k` and compare again <br/> - return zero if the previous condition has not been satisfied when `k` &equals; `n`
 ## method
 * say we have a list, `li`, *viz*: [2, 3, 4, 5, -1]
 ### **method 1: check the numbers sequentially L-R**
+> **rule(s)** <br/> - find the length of the list, `li`: if length is zero or 1 return 0, else, compare the value of `li[k+1]` to `li[k]` <br/> - if `li[k+1]` &le; `li[k]` return `k`, else, add one to `k` and compare again <br/> - return zero if the previous condition has not been satisfied or when `k` &equals; `n`
 * this is the trivial solution
     - the list is of size 5, that is, `n` &equals; 5
     - have a variable `k` initialised to zero
@@ -128,11 +128,35 @@
             - 1 is the rightmost element, therefore, stop
         - what index is element `1` in list A? *Ans:* 2. this is the correct answer
     - it appears that the new algo works in both scenarios
-* 2:22:21
-* the list is of size 5, that is, `n` &equals; 5
-* have a variable `k` initialised to zero
-* have a variable `mid` that will be the mid-point of the list in question
-* first pass: `k` is zero and `mid` is 5 // 2 &equals; 3
+* **why the new algo works...**
+    - the input list, `nums`, of length `n` is a sorted, rotated list, therefore, all elements, if any, to the right of the element whose index we want to return are in increasing order and the ones to its, if any, left are in decreasing order
+    - as such, given a middle element in said list, `mid`, the answer must lie to the left of said midpoint if `mid` is lesser than the element in the n<sup>th</sup>-1 position (`mid` &lt; `nums[n-1]`). `nums[n-1]` by the way is the same as `nums[-1]` in python
+    - it follows that the answer must lie to the right of said midpoint if `mid` is greater than the element in the n<sup>th</sup>-1 position (`mid` &gt; `nums[n-1]`)
+* **the rule(s):** <br/>- have a list, `nums`, of size `n` <br/> - have a variable `mid` that will be the mid-point of said list (assume that `mid` is at index `k`) <br/> - repeat the first two steps using the sub-list `nums[:k]`if `mid` &lt; `nums[-1]`,  else, use `nums[k+1:]`
+* recall the list, `li`, *viz*: [2, 3, 4, 5, -1]
+    - initial state: `n` is 5, `mid` is 4 and `k` is 2
+    - first pass: compare `mid` to `li[-1]`, therefore, compare 4 to -1
+        - 4 &gt; -1, therefore, the answer must lie on the right of 4
+    - second pass: repeat steps on `li[3:]`; `n` is 2, `mid` is 5 and `k` is 3
+        - compare `mid` to `li[-1]`, therefore, compare 5 to -1
+        - 5 &gt; -1, therefore, the answer must lie on the right of 5
+    - third pass: repeat steps on `li[4:]`; `n` is 1, `mid` is -1 and `k` is 4
+        - compare `mid` to `li[-1]`, therefore compare -1 to -1
+        - -1 &equals; -1, therefore, the answer must be the index of -1 aka `k`
+    - return `k`
+* the code
+
+    ```python
+        def count_rotations(nums: list) -> int:
+            """ insert docstring here """
+            nums = nums if nums and isinstance(nums, list) else []
+
+            if len(nums) > 1:
+              pass
+            # 2:23:26
+
+            return 0
+    ```
 
 ## solution
 ### possible solutions
