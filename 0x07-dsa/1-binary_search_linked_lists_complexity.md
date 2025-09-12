@@ -129,33 +129,75 @@
         - what index is element `1` in list A? *Ans:* 2. this is the correct answer
     - it appears that the new algo works in both scenarios
 * **why the new algo works...**
-    - the input list, `nums`, of length `n` is a sorted, rotated list, therefore, all elements, if any, to the right of the element whose index we want to return are in increasing order and the ones to its, if any, left are in decreasing order
+    - the input list, `nums`, of length `n` is a sorted, rotated list, therefore, all elements, if any, to the right and left, if any, of the element whose index we want to return are in increasing order
     - as such, given a middle element in said list, `mid`, the answer must lie to the left of said midpoint if `mid` is lesser than the element in the n<sup>th</sup>-1 position (`mid` &lt; `nums[n-1]`). `nums[n-1]` by the way is the same as `nums[-1]` in python
     - it follows that the answer must lie to the right of said midpoint if `mid` is greater than the element in the n<sup>th</sup>-1 position (`mid` &gt; `nums[n-1]`)
-* **the rule(s):** <br/>- have a list, `nums`, of size `n` <br/> - have a variable `mid` that will be the mid-point of said list (assume that `mid` is at index `k`) <br/> - repeat the first two steps using the sub-list `nums[:k]`if `mid` &lt; `nums[-1]`,  else, use `nums[k+1:]`
+* **the rule(s):** <br/>- have a list, `nums`, of size `n` <br/> - have a variable `mid` that will be the index of the mid-point of said list <br/> - repeat the first two steps using the sub-list `nums[:mid]`if `nums[mid]` &lt; `nums[-1]`,  else, use `nums[mid+1:]`
 * recall the list, `li`, *viz*: [2, 3, 4, 5, -1]
-    - initial state: `n` is 5, `mid` is 4 and `k` is 2
-    - first pass: compare `mid` to `li[-1]`, therefore, compare 4 to -1
+    - initial state: `n` is 5, `mid` is 2, boundary markers `left` and `right` are zero and `len(li) - 1` which is `n` - 1 which is 4
+    - first pass: compare `li[mid]` to `li[right]`, therefore, compare 4 to -1
         - 4 &gt; -1, therefore, the answer must lie on the right of 4
-    - second pass: repeat steps on `li[3:]`; `n` is 2, `mid` is 5 and `k` is 3
-        - compare `mid` to `li[-1]`, therefore, compare 5 to -1
+        - `left` becomes `mid` + 1 = 2 + 1 = 3
+    - second pass: repeat steps on `li[left:right]`; `n` is 5, `mid` is 3, `left` is 3 and `right` is 4
+        - compare `li[mid]` to `li[right]`, therefore, compare 5 to -1
         - 5 &gt; -1, therefore, the answer must lie on the right of 5
-    - third pass: repeat steps on `li[4:]`; `n` is 1, `mid` is -1 and `k` is 4
-        - compare `mid` to `li[-1]`, therefore compare -1 to -1
-        - -1 &equals; -1, therefore, the answer must be the index of -1 aka `k`
-    - return `k`
+        - `left` becomes `mid` + 1 = 3 + 1 = 4
+    - third pass: repeat steps on `li[left:right]`; `n` is 5, `mid` is 4, `left` is 4 and `right` is 4
+        - notice that the list has one element, therefore the answer must be the index of this element
+    - return  the index of -1 in `li` which happens to be the value of `mid`
+* another list: `[7, 8, 1, 3, 4, 5, 6]`
+    - initial state: `n` is 7, `mid` is 3, boundary markers `left` and `right` are zero and `len(li) - 1` which is `n` - 1 which is 6
+    - first pass: compare `li[mid]` to `li[right]`, therefore, compare 3 to 6
+        - 3 &lt; 6, therefore, the answer must lie on the left of 3
+        - `right` becomes `mid` -1 = 3 - 1 = 2
+    - second pass: repeat steps on `li[left:right]`; `n` is 7, `mid` is 1, `left` is 0 and `right` is 2
+        - compare `li[mid]` to `li[right]`, therefore, compare 8 to 1
+        - 8 &gt; -1, therefore, the answer must lie on the right of 8
+        - `left` becomes `mid` + 1 = 1 + 1 = 2
+    - third pass: repeat steps on `li[left:right]`; `n` is 7, `mid` is 2, `left` is 2 and `right` is 2
+        - notice that the list has one element, therefore the answer must be the index of this element
+    - return  the index of -1 in `li` which happens to be the value of `mid`
+* another list:  `[1, 2, 3, 4, 5, -1, 0]`
+    - initial state: `n` is 7, `mid` is 3, boundary markers `left` and `right` are zero and `len(li) - 1` which is `n` - 1 which is 6
+        - first pass: compare `li[mid]` to `li[right]`, therefore, compare 4 to 0
+            - 4 &gt; -0, therefore, the answer must lie on the right of 4
+            - `left` becomes `mid` + 1 = 3 + 1 = 4
+        - second pass: repeat steps on `li[left:right]`; `n` is 7, `mid` is 5, `left` is 4 and `right` is 6
+            - compare `li[mid]` to `li[right]`, therefore, compare -1 to 0
+            - -1 &lt; 0, therefore, the answer must lie on the left of -1
+            - `right` becomes `mid` - 1 = 6 + 1 = 5
+        - third pass: repeat steps on `li[left:right]`; `n` is 7, `mid` is 5, `left` is 4 and `right` is 5
+            - compare `li[mid]` to `li[right]`, therefore, compare 5 to -1
+            - 5 &gt; -1, therefore, the answer must lie on the right of 5
+            - `left` becomes `mid` + 1 = 5 + 1 = 6
+        fourth pass: repeat steps on `li[left:right]`; `n` is 7, `mid` is 5, `left` is 6 and `right` is 6
+            - notice that the list has one element, therefore the answer must be the index of this element
+        - return  the index of -1 in `li` which happens to be the value of `mid`
 * the code
 
     ```python
         def count_rotations(nums: list) -> int:
-            """ insert docstring here """
-            nums = nums if nums and isinstance(nums, list) else []
+        """ insert docstring here """
+        nums = nums if nums and isinstance(nums, list) else []
 
-            if len(nums) > 1:
-              pass
-            # 2:23:26
+        if len(nums) > 1:
+        left, right = 0, len(nums) - 1
 
-            return 0
+        while left < right:
+            mid = (left + right) // 2
+
+            if nums[mid] < nums[right]: # go left
+                right = mid if len(nums) > 2 else mid - 1
+            else: # go right
+                left = mid if len(nums) > 2 else mid + 1
+            
+            if len(nums[mid:right-1]) == 1:
+                return mid + 1
+
+            # 2:26:11
+            # test [2, 1] fails
+
+        return 0
     ```
 
 ## solution
