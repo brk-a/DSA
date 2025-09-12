@@ -1,48 +1,68 @@
 #!/usr/bin/python3
 
 
-def count_rotations(nums: list[int]) -> int:
-    """
-    Given a sorted list that has been rotated, find the number of times it
-    has been rotated. Rotation is defined as taking the last element and
-    moving it to the front. The rotation count corresponds to the index of
-    the smallest element in the rotated list.
+# def count_rotations(nums: list[int]) -> int:
+#     """
+#     Given a sorted list that has been rotated, find the number of times it
+#     has been rotated. Rotation is defined as taking the last element and
+#     moving it to the front. The rotation count corresponds to the index of
+#     the smallest element in the rotated list.
 
-    Args:
-        nums (list[int]): A rotated sorted list of unique numbers.
+#     Args:
+#         nums (list[int]): A rotated sorted list of unique numbers.
 
-    Returns:
-        int: Number of rotations.
-    """
+#     Returns:
+#         int: Number of rotations.
+#     """
+#     nums = nums if nums and isinstance(nums, list) else []
+
+#     if not nums:
+#         return 0  # empty list, no rotations
+
+#     left, right = 0, len(nums) - 1
+
+#     # If the list is already sorted (not rotated)
+#     if nums[left] < nums[right]:
+#         return 0
+
+#     while left <= right:
+#         mid = (left + right) // 2
+#         next_idx = (mid + 1) % len(nums)
+#         prev_idx = (mid - 1 + len(nums)) % len(nums)
+
+#         # Check if mid is the minimum element
+#         if (nums[mid] <= nums[next_idx] and nums[mid] <= nums[prev_idx]):
+#             return mid
+
+#         # Decide where to go next
+#         if nums[mid] >= nums[left]:
+#             # Left part is sorted, move right
+#             left = mid + 1
+#         else:
+#             # Right part is sorted, move left
+#             right = mid - 1
+
+#     return 0  # fallback, should never reach here
+
+def count_rotations(nums: list) -> int:
+    """ insert docstring here """
     nums = nums if nums and isinstance(nums, list) else []
 
-    if not nums:
-        return 0  # empty list, no rotations
+    if len(nums) > 1:
+        left, right = 0, len(nums) - 1
 
-    left, right = 0, len(nums) - 1
+        while left < right:
+            mid = (left + right) // 2
 
-    # If the list is already sorted (not rotated)
-    if nums[left] < nums[right]:
-        return 0
+            if nums[mid] < nums[right]: # go left
+                right = mid if len(nums) > 2 else mid - 1
+            else: # go right
+                left = mid if len(nums) > 2 else mid + 1
+            
+            if len(nums[mid:right]) == 1:
+                return mid + 1
 
-    while left <= right:
-        mid = (left + right) // 2
-        next_idx = (mid + 1) % len(nums)
-        prev_idx = (mid - 1 + len(nums)) % len(nums)
-
-        # Check if mid is the minimum element
-        if (nums[mid] <= nums[next_idx] and nums[mid] <= nums[prev_idx]):
-            return mid
-
-        # Decide where to go next
-        if nums[mid] >= nums[left]:
-            # Left part is sorted, move right
-            left = mid + 1
-        else:
-            # Right part is sorted, move left
-            right = mid - 1
-
-    return 0  # fallback, should never reach here
+    return 0
 
 
 if __name__ == "__main__":
