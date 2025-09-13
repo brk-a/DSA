@@ -178,26 +178,35 @@
     ```python
         def count_rotations(nums: list) -> int:
         """ insert docstring here """
-        nums = nums if nums and isinstance(nums, list) else []
+            nums = nums if nums and isinstance(nums, list) else []
 
-        if len(nums) > 1:
-        left, right = 0, len(nums) - 1
+            if not nums:
+                return 0  # empty list, no rotations
 
-        while left < right:
-            mid = (left + right) // 2
+            left, right = 0, len(nums) - 1
 
-            if nums[mid] < nums[right]: # go left
-                right = mid if len(nums) > 2 else mid - 1
-            else: # go right
-                left = mid if len(nums) > 2 else mid + 1
-            
-            if len(nums[mid:right-1]) == 1:
-                return mid + 1
+            # If the list is already sorted (not rotated)
+            if nums[left] < nums[right]:
+                return 0
 
-            # 2:26:11
-            # test [2, 1] fails
+            while left <= right:
+                mid = (left + right) // 2
+                next_idx = (mid + 1) % len(nums)
+                prev_idx = (mid - 1 + len(nums)) % len(nums)
 
-        return 0
+                # Check if mid is the minimum element
+                if (nums[mid] <= nums[next_idx] and nums[mid] <= nums[prev_idx]):
+                    return mid
+
+                # Decide where to go next
+                if nums[mid] >= nums[left]:
+                    # Left part is sorted, move right
+                    left = mid + 1
+                else:
+                    # Right part is sorted, move left
+                    right = mid - 1
+
+            return 0  # fallback, should never reach here
     ```
 
 ## solution
@@ -208,6 +217,8 @@
 ### *method 1: linear search**
 * time complexity of *O(N)*; space complexity of *O(1)*
 ### *method 2: binary search**
+* time complexity of *O(log N)*; space complexity of *O(1)*
+* 
 ### generalise the solution
 
 [def]: ./1-binary_search_linked_lists_complexity.py
