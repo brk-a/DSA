@@ -218,7 +218,6 @@
 * time complexity of *O(N)*; space complexity of *O(1)*
 ### *method 2: binary search**
 * time complexity of *O(log N)*; space complexity of *O(1)*
-* 
 ### generalise the solution
 
 [def]: ./1-binary_search_linked_lists_complexity.py
