@@ -17,10 +17,17 @@ class UserDatabase:
                 return username
     
     def update(self, user):
-        target = self.find(user.username)
+        target = self.find(users.username)
         target.name, target.email = user.name, user.email
     
     def list_all(self):
         return self.users
+    
+    def delete(self, user):
+        target = self.find(users.username)
+        if target:
+            users.remove(target)
+        else:
+            pass
     
     # 2:53:51
