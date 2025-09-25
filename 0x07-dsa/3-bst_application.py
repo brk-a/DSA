@@ -30,4 +30,22 @@ class UserDatabase:
         else:
             pass
     
+
+if __name__ == "__main__":
+    user_1 = User("kakasungura", "kaka sungura", "kakasungura@bunnyracing.co")
+    user_2 = User("kakambweha", "kaka mbweha", "kakambweha@forfoxsake.ac.ke")
+    user_3 = User("goat matata", "goat matata", "goat matata@thegoatpodcast.com")
+    user_4 = User(username="ddangombe", name="dada ngombe...", email="dadangombe@chizicheese.co.k")
+
+    user_database = UserDatabase()
+    user_database.insert(user_1)
+    user_database.insert(user_2)
+    user_database.insert(user_3)
+
+    find_user_2 = user_database.find()
+    user_database.list_all()
+    user_database.delete(user_1)
+    user_database.list_all()
+    user_database.update(username="dadangombe", name="dada ngombe", email="dadangombe@chizicheese.co.ke")
+    user_database.list_all()
     # 2:54:50
