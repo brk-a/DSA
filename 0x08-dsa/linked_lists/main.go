@@ -1,0 +1,3 @@
+package linkedlists
+
+func LinkedLists(){}
