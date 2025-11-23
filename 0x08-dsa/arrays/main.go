@@ -1,5 +1,6 @@
 package arrays
 
 func Arrays() {
-	ArrayBasics()
+	// ArrayBasics()
+	TwoSum()
 }
