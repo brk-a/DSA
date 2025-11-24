@@ -2,5 +2,6 @@ package arrays
 
 func Arrays() {
 	// ArrayBasics()
-	TwoSum()
+	// TwoSum()
+	BestTimeToBuyStock()
 }
