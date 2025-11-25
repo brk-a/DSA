@@ -9,6 +9,7 @@ a **different day in the future** to sell said stock
 achieve a profit
 
 ## assumptions
+* *nada*
 
 ## examples
 ### example 1:
