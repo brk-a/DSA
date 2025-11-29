@@ -42,7 +42,7 @@ the largest sum and return said sum
 * have a var, `max_sum`, initialised to `-inf`
 * have a var, `curr_sum`, initialised to zero
 * for each element in `nums` beginning at `nums[0]`
-    * set `curr_sum` to the sum of `nums[i]` and `nums[j]` where `j` = i, i+1 ..., `nums.length`
+    * set `curr_sum` to the sum of `nums[i]` and `nums[j]` where `j` = i, i+1 ..., `nums.length - 1`
     * check whether `curr_sum` &gt; `max_sum`
         * set `max_sum` to `curr_sum` if yes, else, continue
 * increment `i` by one and repeat the previous step

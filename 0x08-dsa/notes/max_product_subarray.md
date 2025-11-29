@@ -33,7 +33,7 @@ largest product
 * have a variable, `max_prod`, initialised to -&infin;
 * have a variable, `curr_prod`, initialised to 1
 * for each element in `nums` beginning at `nums[0]`
-    * set `curr_prod` to the product of `nums[i]` and `nums[j]` where j = i, i+1, ..., `nums.length`
+    * set `curr_prod` to the product of `nums[i]` and `nums[j]` where j = i, i+1, ..., `nums.length - 1`
     * check whether `curr_prod` &gt; `max_prod`
         * set `max_prod` to `curr_prod` if yes, else, continue
 * increment `i` by one and repeat the previous step
