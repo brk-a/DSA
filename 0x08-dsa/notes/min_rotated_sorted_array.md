@@ -12,7 +12,7 @@ has been rotated 7 times (also zero times if you think about it)
 * each element in `nums` is unique
 
 ### constraints
-* algo must run in at least O(lon N) time
+* algo must run in at least O(log N) time
 
 ### examples
 #### example 1
