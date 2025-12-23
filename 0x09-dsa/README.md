@@ -2,7 +2,7 @@
 
 ## why algorithms work
 
-* we have looked and *what*  algoritms are and, to some extent,  *how* they work
+* we have looked and *what*  algorithms are and, to some extent,  *how* they work
 * now we look at *why* they work
 * "**... but *how do it know*? ...**" is what we will look at
 * expect a mix of maths (we are not americans; they only do one), complexity analysis techniques, philosophy (if not now, when? if not here, where? if not this, what? if not me, who?), epistemology (why not?), ontology (a wee bit), DSA and more 
