@@ -4,9 +4,11 @@
 ### 0.1. why TF do we need to study algos?
 * limited time and space resources for computational tasks
     * multiply the time and space requirements for a single google query; multiply that by 5.9 million (as of 20-Dec-2025)
-    <img alt="internet-minute-2025-viz" src="./Internet-Minute-2025.webp" style="width: 500px; height: auto; padding: 5px; margin: 5px;"/>
+    <img alt="internet-minute-2025-viz" src="./Internet-Minute-2025.webp" style="width: 500px; height: auto; padding: 5px; margin: 5px;"/> <br/>
+    
+    
     * picture what requirements would be needed for the surface web alone
-    * the margines of error must be tight; in some cases, there is simply no margin of error
+    * the margins of error must be tight; in some cases, there is simply no margin of error
 ## 1. how TF do we measure the efficiency of code?
 * another way to ask the question: how TF do we measure the speed of a function/method?
 * depends on the measuring rod ...
