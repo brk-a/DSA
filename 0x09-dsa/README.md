@@ -7,7 +7,7 @@
 * "**... but *how do it know*? ...**" is what we will look at
 * expect a mix of maths (we are not americans; they only do one), complexity analysis techniques, philosophy (if not now, when? if not here, where? if not this, what? if not me, who?), epistemology (why not?), ontology (a wee bit), DSA and more 
 
-### flow
+## flow
 * introduction to time complexity
 * time complexity analysis of insertion sort
 * asymptotic analysis
