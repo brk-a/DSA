@@ -1,7 +1,9 @@
 # time complexity
 
+<div style="text-align: justify;">
+
 ## 0. intro
-### 0.1. why TF do we need to study algos?
+## 0.1. why TF do we need to study algos?
 * limited time and space resources for computational tasks
     * multiply the time and space requirements for a single google query; multiply that by 5.9 million (as of 20-Dec-2025)
     <img alt="internet-minute-2025-viz" src="./Internet-Minute-2025.webp" style="width: 500px; height: auto; padding: 5px; margin: 5px;"/> <br/>
@@ -71,3 +73,5 @@
 * **formal definition of best-case scenario:** minimum number of steps an algo takes for any possible input
 * **formal definition of worst-case scenario:** maximum number of steps an algo takes for any possible input
 * **formal definition of average-case scenario:** average number of steps an algo takes for all possible inputs
+
+</div>

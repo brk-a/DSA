@@ -1,5 +1,7 @@
 # insertion sort
 
+<div style="text-align: justify;">
+
 ## 0. intro
 ### 0.1. pseudo-code of insertion sort algo
 
@@ -15,7 +17,7 @@
             A[j+1] = key  .......................... line 8
 ```
 
-### 1. how it works
+## 1. how it works
 * algo takes in a linear data structure such as an array and sorts it in place
 > **idea:** use a *moving wall* to separate the input array into two parts: the sorted part on the left and the unsorted part on the right. focus on the element on the right that is nearest to the wall. figure out where to place said element on the left, move the wall one step to the right and repeat process until there are no elements on the right of said wall 
 * how TF do you figure out where to place the element in question?
@@ -30,7 +32,7 @@
     * a `while` loop that figures out where `key` should be on the left of the wall
 * the outer loop starts at index one and not zero because the sortrd list must, by definition, have one element to start with
     * also, starting at index one (or pointing to the element at `i+1` generally) is how it moves the wall 
-### 2. time complexity
+## 2. time complexity
 * $T(n) = c_1n + c_2(n-1) + c_4(n-1) + c_5\sum_{j=2}^nt_j + c_6\sum_{j=2}^n(t_j - 1) + c_7\sum_{j=2}^n(t_j - 1) + c_8(n - 1)$
     * $c_n$ is the constant at line $n$ in the pseudo-code above
         * example: constant `key` on line 2 is $c_2$
@@ -49,3 +51,5 @@
     * $T(n) \approx c\frac{n}{2} + c\frac{n^2}{2}$: time complexity is polynomial in general and quadratic in particular
 * $T(n)$ can be simplified *viz*: $T(n) \approx \frac{c}{2}(n + n^2) + d$
     * the time complexity of is quadratic
+
+</div>
