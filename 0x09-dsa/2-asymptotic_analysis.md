@@ -110,8 +110,8 @@
     * we have fulfilled both conditions, therefore, g(n) is an upper bound of f(n) ✅ 
         * $f(n) \in O(n^2)$
 > **handy shortcut:** only look at the leading terms (terms with the highest power) when the terms of the functions you are dealing with have no negative coefficients
-* **random quiz 4:** prove that the time complexity function, $T(n) = 8n + 5$ is O(n)
-    * strategy: find a constant c &gt; 0 and inte n<sub>0</sub> &ge; 1 such that for every integer n &ge; n<sub>0</sub>, 8n + 5 &le; c*n
+* **random quiz 4:** prove that the time complexity function, $T(n) = 8n + 5$ is $\Omicron(n)$
+    * strategy: find a constant c &gt; 0 and int n<sub>0</sub> &ge; 1 such that for every integer n &ge; n<sub>0</sub>, 8n + 5 &le; c*n
     * we are dealing with a linear function: the slope of said func determines how quickly it grows
         * set c &gt; 8 to make g(n) grow faster than f(n)
         * set c to 9
@@ -145,7 +145,7 @@
         * therefore, n<sub>0</sub> = 5
     * **conclusion:** $cg(n) \gt f(n) \medspace \forall c > 8\medspace and\medspace n_0 \geq 5$
     * we have fulfilled both conditions, therefore, g(n) is an upper bound of f(n) ✅ 
-        * $f(n) = 8n + 5 \in O(n)$
+        * $f(n) = 8n + 5 \in \Omicron(n)$
 #### 1.2.2. lower bound
 * $\Omega(g(n)) = \{f(n):\medspace  \ni c, n_0 > 0 \medspace such \medspace that\medspace cg(n) \leq f(n)\: \forall n \geq n_0\}$
 * $\Omega(\cdot)$ is used to asymptotically *lower-bound* a function
@@ -297,13 +297,13 @@
     * example: constant `key` on line 2 is $c_2$
 * best case
     $$
-    T(n) = cn
+        T(n) = cn
     $$
 
     *  where *c* is a constant
 * worst case
     $$
-    T(n) = \frac{cn^2 - cn}{2}\\[1em]
+        T(n) = \frac{cn^2 - cn}{2}\\[1em]
     $$
 
     * where *c* is a constant
@@ -314,11 +314,11 @@
 * **lower bound:** $T(n) \in \Omega(n)$ because the lower bound of the best case is the most efficient an algo can be
 * **tight bound:** $T(n) \in \Theta(n^2)$
 
-||$\Omicron$| $\Theta$ | $\Omega$ |
+|| $\Omicron$ | $\Theta$ | $\Omega$ |
 |:---:|:---:|:---:|:---:|
-|best case|$\Omicron(n)$|$\Theta(n)$|$\Omega(n)$|
-|average case|$\Omicron(n^2)$|$\Theta(n^2)$|$\Omega(n^2)$|
-|worst case|$\Omicron(n^2)$|$\Theta(n^2)$|$\Omega(n^2)$|
+|best case| $\Omicron(n)$ |$\Theta(n)$|$\Omega(n)$|
+|average case| $\Omicron(n^2)$ |$\Theta(n^2)$|$\Omega(n^2)$|
+|worst case| $\Omicron(n^2)$ |$\Theta(n^2)$|$\Omega(n^2)$|
 
 > **handy shortcut:** pick the worst case of the upper bound when looking for the ~~ultimate~~ upper bound; pick the best case of the lower bound when looking for the ~~ultimate~~ lower bound <br/> **in other words:** upper bound of the worst case is the worst of the worst; lower bound of the best case is the best of the best
 
