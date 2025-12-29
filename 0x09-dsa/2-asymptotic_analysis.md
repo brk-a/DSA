@@ -25,7 +25,7 @@
 
 ### 1.2. formal definitions
 #### 1.2.1. upper bound
-* $O(g(n)) = \{f(n): \exists c, n_0 > 0 \text{ such that } f(n) \leq cg(n) \ \forall n \geq n_0\}$
+* $O(g(n)) = \{f(n): \exists \ c, n_0 > 0 \text{ such that } f(n) \leq cg(n) \ \forall n \geq n_0\}$
 * $O(\cdot)$ is used to asymptotically *upper-bound* a function
 * think of $f(n) \in O(g(n))$ as corresponding to $f(n) \leq g(n)$
 
@@ -231,13 +231,13 @@ $$n = -\frac{3}{2}$$
 $$\text{we are only interested in the solution where } n \geq 0$$
 $$\therefore n \ \text{has no viable solution at } c_1 = 2$$
 
-    * so far we have the following
-        * g(n) = f(n) IFF $n = -1 \pm i\sqrt{2}$
-        * $c_2 = 3$ and $c_1 \geq 2$
-        * $n_0 \geq 3$
-        * $c_2 g(n) \geq f(n) \ \forall c_2 > 2\ \text{and}\ n_0 \geq 3$
-        * $c_1 g(n) \leq f(n) \ \forall c_1 < 2\ \text{and}\ n_0 \geq 3$
-        * **conclusion:** $c_1 g(n) \leq f(n) \leq c_2 g(n) \ \forall c_1 < 2,\ c_2 > 2\ \text{and}\ n_0 \geq 3$
+* so far we have the following
+    * g(n) = f(n) IFF $n = -1 \pm i\sqrt{2}$
+    * $c_2 = 3$ and $c_1 \geq 2$
+    * $n_0 \geq 3$
+    * $c_2 g(n) \geq f(n) \ \forall c_2 > 2\ \text{and}\ n_0 \geq 3$
+    * $c_1 g(n) \leq f(n) \ \forall c_1 < 2\ \text{and}\ n_0 \geq 3$
+    * **conclusion:** $c_1 g(n) \leq f(n) \leq c_2 g(n) \ \forall c_1 < 2,\ c_2 > 2\ \text{and}\ n_0 \geq 3$
 * we have fulfilled all conditions, therefore, g(n) is a tight bound of f(n) ✅ 
     * $f(n) \in \Theta(n^2)$
 
