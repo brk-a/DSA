@@ -1,5 +1,7 @@
 # divide and conquer (plus quicksort algo)
 
+<div style="text-align: justify;">
+
 ## 0. pseudo-code for quick sort algo
 
 ```plaintext
@@ -104,7 +106,7 @@
     * there will be $n-1$ recursive calls; the size of the input array reduces by one in each call
     * recurrence relation *viz*: $T(n) = T(n-1) + cn$
 * at best, the pivot is always the middle element
-    * example: A = [4, 2, 6, 1, 3, 5, 7]. `A.length` = 7, `start` = 0 and `last` = 
+    * example: A = [4, 2, 6, 1, 3, 5, 7]. `A.length` = 7, `start` = 0 and `last` = 6
     
         ```plaintext
                                             QuickSort(A, 0, 6)
@@ -131,9 +133,9 @@
 |...|...|...|
 |$2$|1|$c \times (n-(n-2)) = 2c$|
 |$1$|1|$c \times (n-(n-1)) = c$|
-|**Total**||$ \Sigma_{k=1}^n c = \frac{n^2 + n}{2} \times c$|
+|**Total**||$\Sigma_{k=1}^n c = \frac{n^2 + n}{2} \times c$|
 
-> **recall:** <br/> $\Sigma_{k=1}^n c =  c + 2c + ... + c(n-1) + cn$ <br/> $(1 + 2 + ... + (n-1) + n) \times c$ <br/> $((1+n) \frac{n}{2}) \times c$ <br/> $\frac{n^2 + n}{2} \times c$ <br/>
+> **recall:** <br/> $\Sigma_{k=1}^n c =  c + 2c + ... + c(n-1) + cn \\[1em]$ <br/> $(1 + 2 + ... + (n-1) + n) \times c \\[1em]$ <br/> $((1+n) \frac{n}{2}) \times c \\[1em]$ <br/> $\frac{n^2 + n}{2} \times c \\[1em]$ <br/>
 * **upper bound** of time complexity function, $T(n)$, is, therefore, $\frac{n^2 + n}{2} \times c$
     * $c$ and the non-leading polynomials are insignificant as far as the upper bound is concerned, therefore, $T(n) \in \Omicron(n^2)$
 ##### 1.1.3.2. upper bound of best-case scenario
@@ -150,11 +152,11 @@
 |$\frac{n}{8}$|8|$8 \times \frac{cn}{8} = cn$|
 |...|...|...|
 |$1$|$n$|$n \times c = cn$|
-|**Total**||$ \Sigma_{k} 2^k cn = cn \times log(n)$|
+|**Total**||$\Sigma_{k} 2^k cn = cn \times log(n)$|
 
-> **pattern:** the total merging time at any step, regardless of the sub-problem size, is $cn$
+> **pattern:**<br/> the total merging time at any step, regardless of the sub-problem size, is $cn$
 
 * **upper bound** of time complexity function, $T(n)$, is, therefore, $cn \times log(n)$
     * $c$ is insignificant as far as the upper bound is concerned, therefore, $T(n) \in \Omicron(n \ log \ n)$
-##### 1.1.3.2. upper bound of average-case scenario
-* 2:34:43
+
+</div>
