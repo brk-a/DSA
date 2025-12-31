@@ -72,9 +72,9 @@ $\mathbb{E}[X] = \sum_x x \cdot P(X=x)$ <br/>
 ### 1.3. linearity of expectation
 * the expectation of a sum of random variables is the sum of the expectation of said variables
     * let $X_1$ and $X_2$ be random variables <br/><br/>
-    $\mathbb{E}[X_1 + X_2] = \mathbb{E}[X_1] + \mathbb{E}[X_2] \\[1em]$ <br/>
+    $\mathbb{E}[X_1 + X_2] = \mathbb{E}[X_1] + \mathbb{E}[X_2]$ <br/>
 * scalars (aka constants or coefficients) of a random variable scale its expectation
-    * let $c$ be a scalar and $X_1$ and random var<br/><br/>
+    * let $c$ be a scalar and $X_1$ a random var<br/><br/>
     $\mathbb{E}[cX_1] = c \mathbb{E}[X_1]$ <br/>
 
 ## 2. average case for quick sort
@@ -103,7 +103,6 @@ $T(n) = (n-1) + \frac{1}{n} \sum_{k=0}^{n-1}(T(k) + T(n-k-1))$ <br/>
     * this is how we end up with $\frac{1}{n} \sum_{k=0}^{n-1}(T(k) + T(n-k-1))$
 ### 2.2. substitute method
 * we have seen how the recurrence tree method and master theorem are used to find the upper bound; introducing the substitute method...
-* 
 * **steps**
     * make an educated guess
     * prove (or disprove) said guess using induction
@@ -123,35 +122,29 @@ $T(n) = (n-1) + \frac{1}{n} \sum_{k=0}^{n-1}(T(k) + T(n-k-1))$ <br/>
             * the sum of $n$ consecutive whole numbers starting from 1 ending at $n$ is $\frac{n(n+1)}{2}$
         * let us test this with n = 20
             $$
-                S(20) = 1 + 2+ 3 + ... + 20 \\[1em]
-                S(20) = (20+1) + (19+2) + ... + (11+10) \\[1em]
-                S(20) = 21 \times 10 \\[1em]
-                S(20) = 210 \\[1em]
-                
-                \text{test using the pattern we noticed} \\[1em]
-
-                S(20) = \frac{20(21)}{2}\\[1em]
-                S(20) = \frac{420}{2}\\[1em]
-                S(20) = 210\\[1em]
-
-                \text{the pattern appears to work}
+            S(20) = 1 + 2+ 3 + ... + 20 \\[1em]
+            S(20) = (20+1) + (19+2) + ... + (11+10) \\[1em]
+            S(20) = 21 \times 10 \\[1em]
+            S(20) = 210 \\[1em]
+            \text{test using the pattern we noticed} \\[1em]
+            S(20) = \frac{20(21)}{2}\\[1em]
+            S(20) = \frac{420}{2}\\[1em]
+            S(20) = 210\\[1em]
+            \text{the pattern appears to work}
             $$
          * let us test this with n = 21
             $$
-                S(21) = 1 + 2+ 3 + ... + 21 \\[1em]
-                S(21) = (21+1) + (20+2) + ... + (12+10) + 11 \\[1em]
-                \text{notice how the last term has no partner; we hebben een serieus probleem}\\[1em]
-                \text{actually not; we do not hebben een serieus probleem. calma, povo; calma}\\[1em]
-                S(21) = (22 \times 10) + 11 \\[1em]
-                S(21) = 231 \\[1em]
-                
-                \text{ test using the pattern we noticed} \\[1em]
-
-                S(21) = \frac{21(22)}{2}\\[1em]
-                S(21) = \frac{462}{2}\\[1em]
-                S(21) = 231\\[1em]
-
-                \text{the pattern appears to work even for odd-numbered terms}
+            S(21) = 1 + 2+ 3 + ... + 21 \\[1em]
+            S(21) = (21+1) + (20+2) + ... + (12+10) + 11 \\[1em]
+            \text{notice how the last term has no partner; we hebben een serieus probleem}\\[1em]
+            \text{actually not; we do not hebben een serieus probleem. calma, povo; calma}\\[1em]
+            S(21) = (22 \times 10) + 11 \\[1em]
+            S(21) = 231 \\[1em]
+            \text{ test using the pattern we noticed} \\[1em]
+            S(21) = \frac{21(22)}{2}\\[1em]
+            S(21) = \frac{462}{2}\\[1em]
+            S(21) = 231\\[1em]
+            \text{the pattern appears to work even for odd-numbered terms}
             $$
         * we can conclude that generally, $S(n) = 1 + 2 + ... + n = \frac{n(n+1)}{2}$ ✅
     * induction, therefore, is a **reasoning process where one moves from the specific to the general case**
@@ -185,22 +178,20 @@ $T(n) \leq cn \, log \, n$ <br/>
     * the recurrence relation has been simplified to $T(n) = (n-1) + \frac{2}{n} \sum_{k=0}^{n-1}T(k)$
     * it follows that $T(n) \leq (n-1) + \frac{2}{n} \sum_{k=0}^{n-1} ck \, log \, k$
     $$
-        T(n) \leq (n-1) + \frac{2}{n} \cdot c \sum_{k=0}^{n-1} k \, log \, k \\[1em]
-        \text{ now:} \, \sum_{k=0}^{n-1} k \, log \, k  \approx \int_{0}^n k \, log \, k \, dk \\[1em]
-        \int_{0}^n k \, log \, k \, dk = \frac{k^2}{2} log \, k - \frac{k^2}{4} + C \\[1em]
-        \text{recall that} \, 0 \leq k \lt n \\[1em]
-        \frac{k^2}{2} log \, k - \frac{k^2}{4} + C \leq \frac{n^2}{2}log \, n - \frac{n^2}{4} + C \\[1em]
-        T(n) \leq (n-1) + \frac{2}{n} \cdot c \sum_{k=0}^{n-1} k \, log \, k \, \, \text{becomes} \, \, T(n) \leq (n-1) + \frac{2}{n} (\frac{n^2}{2}log \, n - \frac{n^2}{4} + C) \\[1em]
-        T(n) \leq \frac{n}{2} -1 + n \, log \, n + \frac{2C}{n} \\[1em]
-        T(n) \leq n \, log(n) \\[2em]
-
-        \therefore \, T(n) \in n \, log(n) \, ✅ 
-
+    T(n) \leq (n-1) + \frac{2}{n} \cdot c \sum_{k=0}^{n-1} k \, log \, k \\[1em]
+    \text{ now:} \, \sum_{k=0}^{n-1} k \, log \, k  \approx \int_{0}^n k \, log \, k \, dk \\[1em]
+    \int_{0}^n k \, log \, k \, dk = \frac{k^2}{2} log \, k - \frac{k^2}{4} + C \\[1em]
+    \text{recall that} \, 0 \leq k \lt n \\[1em]
+    \frac{k^2}{2} log \, k - \frac{k^2}{4} + C \leq \frac{n^2}{2}log \, n - \frac{n^2}{4} + C \\[1em]
+    T(n) \leq (n-1) + \frac{2}{n} \cdot c \sum_{k=0}^{n-1} k \, log \, k \, \, \text{becomes} \, \, T(n) \leq (n-1) + \frac{2}{n} (\frac{n^2}{2}log \, n - \frac{n^2}{4} + C) \\[1em]
+    T(n) \leq \frac{n}{2} -1 + n \, log \, n + \frac{2C}{n} \\[1em]
+    T(n) \leq n \, log(n) \\[2em]
+    \therefore \, T(n) \in n \, log(n) \, ✅ 
     $$
 
 * **what we have established**
     * at n=1, quicksort does not need to run; an array of length one is already sorted
-    * at n=k, $T(n) \in \Omicron( n \, log(n))$
+    * at n=k, $T(n) \in \Omicron(n \, log(n))$
 * **comments about assumptions**
     * randomised input allows us to apply stochastic method to pivot selection, else, deterministic selection would occur resulting in a highly unbalanced partition that leads to the worst-case scenario
 ## 3. randomised quick sort
