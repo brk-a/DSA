@@ -183,12 +183,77 @@ $T(n) \leq cn \, log \, n$ <br/>
     * it follows that $T(k) \leq c \cdot k \, log(k)$ ✅
 * step three: n = k+1
     * the recurrence relation has been simplified to $T(n) = (n-1) + \frac{2}{n} \sum_{k=0}^{n-1}T(k)$
-    * it follows that $T(n) \leq (n-1) + \frac{2}{n} \sum_{k=0}^{n-1} ck \, log \, k$ ✅
-* 2:54:15
+    * it follows that $T(n) \leq (n-1) + \frac{2}{n} \sum_{k=0}^{n-1} ck \, log \, k$
+    $$
+        T(n) \leq (n-1) + \frac{2}{n} \cdot c \sum_{k=0}^{n-1} k \, log \, k \\[1em]
+        \text{ now:} \, \sum_{k=0}^{n-1} k \, log \, k  \approx \int_{0}^n k \, log \, k \, dk \\[1em]
+        \int_{0}^n k \, log \, k \, dk = \frac{k^2}{2} log \, k - \frac{k^2}{4} + C \\[1em]
+        \text{recall that} \, 0 \leq k \lt n \\[1em]
+        \frac{k^2}{2} log \, k - \frac{k^2}{4} + C \leq \frac{n^2}{2}log \, n - \frac{n^2}{4} + C \\[1em]
+        T(n) \leq (n-1) + \frac{2}{n} \cdot c \sum_{k=0}^{n-1} k \, log \, k \, \, \text{becomes} \, \, T(n) \leq (n-1) + \frac{2}{n} (\frac{n^2}{2}log \, n - \frac{n^2}{4} + C) \\[1em]
+        T(n) \leq \frac{n}{2} -1 + n \, log \, n + \frac{2C}{n} \\[1em]
+        T(n) \leq n \, log(n) \\[2em]
+
+        \therefore \, T(n) \in n \, log(n) \, ✅ 
+
+    $$
 
 * **what we have established**
     * at n=1, quicksort does not need to run; an array of length one is already sorted
-    * at n=k
+    * at n=k, $T(n) \in \Omicron( n \, log(n))$
+* **comments about assumptions**
+    * randomised input allows us to apply stochastic method to pivot selection, else, deterministic selection would occur resulting in a highly unbalanced partition that leads to the worst-case scenario
+## 3. randomised quick sort
+* the pivot is selected at random; it is never always the first element (the latter is the deterministic way of selecting a pivot)
+* the goal of randomised quick-sort is make the running time independent of input ordering
+### 3.1 how TF do you make sure every element is equally likely to be the pivot?
+* eea...sy! choose an element in `A[first, ..., last]` **randomly** and exchange it with `A[first]`
+* the partition will be more balanced on average
+> **caveat** <br/> this is simply one way of achieving the objective
+### 3.2. pseudo-code for randomised quick sort algo
+
+```plaintext
+    algorithm QuickSort(A, first, last):
+        if first < last:
+            splitPoint = partition(A, first, last)
+            QuickSort(A, first, splitPoint-1)
+            QuickSort(A, splitPoint+1, last)
+    
+    partition(A, first, last):
+        randomise(A)
+        pivotValue = A[first]
+        left = first+1
+        right = last
+
+        done = False
+        while not done:
+            while left <= right && A[left] <= pivotValue:
+                left += 1
+            while A[right] >= pivotValue && right >= left:
+                right -= 1
+            
+            if right < left:
+                done = True
+            else:
+                temp = A[left]
+                A[left] = A[right]
+                A[right] = temp
+        temp = A[first]
+        A[first] = A[right]
+        A[right] = temp
+
+        return right
+
+    randomise(A):
+        k = random(first, last)
+        temp = A[first]
+        A[first] = A[k]
+        A[k] = temp
+```
+
+* it differs from regular quick-sort in that the array is randomised on every call (recursive or otherwise)
+### 3.3. time complexity of randomised quick-sort
+* 2:58:16
 
 
 
