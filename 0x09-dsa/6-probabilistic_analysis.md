@@ -121,45 +121,45 @@ $T(n) = (n-1) + \frac{1}{n} \sum_{k=0}^{n-1}(T(k) + T(n-k-1))$ <br/>
         * notice how 11 = 10 + 1, 11*10 = 110 and 110/2 = 55; we may have a pattern here
             * the sum of $n$ consecutive whole numbers starting from 1 ending at $n$ is $\frac{n(n+1)}{2}$
         * let us test this with n = 20
-            $$
-            S(20) = 1 + 2+ 3 + ... + 20 \\[1em]
-            S(20) = (20+1) + (19+2) + ... + (11+10) \\[1em]
-            S(20) = 21 \times 10 \\[1em]
-            S(20) = 210 \\[1em]
-            \text{test using the pattern we noticed} \\[1em]
-            S(20) = \frac{20(21)}{2}\\[1em]
-            S(20) = \frac{420}{2}\\[1em]
-            S(20) = 210\\[1em]
-            \text{the pattern appears to work}
-            $$
-         * let us test this with n = 21
-            $$
-            S(21) = 1 + 2+ 3 + ... + 21 \\[1em]
-            S(21) = (21+1) + (20+2) + ... + (12+10) + 11 \\[1em]
-            \text{notice how the last term has no partner; we hebben een serieus probleem}\\[1em]
-            \text{actually not; we do not hebben een serieus probleem. calma, povo; calma}\\[1em]
-            S(21) = (22 \times 10) + 11 \\[1em]
-            S(21) = 231 \\[1em]
-            \text{ test using the pattern we noticed} \\[1em]
-            S(21) = \frac{21(22)}{2}\\[1em]
-            S(21) = \frac{462}{2}\\[1em]
-            S(21) = 231\\[1em]
-            \text{the pattern appears to work even for odd-numbered terms}
-            $$
-        * we can conclude that generally, $S(n) = 1 + 2 + ... + n = \frac{n(n+1)}{2}$ ✅
-    * induction, therefore, is a **reasoning process where one moves from the specific to the general case**
-    * there are three steps during induction
-        * test the statement/proposition in the trivial/base case
-        * test said statement/proposition when $n$ is an arbitrary number $k$
-        * test said statement/proposition when $n$ is an arbitrary number $k+1$
-    * the statement/proposal holds IFF it passes all tests
-    * in our case
-        * the trivial test is $n=1$
-            * $S(1) = \frac{1(1+1)}{2} = \frac{2}{2} = 1$ ✅
-        * the case where $n=k$
-            * $S(k) = 1 + 2 + ... + k = \frac{k(k+1)}{2}$ ✅
-        * the case where $n=(k+1)$
-            * $S(k+1) = S(k) + (k+1) = 1 + 2 + ... + k + (k+1) = \frac{k(k+1)}{2} + (k+1) = \frac{(k+1)(k+2)}{2}$ ✅
+$$
+S(20) = 1 + 2+ 3 + ... + 20 \\[1em]
+S(20) = (20+1) + (19+2) + ... + (11+10) \\[1em]
+S(20) = 21 \times 10 \\[1em]
+S(20) = 210 \\[1em]
+\text{test using the pattern we noticed} \\[1em]
+S(20) = \frac{20(21)}{2}\\[1em]
+S(20) = \frac{420}{2}\\[1em]
+S(20) = 210\\[1em]
+\text{the pattern appears to work}
+$$
+* let us test this with n = 21
+$$
+S(21) = 1 + 2+ 3 + ... + 21 \\[1em]
+S(21) = (21+1) + (20+2) + ... + (12+10) + 11 \\[1em]
+\text{notice how the last term has no partner; we hebben een serieus probleem}\\[1em]
+\text{actually not; we do not hebben een serieus probleem. calma, povo; calma}\\[1em]
+S(21) = (22 \times 10) + 11 \\[1em]
+S(21) = 231 \\[1em]
+\text{ test using the pattern we noticed} \\[1em]
+S(21) = \frac{21(22)}{2}\\[1em]
+S(21) = \frac{462}{2}\\[1em]
+S(21) = 231\\[1em]
+\text{the pattern appears to work even for odd-numbered terms}
+$$
+* we can conclude that generally, $S(n) = 1 + 2 + ... + n = \frac{n(n+1)}{2}$ ✅
+* induction, therefore, is a **reasoning process where one moves from the specific to the general case**
+* there are three steps during induction
+    * test the statement/proposition in the trivial/base case
+    * test said statement/proposition when $n$ is an arbitrary number $k$
+    * test said statement/proposition when $n$ is an arbitrary number $k+1$
+* the statement/proposal holds IFF it passes all tests
+* in our case
+    * the trivial test is $n=1$
+        * $S(1) = \frac{1(1+1)}{2} = \frac{2}{2} = 1$ ✅
+    * the case where $n=k$
+        * $S(k) = 1 + 2 + ... + k = \frac{k(k+1)}{2}$ ✅
+    * the case where $n=(k+1)$
+        * $S(k+1) = S(k) + (k+1) = 1 + 2 + ... + k + (k+1) = \frac{k(k+1)}{2} + (k+1) = \frac{(k+1)(k+2)}{2}$ ✅
 
 #### 2.2.1 use substitute method to find the upper bound of the average case for quick sort
 * given the recurrence relation <br/><br/>
@@ -177,17 +177,17 @@ $T(n) \leq cn \, log \, n$ <br/>
 * step three: n = k+1
     * the recurrence relation has been simplified to $T(n) = (n-1) + \frac{2}{n} \sum_{k=0}^{n-1}T(k)$
     * it follows that $T(n) \leq (n-1) + \frac{2}{n} \sum_{k=0}^{n-1} ck \, log \, k$
-    $$
-    T(n) \leq (n-1) + \frac{2}{n} \cdot c \sum_{k=0}^{n-1} k \, log \, k \\[1em]
-    \text{ now:} \, \sum_{k=0}^{n-1} k \, log \, k  \approx \int_{0}^n k \, log \, k \, dk \\[1em]
-    \int_{0}^n k \, log \, k \, dk = \frac{k^2}{2} log \, k - \frac{k^2}{4} + C \\[1em]
-    \text{recall that} \, 0 \leq k \lt n \\[1em]
-    \frac{k^2}{2} log \, k - \frac{k^2}{4} + C \leq \frac{n^2}{2}log \, n - \frac{n^2}{4} + C \\[1em]
-    T(n) \leq (n-1) + \frac{2}{n} \cdot c \sum_{k=0}^{n-1} k \, log \, k \, \, \text{becomes} \, \, T(n) \leq (n-1) + \frac{2}{n} (\frac{n^2}{2}log \, n - \frac{n^2}{4} + C) \\[1em]
-    T(n) \leq \frac{n}{2} -1 + n \, log \, n + \frac{2C}{n} \\[1em]
-    T(n) \leq n \, log(n) \\[2em]
-    \therefore \, T(n) \in n \, log(n) \, ✅ 
-    $$
+$$
+T(n) \leq (n-1) + \frac{2}{n} \cdot c \sum_{k=0}^{n-1} k \, log \, k \\[1em]
+\text{ now:} \, \sum_{k=0}^{n-1} k \, log \, k  \approx \int_{0}^n k \, log \, k \, dk \\[1em]
+\int_{0}^n k \, log \, k \, dk = \frac{k^2}{2} log \, k - \frac{k^2}{4} + C \\[1em]
+\text{recall that} \, 0 \leq k \lt n \\[1em]
+\frac{k^2}{2} log \, k - \frac{k^2}{4} + C \leq \frac{n^2}{2}log \, n - \frac{n^2}{4} + C \\[1em]
+T(n) \leq (n-1) + \frac{2}{n} \cdot c \sum_{k=0}^{n-1} k \, log \, k \, \, \text{becomes} \, \, T(n) \leq (n-1) + \frac{2}{n} (\frac{n^2}{2}log \, n - \frac{n^2}{4} + C) \\[1em]
+T(n) \leq \frac{n}{2} -1 + n \, log \, n + \frac{2C}{n} \\[1em]
+T(n) \leq n \, log(n) \\[2em]
+\therefore \, T(n) \in n \, log(n) \, ✅ 
+$$
 
 * **what we have established**
     * at n=1, quicksort does not need to run; an array of length one is already sorted
@@ -197,7 +197,7 @@ $T(n) \leq cn \, log \, n$ <br/>
 ## 3. randomised quick sort
 * the pivot is selected at random; it is never always the first element (the latter is the deterministic way of selecting a pivot)
 * the goal of randomised quick-sort is make the running time independent of input ordering
-### 3.1 how TF do you make sure every element is equally likely to be the pivot?
+### 3.1. how TF do you make sure every element is equally likely to be the pivot?
 * eea...sy! choose an element in `A[first, ..., last]` **randomly** and exchange it with `A[first]`
 * the partition will be more balanced on average
 > **caveat** <br/> this is simply one way of achieving the objective
@@ -244,10 +244,62 @@ $T(n) \leq cn \, log \, n$ <br/>
 
 * it differs from regular quick-sort in that the array is randomised on every call (recursive or otherwise)
 ### 3.3. time complexity of randomised quick-sort
-* 2:58:16
+* we will track the expected number of comparisons, $C(n)$, instead of the whole algo
+    * most of the computational cost in quick-sort arises from comparing elements to the pivot during the partition process
+    * analysing partitions avoids the need to explicitly track other details ofthe algo
+    * runtime of quick-sort is directly proportional to the number of comparisons
+* we need to figure out the following
+    * probability of comparison betweentwo elements
+        * for two elements, `A[i]` and `A[j]`, the pivot could be `A[i]` or `A[j]` with equal likelihood in the sub-array `A[i, j]`
+            * only when one is chosen as the pivot can the two be directly compared
+        * we can use the following expression to represent this scenario <br/><br/> $P(A[i] \, \text{and} \, A[j] \, \text{ compared}) = P(A[i] \, \text{is pivot first}) + P(A[j] \, \text{is pivot first})$ <br/><br/>
+        * $P(A[i] \, \text{is pivot first}) = \frac{1}{j-i+1}$ because each element in `A[i, j]` is equally likely to be picked
+            * len(A) = j - i + 1 = n
+        * $P(A[j] \, \text{is pivot first}) = \frac{1}{j-i+1}$ for the same reason
+        * **the probability that `A[i]` and `A[j]` are compared *viz*:** <br/><br/> $P(A[i] \, \text{and} \, A[j] \, \text{ compared}) = \frac{2}{j-i+1}$ <br/><br/>
+    * expected comparisons for all pairs
+        * recall: $\mathbb{E}[X] = \sum_x x \cdot P(X=x)$
+            * $x$ in our case is the event of comaring two numbers, therefore, has a value of one ~~when it occurs~~
+            * $P(X=x)$ in our case is $\frac{2}{j-i+1}$
+        * we need to figure out the total number of pairs composed of two arbitrary numbers at inded `i` and `j`
+            * **total number of pairs *viz*:** ${n \choose 2} = \frac{n(n-1)}{2}$ <!-- \binom{n}{2} works too -->
+                * how TF does one make a pair?
+                    * eaa...sy! assume `n` elements in `A`. pick an element at random. there are `n-1` left. pick another at random. job done
+                    * mathemagically... $\sum_{i=1}^{n-1} \sum_{j=i+1}^n$
+                    * "i see a embedded/nested `for` loop," you say. you are correct ...
 
+                        ```plaintext
+                            for i in range(1, n):
+                                for j in range(i+1, n+1):
+                                    // do sth here ...
+                        ```
 
+                    * the outer `for` loop corresponds to the outer summation; the inner loop corresponds to the inner summation
+* what we have so far
+    * **the probability that `A[i]` and `A[j]` are compared:** <br/><br/> $P(A[i] \, \text{and} \, A[j] \, \text{ compared}) = \frac{2}{j-i+1}$ <br/><br/>
+    * **total number of pairs:** <br/> <br/> ${n \choose 2} = \frac{n(n-1)}{2}$ <br/><br/>
+* we can now compute the expected number of comparisons
+$$
+\mathbb{E}[X] = \sum_x x \cdot P(X=x)\\[1em]
+C(n) = \sum_{i=1}^{n-1} \sum_{j=i+1}^n \frac{2}{j-i+1} \\[1em]
+T(n) \, \text{ is proportional to} \, C(n) \\[1em]
+\therefore \, O(C(n)) \approx O(T(n))
+$$
 
+* how TF do you find $O(C(n))$ ?
+    * glad you asked...
+    * **step 1:** simplify $C(n)$ <br/><br/> $C(n) = \sum_{i=1}^{n-1} \sum_{j=i+1}^n \frac{2}{j-i+1}$ <br/> $\text{let} \, j-i+1 = k$ <br/> $C(n) = \sum_{i=1}^{n-1} \sum_{k=1}^{n-i} \frac{2}{k}$ <br/><br/>
+    * **step 2:** approximate the inner summation <br/><br/> $C(n) = \sum_{i=1}^{n-1} \sum_{k=1}^{n-i} \frac{2}{k}$ <br/><br/> but $\sum_{k=1}^{n-1} \frac{1}{k}$ is the harmonic number $H_{n-1}$ <br/><br/> and $H_{n-1} \approx ln(n-i) + \gamma$ <br/><br/> so $C(n) \approx 2 \sum_{i=1}^{n-1} ln(n-i) + \gamma$ <br/><br/>
+    * **step 3:** compute the outer summation
+        * we know that <br/><br/>$\sum_{i=1}^{n-1} x =  (n-1)x$<br/><br/> so $C(n) \approx 2(n-1) \, ln(n-i) + \gamma$ <br/><br/> disregard the constants because they are do not affect the upper bound significantly <br/><br/> therefore $C(n) \approx n \, \text{ln} \, n$ <br/><br/>
+    * **conclusion:** $C(n) \approx n \, \text{ln} \, n$
+* what we have so far
+    * $C(n) \approx n \, \text{ln} \, n$
+    * recall $T(n) \, \text{ is proportional to} \, C(n)$
+    * therefore $T(n) \approx C(n) \approx n \, \text{ln} \, n$
+* $log_2(n)$ grows faster than $\text{ln}(n)$: since this is upper-bound analysis, we can replace the natural log wit base 2 log *viz*: <br/><br/> $T(n) \approx n \, log \, n$
+
+* **conclusion:** $T(n) \in O(n \, log(n))$ . randomisation rules out the likelihood of the worst or best-case scenarios for regular quick sort discussed previously from occurring
 </div>
 
 [def]: ./5-divide_and_conquer.md
