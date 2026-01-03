@@ -17,12 +17,12 @@
             A --> E[Array Representation]
             A --> F[Left Child: 2*index + 1]
             A --> G[Right Child: 2*index + 2]
-            A --> H[Parent: floor((index - 1)/2)]
+            A --> H["Parent: floor((index - 1)/2)"]
             A --> I[heapifyUp: Bubble Up]
             A --> J[heapifyDown: Bubble Down]
-            A --> K[Insert: O(log n)]
-            A --> L[Extract Max: O(log n)]
-            A --> M[Build Heap: O(n)]
+            A --> K["Insert: O(log n)"]
+            A --> L["Extract Max: O(log n)"]
+            A --> M["Build Heap: O(n)"]
 
             N[Min Heap] --> O[Root: Minimum Element]
             N --> P[Complete Binary Tree]
@@ -30,12 +30,12 @@
             N --> R[Array Representation]
             N --> S[Left Child: 2*index + 1]
             N --> T[Right Child: 2*index + 2]
-            N --> U[Parent: floor((index - 1)/2)]
+            N --> U["Parent: floor((index - 1)/2)"]
             N --> V[heapifyUp: Bubble Up]
             N --> W[heapifyDown: Bubble Down]
-            N --> X[Insert: O(log n)]
-            N --> Y[Extract Min: O(log n)]
-            N --> Z[Build Heap: O(n)]
+            N --> X["Insert: O(log n)"]
+            N --> Y["Extract Min: O(log n)"]
+            N --> Z["Build Heap: O(n)"]
     ```
 
 * heap is one maximally efficient implementation of an abstract data type called a **priority queue** and, in fact, priority queues are often referred to as *"heaps"*, regardless of how they may be implemented
@@ -144,6 +144,117 @@
         * multiply the index by 2  and add two to get to the right child
             * $(3 \times 2) + 2 = 8$
     * it appears we have a pattern 
-        * given a node at index, `i`, on an array, `A`,<br/><br/> the  parent node is at index $\lfloor\frac{i-1}{2}\rfloor$ <br/><br/> the left child is at index $(i \times 2) + 1$ <br/><br/> and the right child is at index $(i \times 2) + 2$ <br/><br/>
-    * 3:18:59b
-## 2. 
+        * given a non-root node at index, `i`, on an array, `A`,<br/><br/> the  parent node is at index $\lfloor\frac{i-1}{2}\rfloor$ <br/><br/> the left child is at index $(i \times 2) + 1$ <br/><br/> and the right child is at index $(i \times 2) + 2$ <br/><br/>
+### 1.3. properties of heaps that are relevant to finding its time complexity
+* the relationship between a heap's number of nodes, `n`, and its height, `h`, is $h = log_2(n)$ assuming said heap is fully filled (all nodes are populated and each parent has two children)
+    * **example 1:** `n` = 3
+        * the heap looks like this
+
+        ```mermaid
+            graph TD
+                A(()) --- B(())
+                A --- C(()) 
+        ```
+
+        * height of the heap, `h`, is simply the number of levels; in this case `h` = 2
+        * $log_2(3) \approx 1.58$ and $\lceil 1.58 \rceil = 2 = h$ ✅
+    * **example 2:** `n` = 7
+        * the heap looks like this
+
+        ```mermaid
+            graph TD
+                A(()) --- B(())
+                A --- C(())
+                B --- D(())
+                B --- E(())
+                C --- F(())
+                C --- G(())
+        ```
+
+        * height of the heap, `h`, is 3
+        * $log_2(7) \approx 2.8$ and $\lceil 2.8 \rceil = 3 = h$ ✅
+    * **example 3:** run the numbers starting at `n`  1 ending at `n` = 20
+
+        |n|log<sub>2</sub>(n)|h|ceil(log(n))|
+        |:---:|:---:|:---:|:---:|
+        |1|0|1|0|
+        |2|1|2|2|
+        |3|1.58|2|2|
+        |4|2|3|3|
+        |5|2.32|3|3|
+        |6|2.58|3|3|
+        |7|2.8|3|3|
+        |8|3|4|4|
+        |9|3.16|4|4|
+        |10|3.32|4|4|
+        |11|3.46|4|4|
+        |12|3.58|4|4|
+        |13|3.7|4|4|
+        |14|3.81|4|4|
+        |15|3.91|4|4|
+        |16|4|5|5|
+        |17|4.09|5|5|
+        |18|4.17|5|5|
+        |19|4.25|5|5|
+        |20|4.32|5|5|
+
+    * **conclusion:** $h = \lceil log_2(n) \rceil$
+* given a heap whose number of nodes is `n`, the number of nodes at the leaf level, assuming the tree is fully filled up, are $\frac{n}{2}$
+    * **example 1:** `n` = 3
+        * the heap looks like this
+
+        ```mermaid
+            graph TD
+                A(()) --- B(())
+                A --- C(()) 
+        ```
+
+        * there are two nodes at the leaf level
+        * $\frac{3}{2} = 1.5$ and $\lceil 1.5 \rceil = 2$ ✅
+    * **example 2:** `n` = 7
+        * the heap looks like this
+
+        ```mermaid
+            graph TD
+                A(()) --- B(())
+                A --- C(())
+                B --- D(())
+                B --- E(())
+                C --- F(())
+                C --- G(())
+        ```
+
+        * there are four nodes at the leaf level
+        * $\frac{7}{2} = 3.5$ and $\lceil 3.5 \rceil = 4$ ✅
+    * **example 3:** run the numbers starting at `n`  1 ending at `n` = 20
+
+        |n|n/2|#leaf nodes|ceil(n/2)|
+        |:---:|:---:|:---:|:---:|
+        |1|0.5|1|1 ✅|
+        |2|1|1|2|
+        |3|1.5|2|2 ✅|
+        |4|2|1|3|
+        |5|2.5|2|3|
+        |6|3|3|4|
+        |7|3.5|4|4 ✅|
+        |8|4|1|5|
+        |9|4.5|2|5|
+        |10|5|3|6|
+        |11|5.5|4|6|
+        |12|6|5|7|
+        |13|6.5|6|7|
+        |14|7|7|8|
+        |15|7.5|8|8 ✅|
+        |16|8|1|9|
+        |17|8.5|2|9|
+        |18|9|3|10|
+        |19|9.5|4|10|
+        |20|10|5|11|
+
+    * **conclusion:** the relationship, $\text{number of leaf nodes} = \lceil \frac{n}{2} \rceil$ , holds when the heap is fully populated (n = 1, 3, 7, 15 etc)
+* given a heap whose number of nodes is `n` and is fully populated
+    * there are approximately $\frac{n}{2}$ nodes at level $n$
+    * there are approximately $\frac{n}{4}$ nodes at level $n-1$
+    * generally, there are apprximately $\frac{n}{2^k}$ nodes at level $n-k+1$ where $1 \leq k \leq n$
+## 2. everything about the `insert` method
+* 3:23:00
