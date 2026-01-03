@@ -257,4 +257,112 @@
     * there are approximately $\frac{n}{4}$ nodes at level $n-1$
     * generally, there are apprximately $\frac{n}{2^k}$ nodes at level $n-k+1$ where $1 \leq k \leq n$
 ## 2. everything about the `insert` method
-* 3:23:00
+### 2.1. max heap
+* we will use the following max heap throughout this section
+
+    ```mermaid
+        graph TD
+            A((10)) --- B((7))
+            A  --- C((5))
+            B --- D((3))
+            B --- E((6))
+            C --- F((4))
+    ```
+
+* this is the representaion of said max heap in pseudo-code
+
+    ```plaintext
+        class maxHeap:
+            define heap size in a variable, `m`
+            create an array, `data`, of the size defined above
+            function Insert(num):
+                add a new data point to the heap while maintaining the heap property
+            function Peek():
+                return a data point 
+    ```
+
+* this is the array representation of said heap
+
+    |val|10|7|5|3|6|4|
+    |:---|:---|:---|:---|:---|:---|:---|
+    |idx|0|1|2|3|4|5|
+
+### 2.2. `insert` method
+* adds a new element/key/data point to the heap while maintaining the heap property
+* **three steps**
+    * **step one:** add said key to the bottom level of the heap
+    * **step two:** compare the newly-added key with its parent; stop if the order is correct, else, go to step three
+    * **step three:** swap said key with its parent and return to step two
+* **assumptions**
+    * the heap is mutable
+    * the heap has the capacity to hold more keys
+* **example: add key `11` to the heap**
+    * step one: add said key to the bottom level of the heap
+
+    ```mermaid
+        graph TD
+            A((10)) --- B((7))
+            A  --- C((5))
+            B --- D((3))
+            B --- E((6))
+            C --- F((4))
+            C --- G((11))
+    ```
+
+    * step two: compare `11` with `5`, its parent
+        * 11 &gt; 5, therefore, swap
+
+    * step three: swap `11` and `5` the return to step two
+
+        ```mermaid
+            graph TD
+                A((10)) --- B((7))
+                A  --- C((11))
+                B --- D((3))
+                B --- E((6))
+                C --- F((4))
+                C --- G((5))
+        ```
+
+        * compare `11` with `10`: 11 &gt; 10, therefore, swap
+        * swap `11` and `10` and return to step two
+
+        ```mermaid
+            graph TD
+                A((11)) --- B((7))
+                A  --- C((10))
+                B --- D((3))
+                B --- E((6))
+                C --- F((4))
+                C --- G((5))
+        ```
+
+        * heap in current state satisfies the heap property, therefore, stop; return the latest version of the heap
+> **important!** <br/> the tree structure is merely a representation/visualisation; actual operations occur in the array data structure which is linear <br/> the algo has to figure out the index of the parent node before it can compare and/or swap elements in said array
+#### 2.2.1. pseudo-code for `insert` method
+
+    ```plaintext
+        // assume an array, `data`, holds the heap
+        Function Insert(num):
+            // step one: add said key to the bottom level of the heap
+            data.append(num)
+
+            // step two: compare the newly-added key with its parent; stop if the order is correct, else, go to step three
+            i = data.length - 1 // index of `num`
+            while i > 0 && (i-1) / 2 >= 0:
+                if data[i] > data[(i-1)/2]:
+                    // step three: swap said key with its parent and return to step two
+                    tmp = data[i]
+                    data[i] = data[(i-1)/2]
+                    data[(i-1)/2] = tmp
+
+                    i = (i-1) / 2
+                else:
+                    // the `stop` part in step two
+                    break
+    ```
+
+* **caveat:**
+    * this implementations assumes that the elements of `data` are of type `int`; the comparison mechanism, `if data[i] > data[(i-1)/2]:`, will change based on element type
+#### 2.2.2. time complexity
+* **best case** is trivial
