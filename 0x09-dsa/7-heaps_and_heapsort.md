@@ -7,7 +7,7 @@
         * in a max heap, for any given node, `C`, if `P` is the parent node of `C`, then the key (the value) of `P` is greater than or equal to the key of `C`
         * in a min heap, the key of `P` is less than or equal to the key of `C`
     * the node at the *"top"* of the heap (with no parents) is called the root node
-    * see illustration below
+    * see illustrations below
 
     ```mermaid
         graph TD
@@ -23,6 +23,10 @@
             A --> K["Insert: O(log n)"]
             A --> L["Extract Max: O(log n)"]
             A --> M["Build Heap: O(n)"]
+    ```
+
+    ```mermaid
+        graph TD
 
             N[Min Heap] --> O[Root: Minimum Element]
             N --> P[Complete Binary Tree]
@@ -152,8 +156,8 @@
 
         ```mermaid
             graph TD
-                A(()) --- B(())
-                A --- C(()) 
+                A(( )) --- B(( ))
+                A --- C(( )) 
         ```
 
         * height of the heap, `h`, is simply the number of levels; in this case `h` = 2
@@ -163,12 +167,12 @@
 
         ```mermaid
             graph TD
-                A(()) --- B(())
-                A --- C(())
-                B --- D(())
-                B --- E(())
-                C --- F(())
-                C --- G(())
+                A(( )) --- B(( ))
+                A --- C(( ))
+                B --- D(( ))
+                B --- E(( ))
+                C --- F(( ))
+                C --- G(( ))
         ```
 
         * height of the heap, `h`, is 3
@@ -205,8 +209,8 @@
 
         ```mermaid
             graph TD
-                A(()) --- B(())
-                A --- C(()) 
+                A(( )) --- B(( ))
+                A --- C(( )) 
         ```
 
         * there are two nodes at the leaf level
@@ -216,12 +220,12 @@
 
         ```mermaid
             graph TD
-                A(()) --- B(())
-                A --- C(())
-                B --- D(())
-                B --- E(())
-                C --- F(())
-                C --- G(())
+                A(( )) --- B(( ))
+                A --- C(( ))
+                B --- D(( ))
+                B --- E(( ))
+                C --- F(( ))
+                C --- G(( ))
         ```
 
         * there are four nodes at the leaf level
@@ -358,11 +362,75 @@
 
                     i = (i-1) / 2
                 else:
-                    // the `stop` part in step two
+                    // the `stop` bit in step two
                     break
     ```
 
 * **caveat:**
     * this implementations assumes that the elements of `data` are of type `int`; the comparison mechanism, `if data[i] > data[(i-1)/2]:`, will change based on element type
 #### 2.2.2. time complexity
-* **best case** is trivial
+* **best case** time complexity is trivial
+    * say you add a new element whose value is smaller than that of its immediate parent: said element stays where it is added
+    * example: add 5 to the heap
+        * `5`'s parent is `10` and 5 &lt; 10, therefore, no further action is required
+    * **conclusion: time complexity in the best case is O(1), that is,** $T(n) \in O(1)$
+* **worst case** time complexity occurs when the element must be bubbled up to the root (newly-added element is larger than root)
+    * in our example above, we added `11` to the heap
+    * said element ended up being the root, that is, it moved/bubbled up $n$ levels (the height of the heap)
+        * we know that the relationship between the number of nodes, `n`, and height of a heap, `h`, is $h = log(n)$
+        * the algo will perform log(n) swaps to get the newly-added element from the leaf to the root
+    * **conclusion: time complexity in the worst case is O(log(n)), that is,** $T(n) \in O(log(n))$
+* **average case** time complexity depends on the expected number of swaps
+    * $T(n) \propto \mathbb{E}[X]$ <br/> where $\mathbb{E}[X]$ is the expected number of swaps
+    * the random variable, `X`, is the event where a newly-inserted element is swapped with its parent at each level
+        * said event may or may not happen at each level: (one if it happens, else, zero)
+        * the leaf level will be level zero; the root level will be level `n-1` (0-9 incusive is 10 digits)
+    * the probability relies on the following assumptions
+        * newly-added element is arbitrary and random (the chance that said element is larger than its parent is 50% always)
+        * comparsion at each level is an independent event (the $iid$ property): the results of the comparsion at level `h` are independent of those at level `h-1`, however, swapping at level `h-1` only occurs when a swap or comparison or both occur at level `h`
+        * **conclusion: at each level, the probability of swapping $(\frac{1}{2})^i$ where i is the level number**
+    * $\mathbb{E}[X] = \sum_{i=1}^h i \cdot P(X=i)$ <br/><br/> the random var is 1 and the probability is $(\frac{1}{2})^i$ <br/><br/> $\mathbb{E}[X] = \sum_{i=1}^h (\frac{1}{2})^i$ <br/><br/> $\mathbb{E}[X] =  1 + \frac{1}{2} + \frac{1}{4} + ... + (\frac{1}{2})^h$ <br/><br/> we are looking at an infinite geometric series
+    > **geometric series:** <br/> a series where each term is a constant multiple (ratio) of the previous term <br/><br/> $S = \sum_{k=0}^\infin ar^k$ <br/><br/> `a` is the first term and `r` is the common ratio (|r| < 1 for convergence) <br/><br/> the sum of an infinite geometric series is given by <br/><br/> $S = \frac{a}{1-r} \ \text{for} \ |r| \lt 1 $ <br/><br/>
+
+    * in our case: `a` = 1, `r` = 1/2 <br/><br/> we know that $\sum_{k-0}^\infin r^k = \frac{1}{1-r}$ <br/><br/>$\mathbb{E}[X] \approx \frac{1}{1-\frac{1}{2}} = 2$ <br/><br/> we can replace the constant with a number, $C$, to generalise the solution because $h$, the height of the tree, is not infinitely large<br/><br/> $\therefore \mathbb{E}[X] \approx C$ <br/><br/>
+    * **conclusion: time complexity in the average case is O(1), that is,** $T(n) \in O(1)$
+## 3. everything about the `peek` method
+### 3.1. max heap
+* we will use the following max heap throughout this section
+
+    ```mermaid
+        graph TD
+            A((10)) --- B((7))
+            A  --- C((5))
+            B --- D((3))
+            B --- E((6))
+            C --- F((4))
+    ```
+
+* this is the representaion of said max heap in pseudo-code
+
+    ```plaintext
+        class maxHeap:
+            define heap size in a variable, `m`
+            create an array, `data`, of the size defined above
+            function Insert(num):
+                add a new data point to the heap while maintaining the heap property
+            function Peek():
+                return a data point 
+    ```
+
+* this is the array representation of said heap
+
+    |val|10|7|5|3|6|4|
+    |:---|:---|:---|:---|:---|:---|:---|
+    |idx|0|1|2|3|4|5|
+
+### 3.2. `peek` method
+#### 3.2.1. pseudo-code for `peek` method
+
+    ```plaintext
+        // assume an array, `data`, holds the heap
+        Function Peek():
+            return data[0]
+    ```
+* 3:37:31
