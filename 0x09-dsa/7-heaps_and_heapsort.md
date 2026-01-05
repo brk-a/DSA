@@ -345,30 +345,30 @@
 > **important!** <br/> the tree structure is merely a representation/visualisation; actual operations occur in the array data structure which is linear <br/> the algo has to figure out the index of the parent node before it can compare and/or swap elements in said array
 #### 2.2.1. pseudo-code for `insert` method
 
-    ```plaintext
-        // assume an array, `data`, holds the heap
-        Function Insert(num):
-            // step one: add said key to the bottom level of the heap
-            data.append(num)
+```plaintext
+    // assume an array, `data`, holds the heap
+    Function Insert(num):
+        // step one: add said key to the bottom level of the heap
+        data.append(num)
 
-            // step two: compare the newly-added key with its parent; stop if the order is correct, else, go to step three
-            i = data.length - 1 // index of `num`
-            while i > 0 && (i-1) / 2 >= 0:
-                if data[i] > data[(i-1)/2]:
-                    // step three: swap said key with its parent and return to step two
-                    tmp = data[i]
-                    data[i] = data[(i-1)/2]
-                    data[(i-1)/2] = tmp
+        // step two: compare the newly-added key with its parent; stop if the order is correct, else, go to step three
+        i = data.length - 1 // index of `num`
+        while i > 0 && (i-1) / 2 >= 0:
+            if data[i] > data[(i-1)/2]:
+                // step three: swap said key with its parent and return to step two
+                tmp = data[i]
+                data[i] = data[(i-1)/2]
+                data[(i-1)/2] = tmp
 
-                    i = (i-1) / 2
-                else:
-                    // the `stop` bit in step two
-                    break
-    ```
+                i = (i-1) / 2
+            else:
+                // the `stop` bit in step two
+                break
+```
 
 * **caveat:**
     * this implementations assumes that the elements of `data` are of type `int`; the comparison mechanism, `if data[i] > data[(i-1)/2]:`, will change based on element type
-#### 2.2.2. time complexity
+### 2.3. time complexity
 * **best case** time complexity is trivial
     * say you add a new element whose value is smaller than that of its immediate parent: said element stays where it is added
     * example: add 5 to the heap
@@ -390,7 +390,7 @@
         * comparsion at each level is an independent event (the $iid$ property): the results of the comparsion at level `h` are independent of those at level `h-1`, however, swapping at level `h-1` only occurs when a swap or comparison or both occur at level `h`
         * **conclusion: at each level, the probability of swapping $(\frac{1}{2})^i$ where i is the level number**
     * $\mathbb{E}[X] = \sum_{i=1}^h i \cdot P(X=i)$ <br/><br/> the random var is 1 and the probability is $(\frac{1}{2})^i$ <br/><br/> $\mathbb{E}[X] = \sum_{i=1}^h (\frac{1}{2})^i$ <br/><br/> $\mathbb{E}[X] =  1 + \frac{1}{2} + \frac{1}{4} + ... + (\frac{1}{2})^h$ <br/><br/> we are looking at an infinite geometric series
-    > **geometric series:** <br/> a series where each term is a constant multiple (ratio) of the previous term <br/><br/> $S = \sum_{k=0}^\infin ar^k$ <br/><br/> `a` is the first term and `r` is the common ratio (|r| < 1 for convergence) <br/><br/> the sum of an infinite geometric series is given by <br/><br/> $S = \frac{a}{1-r} \ \text{for} \ |r| \lt 1 $ <br/><br/>
+    > **geometric series:** <br/> a series where each term is a constant multiple (ratio) of the previous term <br/><br/> $S = \sum_{k=0}^\infin ar^k$ <br/><br/> `a` is the first term and `r` is the common ratio (|r| < 1 for convergence) <br/><br/> the sum of an infinite geometric series is given by <br/><br/> $S = \frac{a}{1-r} \ \text{for} \ |r| \lt 1$ <br/><br/>
 
     * in our case: `a` = 1, `r` = 1/2 <br/><br/> we know that $\sum_{k-0}^\infin r^k = \frac{1}{1-r}$ <br/><br/>$\mathbb{E}[X] \approx \frac{1}{1-\frac{1}{2}} = 2$ <br/><br/> we can replace the constant with a number, $C$, to generalise the solution because $h$, the height of the tree, is not infinitely large<br/><br/> $\therefore \mathbb{E}[X] \approx C$ <br/><br/>
     * **conclusion: time complexity in the average case is O(1), that is,** $T(n) \in O(1)$
@@ -433,4 +433,224 @@
         Function Peek():
             return data[0]
     ```
-* 3:37:31
+* all the `peek` method does is to return the key at the root node
+### 3.3. time complexity
+* the best, average and worst-case time  complexity are trivial: constant time, that is, $T(n) \in O(1)$
+## 4. everything about the `delete` method
+### 4.1. max heap
+* we will use the following max heap throughout this section
+
+    ```mermaid
+        graph TD
+            A((11)) --- B((7))
+            A  --- C((10))
+            B --- D((3))
+            B --- E((6))
+            C --- F((4))
+            C --- G((5))
+    ```
+
+* this is the representaion of said max heap in pseudo-code
+
+    ```plaintext
+        class maxHeap:
+            define heap size in a variable, `m`
+            create an array, `data`, of the size defined above
+            function Insert(num):
+                add a new data point to the heap while maintaining the heap property
+            function Peek():
+                return a data point 
+    ```
+
+* this is the array representation of said heap
+
+    |val|11|7|10|3|6|4|5|
+    |:---|:---|:---|:---|:---|:---|:---|:---|
+    |idx|0|1|2|3|4|5|6|
+
+### 4.2. the `delete` method
+* deletes the root node not any other node
+* returns the key of said deleted root node
+* the resulting data structure is not a heap because it does not satisfy the heap property; we need to re-arrange said data structure to form a heap
+    * the `delete` method must also "*heapify*" the nodes left after deleting the root
+#### 4.2.1. steps
+* ~~five~~ steps
+* **step zero:** store the key of the root in a variable
+* **step one:** replace the key of root with the key of last node at the last level
+* **step two:** delete the last node at the last level (the one whose key you used in step two)
+* **step three:** perform *"heapify"* to restore the heap property
+    ```plaintext
+        set index = 0 (root)
+        while index has a left child:
+            find largest child
+            if heap[index] < heap[largest_child]:
+                swap heap[index]  and heap[largest_child]
+                move index to largest_child
+            else:
+                break
+    ```
+* **step four:** return the key of the original root (the one from step zero)
+* **example:  apply `delete` method to the max heap above**
+    * step zero: store the key of the root in a variable
+        * set variable `root_key` to `11`
+    * step one: replace root key with the last key at bottom level of the heap
+
+        ```mermaid
+            graph TD
+                A((5)) --- B((7))
+                A  --- C((10))
+                B --- D((3))
+                B --- E((6))
+                C --- F((4))
+                C --- G((5))
+        ```
+
+    * step two: delete the last node at the last level
+
+        ```mermaid
+            graph TD
+                A((5)) --- B((7))
+                A  --- C((10))
+                B --- D((3))
+                B --- E((6))
+                C --- F((4))
+        ```
+
+    * step three: perform *"heapify"* to restore the heap property
+        * compare `5` with `10` and `7`: 10 &gt; 7 &gt; 5, therefore, `largest_child` = 10
+        * swap `5` and `10`
+
+        ```mermaid
+            graph TD
+                A((10)) --- B((7))
+                A  --- C((5))
+                B --- D((3))
+                B --- E((6))
+                C --- F((4))
+        ```
+
+        * heap in current state satisfies the heap property, therefore, stop; no need to make more comaprisons
+    * step four: return the key of the original root
+        * return `11`
+
+#### 4.2.2. pesudo-code for `delete` method
+
+```plaintext
+    // assume an array, `data`, holds the heap
+    Function Delete():
+        last_key = data[last_index]
+        data.remove(last_index) // step two
+
+        root_key = data[0] // step zero
+        data[0] = last_key // step one
+        Heapify(0) // step three
+
+        return root_key // step four
+```
+
+#### 4.2.3. TF is *heapify*?
+* glad you asked...
+* a fundamental operation used to maintain or establish the heap property in a binary heap
+    * ensures that each parent node is greater than or equal to (in a max-heap) or less than or equal to (in a min-heap) its children
+* primarily used during heap construction, element insertion and deletion; the heap property may be violated after modifying the heap structure
+* process involves recursively comparing a node with its children and swapping it with the larger (for max-heap) or smaller (for min-heap) child until the sub-tree rooted at the node satisfies the heap property
+    * starting from the last non-leaf node and moving up to the root when building a heap from an unsorted array, ensure the entire structure satisfies the heap property
+* here is its pseudo-code
+
+    ```plaintext
+        // assume an array, `data`, holds the heap
+        Function Heapify(i):
+            while (2*i)+1 < data.length():
+                maxChildIndex = MaxChild(i)
+                if data[i] < data[maxChildIndex]:
+                    temp = data[maxChildIndex]
+                    data[maxChildIndex] = data[i]
+                    data[i] = temp
+                    i = maxChildIndex
+                else:
+                    break
+
+        Function MaxChild(i):
+            left = 2*i + 1
+            right = 2*i + 1
+            if right >= data.length() || data[left] > data[right]:
+                return left
+            else:
+                return right
+    ```
+
+### 4.3. time complexity
+#### 4.3.1. complete pseudo-code
+```plaintext
+    // assume an array, `data`, holds the heap
+    Function Delete():
+        last_key = data[last_index]
+        data.remove(last_index) // step two
+
+        root_key = data[0] // step zero
+        data[0] = last_key // step one
+        Heapify(0) // step three
+
+        return root_key // step four
+    
+    Function Heapify(i):
+        while (2*i)+1 < data.length():
+            maxChildIndex = MaxChild(i)
+            if data[i] < data[maxChildIndex]:
+                temp = data[maxChildIndex]
+                data[maxChildIndex] = data[i]
+                data[i] = temp
+                i = maxChildIndex
+            else:
+                break
+
+    Function MaxChild(i):
+        left = 2*i + 1
+        right = 2*i + 1
+        if right >= data.length() || data[left] > data[right]:
+            return left
+        else:
+            return right
+```
+
+#### 4.3.2. time complexity of `Delete` and `MaxChild`
+* `MaxChild` takes constant time, that is, $f(n) = C$
+* `Delete` proper takes constant time too: $f(n) = C$
+* `Heapify` is where the magic occurs, therefore, the time complexity of `Delete` is directly proportional to that of `Heapify`
+#### 4.3.3. time complexity of `Heapify`
+* **best-case** time complexity is trivial
+    * say you have a heap whose node count  is one: it takes constant time to delete said node
+    * `Heapify` does not run at all
+    * **conclusion: time complexity in the best case is O(1), that is,** $T(n) \in O(1)$
+* **worst-case** time complexity occurs during `Heapify(0)`, that is, swapping level by level from the root to the leaf
+    * recall: the number of nodes, `n`, of a heap and height, `h`, have the following relationship: $h = log(n)$
+    *  **conclusion: time complexity in the worst case is O(log(n)), that is,** $T(n) \in O(log(n))$
+* **average case** time complexity depends on the expected number of swaps
+    * $T(n) \propto \mathbb{E}[X] \ \text{where} \ \mathbb{E}[X] \ \text{is the expected number of swaps}$
+    * random variable, `X`, is the event where the new root element is swapped at each level
+        * number of swaps needed to bubble down a node to its proper position
+        * said event may or may not happen at each level: (one if it happens, else, zero)
+    * the probability relies on the following assumptions
+        * newly-rooted node is neither arbitrary nor random because it was at the leaf in the original heap (the chance that said node is larger than its child is 100% almost always)
+        * comparsion at each level is an independent event (the $iid$ property): the results of the comparsion at level `h` are independent of those at level `h-1`, however, swapping at level `h-1` only occurs when a swap or comparison or both occur at level `h`
+        * **conclusion: at each level, the probability of swapping is almost always 100%**
+    * we know that <br/> $\mathbb{E}[X] = \sum_{i=1}^h i \cdot P(X=i)$ <br/><br/> in our case, $P(X=i) = 1$ and $i=1$ <br/><br/> $\mathbb{E}[X] = \sum_{i=1}^h 1 = h$ <br/><br/> recall: $h \approx log_2n$ <br/><br/> $\mathbb{E}[X] \approx log_2n$ <br/><br/> drop the constants to generalise the solution <br/><br/> $\therefore \ \mathbb{E}[X] \approx O(log \ n)$ <br/><br/>
+    *  **conclusion: time complexity in the average case is O(log(n)), that is,** $T(n) \in O(log(n))$
+
+## 5. summary table of time complexity for `insert`, `peek` and `delete` methods
+
+|scenario|insert|peek|delete|
+|:---|:---|:---|:---|
+|best-case|$O(1)$|$O(1)$|$O(1)$|
+|average-case|$O(1)$|$O(1)$|$O(log(n))$|
+|worst-case|$O(log(n))$|$O(1)$|$O(log(n))$|
+
+### 5.1. average-case scenario: why TF does it take constant time to insert yet logarithmic time to delete?
+* good question...
+* most inserted elements/nodes end up near the leaves of the heap: this requires few or no swaps to satisfy the heap property
+    * since a majority of nodes in a complete binary tree are near the bottom, the probability of needing to bubble up multiple levels is low, leading to constant-time performance on average
+* deleting always removes the root (the max or min element) and replaces it with the last element which must be heapified downward
+    * this process often requires traversing from root to leaf, $O(log \ n)$ levels, because the replacement element is typically small (in a max-heap) or large (in a min-heap) necessitating multiple comparisons and swaps
+
+## 6. everything about heap-sort
+* 3:53:42
