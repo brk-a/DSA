@@ -1,6 +1,9 @@
 # heaps and heap-sort
 
 ## 0. intro
+
+<div style="text-align: justify;">
+
 ### 0.1. WTF is a heap?
 * a tree-based data structure that satisfies the heap property
     * TF is the *heap property*?
@@ -653,4 +656,306 @@
     * this process often requires traversing from root to leaf, $O(log \ n)$ levels, because the replacement element is typically small (in a max-heap) or large (in a min-heap) necessitating multiple comparisons and swaps
 
 ## 6. everything about heap-sort
-* 3:53:42
+### 6.1. pre-requisites
+* we will use the following throughout this section
+    * an array, `A`, that we will use to create a max heap
+
+    |val|3|7|6|10|5|4|
+    |:---|:---|:---|:---|:---|:---|:---|
+    |idx|0|1|2|3|4|5|
+
+    * **important!:** the array is not a representation of the heap *yet*; we will use said array to create a heap
+### 6.2. build your own ... heap
+* two strategies to turn a linear data structure, say, an array, to a heap
+    * naive approach
+    * restore-heap-property approach
+#### 6.2.1. **strategy one:** naive approach
+* steps
+    * start with an empty array to repesent the max heap
+    * apply `insert` iteratively to the elements of `A`
+* time complexity
+    * **worst case**
+        * the first insertion takes O(1) because the heap was previously empty
+        * second insertion takes O(log 1); 1 is the size of the heap so far
+        * third insertion takes O(log 2); 2 is the size of the heap so far: we appear to have a pattern
+        * the last insertion tales O(log (n-1)); (n-1) is the size of the heap so far: said pattern appears to hold
+        * add the time complexities <br/><br/> $T(n) = O(log \ 1 + log \ 2 + log \ 3 + ... + log \ n)$ <br/><br/> we know from the logarithmic product rule that $\sum_{i=1}^n log \ i = log(1 \cdot 2 \cdot ... \cdot n)$ <br/> and $1 \cdot 2 \cdot ... \cdot n = n!$ <br/><br/> $O(log \ 1 + log \ 2 + log \ 3 + ... + log \ n) = log(n!)$ <br/><br/> we know that $log(n!) \leq log(n^n) = n \ log \ n$ <br/><br/> $\therefore \ T(n) \approx O(n \ log \ n)$ &nbsp; this is consistent with our findings in sub-section 2.3 above <br/><br/>
+        * **conclusion: worst-case time complexity is linearithmic time, that is,** $T(n) \in O(n \ log \ n)$
+#### 6.2.2. **strategy two:** restore-heap-property approach
+* treat the input array as a heap whose heap property needs to be restored
+* steps
+    * begin at the last non-leaf node
+    * apply `heapify`to each node in reverse level order (from bottom to top)
+* **assumption:** the root node is the only node that breaks the heap property (this may not be the case in real life)
+* how TF does one get to the index of the *last non-leaf node*?
+    * great question ... <br/><br/> $i_{\text{last non-leaf node}} = \frac{n}{2} - 1$ &nbsp; where $n$ is `A.length`
+    * **example: the array in sub-section 6.1 above**
+        * n = 6 and i<sub>last non-leaf</sub> = (6/2) - 1 = 3 - 1 = 2
+        * the last non-leaf node is at index 2; said node has the key `6`
+        * see illustration below
+
+        ```mermaid
+            graph TD
+                A((3)) --- B((7))
+                A --- C((6))
+                B --- D((10))
+                B --- E((5))
+                C --- F((4))
+        ```
+
+* pseudo-code for `build_heap` method
+
+    ```plaintext
+        // assume `data` is the array we need to turn into a heap
+        Function BuildHeap():
+            for each index i from (data.length / 2) -1 to 0:
+                Heapify(i)
+    ```
+
+* apply `build_heap` to our example in sub-section 6.1 above
+    * i<sub>last non-leaf</sub> = (6/2) - 1 = 3 - 1 = 2 and key<sub>i</sub> = 6
+        * compare `6` with its child, `4`
+            * heap property is satisfied; continue
+
+            ```mermaid
+                graph TD
+                    A((3)) --- B((7))
+                    A --- C((6))
+                    B --- D((10))
+                    B --- E((5))
+                    C --- F((4))
+            ```
+
+    *  i<sub>last non-leaf</sub> = i<sub>prev</sub> - 1 = 2 - 1 = 1 and key<sub>i</sub> = 7
+        * compare `7` with `10` and `5`
+            * 10 &gt; 5, therefore, `10` is the `maxChild`
+            * 10 &gt; 7, therefore swap `7` and `10`
+            * heap property satisfied; continue
+
+            ```mermaid
+                graph TD
+                    A((3)) --- B((10))
+                    A --- C((6))
+                    B --- D((7))
+                    B --- E((5))
+                    C --- F((4))
+            ```
+
+    * i<sub>last non-leaf</sub> = i<sub>prev</sub> - 1 = 1 - 1 = 0 and key<sub>i</sub> = 3
+        * compare `3` with `10` and `6`
+            * 10 &gt; 6, therefore, `10` is the `maxChild`
+            * 10 &gt; 3, therefore, swap `3` and `10`
+        * compare `3` with `7` and `5`
+            * 7 &gt; 5, therefore, `7` is the `maxChild`
+            * 7 &gt; 3, therefore, swap `3` and `7`         
+        * heap property satisfied; done ✅
+
+            ```mermaid
+                graph TD
+                    A((10)) --- B((7))
+                    A --- C((6))
+                    B --- D((3))
+                    B --- E((5))
+                    C --- F((4))
+            ```
+    > **important!** <br/> Heapify(0) restores the heap prop on the whole binary tree because the root is at index zero <br/> all that happens IRL is swapping of elements on an array; the binary tree is simply a visualisation
+* time complexity
+    * **worst case**
+        * add the time it takes to *heapify* each sub-heap <br/><br/> $T(n) = \sum_{i=0}^{h-1}( \text{no. of nodes at depth} \ i) \times (\text{work per node at depth} \ i)$ <br/><br/> there are, roughly, $h-1$ levels, where $h$ is the height of the heap, because we do not heapify leaf-level nodes; we begin at the last non-leaf nodes<br/> *heapify* operation on each node takes a constant amount of time which is the same for each node and <br/> $\text{work done per node at level} \ i \propto i$ &nbsp; because the work increases as the number of nodes increase<br/><br/> **recall:** <br/>1. we apply *heapify* upwards (beginning at the last non-leaf node all the way to the root): let the starting point be `level 1` (because the leaf level will be level zero) and the root level be `level (h-1)` (0-9 inclusive is 10 digits) <br/> 2. the number of nodes roughly halves as we go up a level <br/><br/> we can estimate the number of nodes at level $i$ *viz:* $\frac{n}{2^{i+1}}$ where `n` is the number of nodes in the heap <br/><br/> $T(n) =  \sum_{i=0}^h(\frac{n}{2^{i+1}} \times i)$ <br/><br/> $T(n) =  n \times \sum_{i=0}^h(\frac{i}{2^{i+1}})$ <br/><br/> we have seen $\sum_{i=0}^h(\frac{i}{2^{i+1}})$ before; this is a geometric series (finite one this time around)<br/> $\sum_{i=0}^\infin(\frac{i}{2^{i+1}}) \approx 2$ <br/><br/> $T(n) \approx n \times 2$ <br/><br/> drop the constants to generalise the solution ~~also, this is an upper-bound calculation~~ <br/><br/> $ \therefore \ T(n) \approx O(n)$ <br/><br/>
+        * **conclusion: worst-case time complexity is linear time, that is,** $T(n) \in O(n)$
+> **conclusion:** <br/> 1. better to "*fix a broken heap*" than to build a heap from scratch; *ex nihilo nihil fit* <br/> 2. the naive way is not always the easiest; the contrarian way is, by definition, counter-intuitive
+### 6.3. heapsort
+* we will use the array in sub-section 6.1 above as an example and for illustration
+#### 6.3.1. steps
+* build a heap using the input array (max heap if sorting in descending order, else, min heap)
+* initilise an empty array
+* repeatedly extract the max (if a max-heap) or min (if a min heap) using the `delete` method
+* place said extracted elements at the end of said initialised array; this results in a sorted array
+#### 6.3.2. example: sort an array in descending order
+* input array: [3, 7, 6, 10, 5, 4]
+    * val-idx representation
+
+        |val|3|7|6|10|5|4|
+        |:---|:---|:---|:---|:---|:---|:---|
+        |idx|0|1|2|3|4|5|
+
+    * tree representation
+
+        ```mermaid
+            graph TD
+                A((3)) --- B((7))
+                A --- C((6))
+                B --- D((10))
+                B --- E((5))
+                C --- F((4))
+        ```
+* **step one:** build a max heap using the input array
+
+    |val|10|6|7|3|5|4|
+    |:---|:---|:---|:---|:---|:---|:---|
+    |idx|0|1|2|3|4|5|
+
+    ```mermaid
+        graph TD
+            A((10)) --- B((6))
+            A --- C((7))
+            B --- D((3))
+            B --- E((5))
+            C --- F((4))
+    ```
+
+* **step two:** initialise an empty array
+
+    |val|||||||
+    |:---|:---|:---|:---|:---|:---|:---|
+    |idx|0|~~1~~|~~2~~|~~3~~|~~4~~|~~5~~|
+* **steps three and four:**  repeatedly extract the max using the `delete` method and append extracted elements to said initialised array
+    * number of iterations 6 (`A.length`); 0-9 is 10 digits
+    * iteration 1
+        * `delete()` returns `10`
+        * heap is re-organised
+
+            ```mermaid
+                graph TD
+                    A((7)) --- B((5))
+                    A --- C((6))
+                    B --- D((3))
+                    B --- E((4))
+            ```
+
+        * append `10` to initialised array
+
+        |val|10||||||
+        |:---|:---|:---|:---|:---|:---|:---|
+        |idx|0|~~1~~|~~2~~|~~3~~|~~4~~|~~5~~|
+    
+    * iteration 2
+        * `delete()` returns `7`
+        * heap is re-organised
+
+            ```mermaid
+                graph TD
+                    A((6)) --- B((5))
+                    A --- C((4))
+                    B --- D((3))
+            ```
+        
+        * append `7` to initialised array
+
+        |val|10|7|||||
+        |:---|:---|:---|:---|:---|:---|:---|
+        |idx|0|1|~~2~~|~~3~~|~~4~~|~~5~~|
+
+    * iteration 3
+        * `delete()` returns `6`
+        * heap is re-organised
+
+            ```mermaid
+                graph TD
+                    A((5)) --- B((3))
+                    A --- C((4))
+            ```
+        * append `6` to initialised array
+
+        |val|10|7|6||||
+        |:---|:---|:---|:---|:---|:---|:---|
+        |idx|0|1|2|~~3~~|~~4~~|~~5~~|
+
+    * iteration 4
+        * `delete()` returns `5`
+        * heap is re-organised
+
+            ```mermaid
+                graph TD
+                    A((4)) --- B((3))
+            ```
+        
+        * append `5` to initialised array
+
+        |val|10|7|6|5|||
+        |:---|:---|:---|:---|:---|:---|:---|
+        |idx|0|1|2|3|~~4~~|~~5~~|
+
+    * iteration 5
+        * `delete()` returns `4`
+        * heap is re-organised
+
+            ```mermaid
+                graph TD
+                    A((3))
+            ```
+        
+        * append `4` to initialised array
+
+        |val|10|7|6|5|4||
+        |:---|:---|:---|:---|:---|:---|:---|
+        |idx|0|1|2|3|4|~~5~~|
+
+    * iteration 6
+        * `delete()` returns `3`
+        * input heap is empty
+        * append `3` to initialised array
+
+        |val|10|7|6|5|4|3|
+        |:---|:---|:---|:---|:---|:---|:---|
+        |idx|0|1|2|3|4|5|
+    
+    * input heap is empty (`A.length` == 0); stop
+        * return newly-built array
+
+        ```mermaid
+            graph TD
+                A((10)) --- B((7))
+                A --- C((6))
+                B --- D((3))
+                B --- E((5))
+                C --- F((4))
+        ```
+
+
+        |val|10|7|6|5|4|3|
+        |:---|:---|:---|:---|:---|:---|:---|
+        |idx|0|1|2|3|4|5|
+
+#### 6.3.3. pseudo-code for heap-sort
+
+```plaintext
+    Function Heapsort(A):
+        // step two: initialise an empty array
+        B = []
+
+        // step one: build a heap using input array
+        BuildHeap(A)
+
+        for i from 0 to A.length - 1:
+            // step three: repeatedly extract the max using the `delete` method
+            nodeKey = Delete(A)
+            // step four: append extracted elements to said initialised array
+            B.append(nodeKey)
+
+        return B
+```
+
+#### 6.3.4. time complexity
+* heap-sort depends on `delete` and `build_heap`; its performance, therefore, is proportional to the performance of its dependencies
+    * `build_heap` has a time complexity (worst-worst-case) of $O(n)$
+        * $T(n)_{build-heap} \approx O(n)$
+    * the `for` loop that iteratively calls the `delete` method has the following time complexity
+        * `delete` has a time complexity (worst-worst-case) of $O(log \ n)$
+        * WTF happens when `delete` is called iteratively?
+            * glad you asked ...
+
+            ||time complexity|
+            |:---|:---|
+            |first delete|$O(log(n))$|
+            |second delete|$O(log(n-1))$|
+            |third delete|$O(log(n-2))$|
+            |...|...|
+            |last delete|$O(log(1))$|
+
+            * add up the time complexities <br/><br/> $T(n)_{for-loop} = O(log(n) + log(n-1) + ... + log(1))$ <br/> ~~ah, sh!t, here we go again...~~ &nbsp; we have seen this before: the logarithmic sum turns out to be the log of the factorial of the highest/limit term <br/><br/> $T(n)_{for-loop} = O(log(n!))$ <br/> we have also seen that $log(n!) \leq log(n^n) = n \ log \ n$ <br/><br/> $\therefore \ T(n)_{for-loop} \approx O(n \ log \ n)$ <br/><br/>
+        * **conclusion: the time complexity of the `for`loop that iteratively calls the `delete` method is linearithmic, that is,** $T(n) \approx O(n \ log \ n)$
+* time complexity of heap sort can be expressed as <br/><br/> $T(n) = T(n)_{build-heap} + T(n)_{for-loop}$ <br/><br/> $T(n)  = O(n + n \cdot log(n))$ <br/> the linearithmic term, $n \cdot log(n)$, is the dominant term (it grows faster), therefore, we may ignore the linear term, $n$ <br/><br/> $\therefore \ T(n)  \approx O(n \ log \ n)$
+* **conclusion: the time complexity of heap-sort is linearithmic, that is,** $T(n) \in O(n \ log \ n)$
+
+</div>
