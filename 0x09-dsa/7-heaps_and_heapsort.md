@@ -431,11 +431,12 @@
 ### 3.2. `peek` method
 #### 3.2.1. pseudo-code for `peek` method
 
-    ```plaintext
-        // assume an array, `data`, holds the heap
-        Function Peek():
-            return data[0]
-    ```
+```plaintext
+    // assume an array, `data`, holds the heap
+    Function Peek():
+        return data[0]
+```
+
 * all the `peek` method does is to return the key at the root node
 ### 3.3. time complexity
 * the best, average and worst-case time  complexity are trivial: constant time, that is, $T(n) \in O(1)$
@@ -761,7 +762,7 @@
     > **important!** <br/> Heapify(0) restores the heap prop on the whole binary tree because the root is at index zero <br/> all that happens IRL is swapping of elements on an array; the binary tree is simply a visualisation
 * time complexity
     * **worst case**
-        * add the time it takes to *heapify* each sub-heap <br/><br/> $T(n) = \sum_{i=0}^{h-1}( \text{no. of nodes at depth} \ i) \times (\text{work per node at depth} \ i)$ <br/><br/> there are, roughly, $h-1$ levels, where $h$ is the height of the heap, because we do not heapify leaf-level nodes; we begin at the last non-leaf nodes<br/> *heapify* operation on each node takes a constant amount of time which is the same for each node and <br/> $\text{work done per node at level} \ i \propto i$ &nbsp; because the work increases as the number of nodes increase<br/><br/> **recall:** <br/>1. we apply *heapify* upwards (beginning at the last non-leaf node all the way to the root): let the starting point be `level 1` (because the leaf level will be level zero) and the root level be `level (h-1)` (0-9 inclusive is 10 digits) <br/> 2. the number of nodes roughly halves as we go up a level <br/><br/> we can estimate the number of nodes at level $i$ *viz:* $\frac{n}{2^{i+1}}$ where `n` is the number of nodes in the heap <br/><br/> $T(n) =  \sum_{i=0}^h(\frac{n}{2^{i+1}} \times i)$ <br/><br/> $T(n) =  n \times \sum_{i=0}^h(\frac{i}{2^{i+1}})$ <br/><br/> we have seen $\sum_{i=0}^h(\frac{i}{2^{i+1}})$ before; this is a geometric series (finite one this time around)<br/> $\sum_{i=0}^\infin(\frac{i}{2^{i+1}}) \approx 2$ <br/><br/> $T(n) \approx n \times 2$ <br/><br/> drop the constants to generalise the solution ~~also, this is an upper-bound calculation~~ <br/><br/> $ \therefore \ T(n) \approx O(n)$ <br/><br/>
+        * add the time it takes to *heapify* each sub-heap <br/><br/> $T(n) = \sum_{i=0}^{h-1}( \text{no. of nodes at depth} \ i) \times (\text{work per node at depth} \ i)$ <br/><br/> there are, roughly, $h-1$ levels, where $h$ is the height of the heap, because we do not heapify leaf-level nodes; we begin at the last non-leaf nodes<br/> *heapify* operation on each node takes a constant amount of time which is the same for each node and <br/> $\text{work done per node at level} \ i \propto i$ &nbsp; because the work increases as the number of nodes increase<br/><br/> **recall:** <br/>1. we apply *heapify* upwards (beginning at the last non-leaf node all the way to the root): let the starting point be `level 1` (because the leaf level will be level zero) and the root level be `level (h-1)` (0-9 inclusive is 10 digits) <br/> 2. the number of nodes roughly halves as we go up a level <br/><br/> we can estimate the number of nodes at level $i$ *viz:* $\frac{n}{2^{i+1}}$ where `n` is the number of nodes in the heap <br/><br/> $T(n) =  \sum_{i=0}^h(\frac{n}{2^{i+1}} \times i)$ <br/><br/> $T(n) =  n \times \sum_{i=0}^h(\frac{i}{2^{i+1}})$ <br/><br/> we have seen $\sum_{i=0}^h(\frac{i}{2^{i+1}})$ before; this is a geometric series (finite one this time around)<br/> $\sum_{i=0}^\infin(\frac{i}{2^{i+1}}) \approx 2$ <br/><br/> $T(n) \approx n \times 2$ <br/><br/> drop the constants to generalise the solution ~~also, this is an upper-bound calculation~~ <br/><br/> $\therefore \ T(n) \approx O(n)$ <br/><br/>
         * **conclusion: worst-case time complexity is linear time, that is,** $T(n) \in O(n)$
 > **conclusion:** <br/> 1. better to "*fix a broken heap*" than to build a heap from scratch; *ex nihilo nihil fit* <br/> 2. the naive way is not always the easiest; the contrarian way is, by definition, counter-intuitive
 ### 6.3. heapsort
@@ -797,11 +798,11 @@
 
     ```mermaid
         graph TD
-            A((10)) --- B((6))
-            A --- C((7))
-            B --- D((3))
-            B --- E((5))
-            C --- F((4))
+            A((10)) --- B((7))
+            A --- C((6))
+            B --- D((5))
+            B --- E((4))
+            C --- F((3))
     ```
 
 * **step two:** initialise an empty array
@@ -817,8 +818,8 @@
 
             ```mermaid
                 graph TD
-                    A((7)) --- B((5))
-                    A --- C((6))
+                    A((7)) --- B((6))
+                    A --- C((5))
                     B --- D((3))
                     B --- E((4))
             ```
@@ -852,8 +853,8 @@
 
             ```mermaid
                 graph TD
-                    A((5)) --- B((3))
-                    A --- C((4))
+                    A((5)) --- B((4))
+                    A --- C((3))
             ```
         * append `6` to initialised array
 
@@ -907,9 +908,9 @@
             graph TD
                 A((10)) --- B((7))
                 A --- C((6))
-                B --- D((3))
+                B --- D((4))
                 B --- E((5))
-                C --- F((4))
+                C --- F((3))
         ```
 
 
@@ -953,9 +954,9 @@
             |...|...|
             |last delete|$O(log(1))$|
 
-            * add up the time complexities <br/><br/> $T(n)_{for-loop} = O(log(n) + log(n-1) + ... + log(1))$ <br/> ~~ah, sh!t, here we go again...~~ &nbsp; we have seen this before: the logarithmic sum turns out to be the log of the factorial of the highest/limit term <br/><br/> $T(n)_{for-loop} = O(log(n!))$ <br/> we have also seen that $log(n!) \leq log(n^n) = n \ log \ n$ <br/><br/> $\therefore \ T(n)_{for-loop} \approx O(n \ log \ n)$ <br/><br/>
+            * add up the time complexities <br/><br/> $T(n)_\text{for loop} = O(log(n) + log(n-1) + ... + log(1))$ <br/> ~~ah, sh!t, here we go again...~~ &nbsp; we have seen this before: the logarithmic sum turns out to be the log of the factorial of the highest/limit term <br/><br/> $T(n)_\text{for loop} = O(log(n!))$ <br/> we have also seen that $log(n!) \leq log(n^n) = n \ log \ n$ <br/><br/> $\therefore \ T(n)_\text{for loop} \approx O(n \ log \ n)$ <br/><br/>
         * **conclusion: the time complexity of the `for`loop that iteratively calls the `delete` method is linearithmic, that is,** $T(n) \approx O(n \ log \ n)$
-* time complexity of heap sort can be expressed as <br/><br/> $T(n) = T(n)_{build-heap} + T(n)_{for-loop}$ <br/><br/> $T(n)  = O(n + n \cdot log(n))$ <br/> the linearithmic term, $n \cdot log(n)$, is the dominant term (it grows faster), therefore, we may ignore the linear term, $n$ <br/><br/> $\therefore \ T(n)  \approx O(n \ log \ n)$
+* time complexity of heap sort can be expressed as <br/><br/> $T(n) = T(n)_\text{build heap} + T(n)_\text{for loop}$ <br/><br/> $T(n)  = O(n + n \cdot log(n))$ <br/> the linearithmic term, $n \cdot log(n)$, is the dominant term (it grows faster), therefore, we may ignore the linear term, $n$ <br/><br/> $\therefore \ T(n)  \approx O(n \ log \ n)$
 * **conclusion: the time complexity of heap-sort is linearithmic, that is,** $T(n) \in O(n \ log \ n)$
 
 </div>
