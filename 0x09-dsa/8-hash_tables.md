@@ -443,9 +443,26 @@
         * the size of the linked list at index `i`
         * a constant, `1`, that accounts for the number of steps needed to initialise and place the node where it is required
     * **conclusion: the time complexity in the average case is proportional to the load factor and number of steps needed to initialise and place the node where it is required, that is,** <br/><br/> $T(n) \in O(1 + \alpha)$ <br/><br/>
-    > **is the `1` in $O(1 + \alpha)$ necessary?** <br/><br/> - why, yes!<br/> - $\alpha = \frac{m}{n} \ \text{and} \ m \leq n \text{always}$; said number could be so small that $\alpha$ &rarr; zero <br/> - you do not want $T(n)$ to approach zero, now, do you? <br/><br/>
+    > **is the `1` in $O(1 + \alpha)$ necessary?** <br/><br/> - why, yes!<br/> - $\alpha = \frac{m}{n} \ \text{and} \ m \leq n \ \text{always}$; said number could be so small that $\alpha$ &rarr; zero <br/> - you do not want $T(n)$ to approach zero, now, do you? <br/><br/>
 ### 3.3. time complexity of `search` method
-* 4:50:03
+* time complexity in all cases is the same as the `insert` method
+* the cost that is significant in the `search` method is attributed to
+    * the computation of indices by the hash function
+    * traversing a linked list at index `i` to retrieve data at the end of said linked list
+* **conclusion**
+    * the best-case time complexity of the `search` method is constant time  <br/><br/> $T(n) \in O(1)$ <br/><br/>
+    * the worst-case time complexity of the `search` method is proportional to the size of the linked list at index `i` <br/><br/> $T(n) \in O(m)$ <br/><br/>
+    * the average-case time complexity of the `search` method is proportional to the load factor and number of steps needed to traverse a linked list at index `i` <br/><br/> $T(n) \in O(1 + \alpha)$
+### 3.4. time complexity of `delete` method
+* time complexity in all cases is the same as the `insert` method
+* the cost that is significant in the `delete` method is attributed to
+    * the computation of indices by the hash function
+    * traversing a linked list at index `i` to find data at the end of said linked list
+* **conclusion**
+    * the best-case time complexity of the `delete` method is constant time  <br/><br/> $T(n) \in O(1)$ <br/><br/>
+    * the worst-case time complexity of the `delete` method is proportional to the size of the linked list at index `i` <br/><br/> $T(n) \in O(m)$ <br/><br/>
+    * the average-case time complexity of the `delete` method is proportional to the load factor and number of steps needed to traverse a linked list at index `i` <br/><br/> $T(n) \in O(1 + \alpha)$
+
 
 
 </div>
