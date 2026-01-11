@@ -51,7 +51,7 @@
 * TF is a node?
     * a data structure that stores data and maintains the BST’s structure
     * has the following
-        * a key (and an optional a value)
+        * a key (and an optional value)
         * a reference/pointer to a left child (for smaller keys)
         * a reference/pointer to a right child (for larger keys)
     * the arrangement follows the BST property: all keys in the left sub-tree are ≤ the node’s key and all keys in the right sub-tree are > the node’s key
@@ -78,7 +78,6 @@ class BST:
     Function search(target, node) // private
         if node is not NULL && node.key == target:
             return TRUE
-            key = root.val
         else if node is NULL:
             return FALSE
             
@@ -97,7 +96,7 @@ class BST:
     
 ```
 
-## the `search` method
+## 2. the `search` method
 * **steps**
     * start at athe root node
     * compare key of current node with target value
@@ -105,7 +104,7 @@ class BST:
         * search the left sub-tree if target &lt; key<sub>node<sub>i</sub></sub> , else, search right sub-tree
     * return `false` if a leaf node is reached while the target has not been found
 * **example**
-    * target = 36 and the BSt is the following
+    * target = 36 and the BST is the following
 
     ```mermaid
         %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
@@ -146,7 +145,53 @@ class BST:
         * 36 = 36; target found
         * return `true`
     
-* 5:00:11
+### 2.1. time complexity analysis
+* **worst-case** occurs when every node in the BST is compared to the target value
+    * example 1: target = 36 in the BST above
+    * example 2: a BST with the following nodes: {50, 66, 80, 85} and target = 85
+
+        ```mermaid
+            %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+            graph TD
+                A((50)) --- B((66))
+                B --- C((80))
+                C --- D((85))
+        ```
+
+    * assumptions
+        * there are `n` nodes in the BST
+        * ~~there are `m` nodes between the root node and the node whose  key is equal to the target~~
+        * ~~the height of the BST is `h`~~
+    * comparison op takes constant time; there are `n` nodes, therefore, it will take `n` long to traverse the BST
+    * **conclusion: the time complexity of the `search` method in the worst case is proportional to the number of nodes in the BST, that is,** <br/><br/> $T(n) \in O(n)$ <br/><br/>
+* **best case** occurs when the key of the root node is equal to the target regardless of how large the BST is
+    * comparison op takes constant time; there is only one node to check, therefore, it takes constant time to find the target
+    * **conclusion: the time complexity of the `search` method in the best case is constant, that is,** <br/><br/> $T(n) \in O(1)$ <br/><br/>
+* **average case** depends on the expected number of nodes compared, that is, <br/><br/> $T(n) \propto C(n)$ <br/><br/>
+    * assumptions
+        * BST is randomly constructed and it has `n` nodes
+        * said randomly constructed tree is **relatively** balanced and its height is `h` where `h = log(n)`
+    * there are two scenarios arising from said assumptions
+        * unsuccessful search
+        * successful search
+    * **unsuccessful search scenario**
+        * recall: $C(n)$ is the expected number of comparisons (or expected depth of a BST)
+        * $C(n)$ is unnecessary here because the entire depth of the tree will be traversed (recall: `search` returns `false` when it gets to a leaf node w/o finding the target)
+        * comparison op takes constant time; each unsuccessful search takes as many comparisons as the height of the tree, therefore, it will take log(n) time to traverse the BST
+        * **conclusion:the time complexity of an unsuccessful search using the `search` method in the average case is proportional to the height of the BST, that is,** <br/><br/> $T(n) \in O(log \ n)$ <br/><br/>
+    * **successful search scenario**
+        * $C(n)$ is necessary because the target is not necessarily located in a leaf node
+        * random variable: `i`
+            * let `i` be the number of nodes in the left sub-tree of the current node (the *"current node"* is the node whose key we are comparing to the target at the moment)
+            * recall: there are `n` nodes in the BST, therefore, the right sub-tree has `n-i-1` nodes (minus one because we are sitting on a node, that is, the left and right sub-trees must be connected to a node)
+        * probability
+            * each node has an equal chance of being compared to the target based on the assumptions above
+            * there are `n` nodes, `i` of which are on the left of the current one at any given time
+            * the probability that search algo goes to the left sub-tree *viz* <br/><br/> $\text{P(nodes on the left sub-tree are compared to target)}  = \frac{i}{n}$ <br/><br/> trivially, the probability that search algo goes to the right sub-tree is <br/><br/> $\text{P(nodes on the right sub-tree are compared to target)}  = \frac{n - i - 1}{n}$ <br/><br/>
+        * the recurrence relation is given by <br/><br/> $C(n) = 1 + \sum_{i=0}^{n-1}(\frac{i}{n} C(i) + \frac{(n - i - 1)}{n} C(n - i - 1))$ <br/><br/> **where**<br/> - $C(n)$ is the expected number of comparisons at the root <br/> - `1` represents a single comparison between the key of the root node and the target <br/> - the summation expression represents the **expected** number of comparisons in the next step <br/><br/> **use the assumptions above to simplify the expression** <br/> assumption one: tree is more-or-less balanced <br/> use this assumption to deduce that there are more-or-less equal nodes on either side of the current node and that the comparisons on the left sub-tree are more-or-less equal to those on the right <br/> $\frac{i}{n} \approx \frac{(n - i - 1)}{n}$  <br/>and  $C(i) \approx C(n - i - 1)$ <br/><br/> $C(n) \approx 1 + \frac{2}{n} \sum_{i=0}^{n-1}(C(i))$ <br/><br/> **use the continuous approximation of the expected value over all possible sub-tree sizes to replace the summation item then use the differential equation form and integrate both sides** <br/><br/> $C(n) \approx 1 +  \frac{2}{n}\int_{0}^{n} C(x) \ dx$ <br/><br/> $C'(n) \approx \frac{2}{n} C(n)$ <br/> and $\frac{dC}{C} = \frac{2}{n} dn$  <br/><br/> $\text{ln} \ C(n) = 2 \ \text{ln} \ n + C_1$ <br/><br/> **exponentiate both sides of the expression** <br/> $C(n) = e^{C_1} n^2$ we can express $C(n)$ as $2 \ \text{ln} \ n$ plus a constant that is not $C_1$<br/><br/> $C(n) = 2 \ \text{ln} \ n + C_2$ where $C_2 \neq C_1$<br/><br/> $\text{ln}(n) = log_2(n) \times \text{ln}(2)$ (natural log and base two log are asymptotically equivalent, that is, they grow at the same rate) <br/> and use $O(1)$ to approximate $C_2$ <br/><br/> $ \therefore \ C(n) \approx 2 \ \text{ln}(n) \mp O(1) \approx 1.39 \ log_2(n)$
+        * **conclusion:the time complexity of a successful search using the `search` method in the average case is proportional to the height of the BST, that is,** <br/><br/> $T(n) \in O(log \ n)$ <br/><br/>
+
+* 5:10:51
 
 
 </div>
