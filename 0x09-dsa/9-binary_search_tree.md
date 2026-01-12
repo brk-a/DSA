@@ -11,7 +11,7 @@
     * glad you asked...
     * for any given node, all values in its left sub-tree are less than said node’s value and all values in its right sub-tree are greater than the node’s value
 * keys in a BST are unique, that is, there are no duplicates in a BST
-* thr root node is the entry point into the BST
+* the root node is the entry point into the BST
 * each node typically contains a key, an associated value and pointers to its left and right children making it a flexible and efficient structure for dynamic data
 * illustration below
 
@@ -42,7 +42,7 @@
 * are widely used in applications such as databases, file systems and implementing associative arrays or sets where ordered data access is required
     * examples: DNS look-ups use BSTs for cluster searching of domain names
 * other situations where BSTs are useful
-    * data dynamically gows or shrinks a lot
+    * data dynamically grows or shrinks a lot
     * frequent searching is required
     * one needs to find the next greatest or smallest element
     * one needs to retrieve elements in a given range
@@ -88,8 +88,20 @@ class BST:
 
         return FALSE 
     
-    Function Insert(target):
-        ...
+    Function Insert(target): // public
+        root = insert(root, target)
+        return root
+    
+    Function insert(node, target): // private
+        if node == NULL:
+            return new Node(target)
+        
+        if target < node.key:
+            node.left = insert(node.left, target)
+        else if target > node.key:
+            node.right = insert(node.right, target)
+        
+        return node
     
     Function Delete(target):
         ...
@@ -146,53 +158,161 @@ class BST:
         * return `true`
     
 ### 2.1. time complexity analysis
+#### 2.1.1. worst case
 * **worst-case** occurs when every node in the BST is compared to the target value
-    * example 1: target = 36 in the BST above
-    * example 2: a BST with the following nodes: {50, 66, 80, 85} and target = 85
+* example 1: target = 36 in the BST above
+* example 2: a BST with the following nodes: {50, 66, 80, 85} and target = 85
 
-        ```mermaid
-            %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
-            graph TD
-                A((50)) --- B((66))
-                B --- C((80))
-                C --- D((85))
-        ```
+    ```mermaid
+        %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+        graph TD
+            A((50)) --- B((66))
+            B --- C((80))
+            C --- D((85))
+    ```
 
-    * assumptions
-        * there are `n` nodes in the BST
-        * ~~there are `m` nodes between the root node and the node whose  key is equal to the target~~
-        * ~~the height of the BST is `h`~~
-    * comparison op takes constant time; there are `n` nodes, therefore, it will take `n` long to traverse the BST
-    * **conclusion: the time complexity of the `search` method in the worst case is proportional to the number of nodes in the BST, that is,** <br/><br/> $T(n) \in O(n)$ <br/><br/>
+* assumptions
+    * there are `n` nodes in the BST
+    * ~~there are `m` nodes between the root node and the node whose  key is equal to the target~~
+    * ~~the height of the BST is `h`~~
+* comparison op takes constant time; there are `n` nodes, therefore, it will take `n` long to traverse the BST
+* **conclusion: the time complexity of the `search` method in the worst case is proportional to the number of nodes in the BST, that is,** <br/><br/> $T(n) \in O(n)$ <br/><br/>
+#### 2.1.2. best case
 * **best case** occurs when the key of the root node is equal to the target regardless of how large the BST is
-    * comparison op takes constant time; there is only one node to check, therefore, it takes constant time to find the target
-    * **conclusion: the time complexity of the `search` method in the best case is constant, that is,** <br/><br/> $T(n) \in O(1)$ <br/><br/>
+* comparison op takes constant time; there is only one node to check, therefore, it takes constant time to find the target
+* **conclusion: the time complexity of the `search` method in the best case is constant, that is,** <br/><br/> $T(n) \in O(1)$ <br/><br/>
+#### 2.1.3. average case
 * **average case** depends on the expected number of nodes compared, that is, <br/><br/> $T(n) \propto C(n)$ <br/><br/>
-    * assumptions
-        * BST is randomly constructed and it has `n` nodes
-        * said randomly constructed tree is **relatively** balanced and its height is `h` where `h = log(n)`
-    * there are two scenarios arising from said assumptions
-        * unsuccessful search
-        * successful search
-    * **unsuccessful search scenario**
-        * recall: $C(n)$ is the expected number of comparisons (or expected depth of a BST)
-        * $C(n)$ is unnecessary here because the entire depth of the tree will be traversed (recall: `search` returns `false` when it gets to a leaf node w/o finding the target)
-        * comparison op takes constant time; each unsuccessful search takes as many comparisons as the height of the tree, therefore, it will take log(n) time to traverse the BST
-        * **conclusion:the time complexity of an unsuccessful search using the `search` method in the average case is proportional to the height of the BST, that is,** <br/><br/> $T(n) \in O(log \ n)$ <br/><br/>
-    * **successful search scenario**
-        * $C(n)$ is necessary because the target is not necessarily located in a leaf node
-        * random variable: `i`
-            * let `i` be the number of nodes in the left sub-tree of the current node (the *"current node"* is the node whose key we are comparing to the target at the moment)
-            * recall: there are `n` nodes in the BST, therefore, the right sub-tree has `n-i-1` nodes (minus one because we are sitting on a node, that is, the left and right sub-trees must be connected to a node)
-        * probability
-            * each node has an equal chance of being compared to the target based on the assumptions above
-            * there are `n` nodes, `i` of which are on the left of the current one at any given time
-            * the probability that search algo goes to the left sub-tree *viz* <br/><br/> $\text{P(nodes on the left sub-tree are compared to target)}  = \frac{i}{n}$ <br/><br/> trivially, the probability that search algo goes to the right sub-tree is <br/><br/> $\text{P(nodes on the right sub-tree are compared to target)}  = \frac{n - i - 1}{n}$ <br/><br/>
-        * the recurrence relation is given by <br/><br/> $C(n) = 1 + \sum_{i=0}^{n-1}(\frac{i}{n} C(i) + \frac{(n - i - 1)}{n} C(n - i - 1))$ <br/><br/> **where**<br/> - $C(n)$ is the expected number of comparisons at the root <br/> - `1` represents a single comparison between the key of the root node and the target <br/> - the summation expression represents the **expected** number of comparisons in the next step <br/><br/> **use the assumptions above to simplify the expression** <br/> assumption one: tree is more-or-less balanced <br/> use this assumption to deduce that there are more-or-less equal nodes on either side of the current node and that the comparisons on the left sub-tree are more-or-less equal to those on the right <br/> $\frac{i}{n} \approx \frac{(n - i - 1)}{n}$  <br/>and  $C(i) \approx C(n - i - 1)$ <br/><br/> $C(n) \approx 1 + \frac{2}{n} \sum_{i=0}^{n-1}(C(i))$ <br/><br/> **use the continuous approximation of the expected value over all possible sub-tree sizes to replace the summation item then use the differential equation form and integrate both sides** <br/><br/> $C(n) \approx 1 +  \frac{2}{n}\int_{0}^{n} C(x) \ dx$ <br/><br/> $C'(n) \approx \frac{2}{n} C(n)$ <br/> and $\frac{dC}{C} = \frac{2}{n} dn$  <br/><br/> $\text{ln} \ C(n) = 2 \ \text{ln} \ n + C_1$ <br/><br/> **exponentiate both sides of the expression** <br/> $C(n) = e^{C_1} n^2$ we can express $C(n)$ as $2 \ \text{ln} \ n$ plus a constant that is not $C_1$<br/><br/> $C(n) = 2 \ \text{ln} \ n + C_2$ where $C_2 \neq C_1$<br/><br/> $\text{ln}(n) = log_2(n) \times \text{ln}(2)$ (natural log and base two log are asymptotically equivalent, that is, they grow at the same rate) <br/> and use $O(1)$ to approximate $C_2$ <br/><br/> $ \therefore \ C(n) \approx 2 \ \text{ln}(n) \mp O(1) \approx 1.39 \ log_2(n)$
-        * **conclusion:the time complexity of a successful search using the `search` method in the average case is proportional to the height of the BST, that is,** <br/><br/> $T(n) \in O(log \ n)$ <br/><br/>
+* assumptions
+    * BST is randomly constructed and it has `n` nodes
+    * said randomly constructed tree is **relatively** balanced and its height is `h` where `h = log(n)`
+* there are two scenarios arising from said assumptions
+    * unsuccessful search
+    * successful search
+* **unsuccessful search scenario**
+    * recall: $C(n)$ is the expected number of comparisons (or expected depth of a BST)
+    * $C(n)$ is unnecessary here because the entire depth of the tree will be traversed (recall: `search` returns `false` when it gets to a leaf node w/o finding the target)
+    * comparison op takes constant time; each unsuccessful search takes as many comparisons as the height of the tree, therefore, it will take log(n) time to traverse the BST
+    * **conclusion: the time complexity of an unsuccessful search using the `search` method in the average case is proportional to the height of the BST, that is,** <br/><br/> $T(n) \in O(log \ n)$ <br/><br/>
+* **successful search scenario**
+    * $C(n)$ is necessary because the target is not necessarily located in a leaf node
+    * random variable: `i`
+        * let `i` be the number of nodes in the left sub-tree of the current node (the *"current node"* is the node whose key we are comparing to the target at the moment)
+        * recall: there are `n` nodes in the BST, therefore, the right sub-tree has `n-i-1` nodes (minus one because we are sitting on a node, that is, the left and right sub-trees must be connected to a node)
+    * probability
+        * each node has an equal chance of being compared to the target based on the assumptions above
+        * there are `n` nodes, `i` of which are on the left of the current one at any given time
+        * the probability that search algo goes to the left sub-tree *viz* <br/><br/> $\text{P(nodes on the left sub-tree are compared to target)}  = \frac{i}{n}$ <br/><br/> trivially, the probability that search algo goes to the right sub-tree is <br/><br/> $\text{P(nodes on the right sub-tree are compared to target)}  = \frac{n - i - 1}{n}$ <br/><br/>
+    * the recurrence relation is given by <br/><br/> $C(n) = 1 + \sum_{i=0}^{n-1}(\frac{i}{n} C(i) + \frac{(n - i - 1)}{n} C(n - i - 1))$ <br/><br/> **where**<br/> - $C(n)$ is the expected number of comparisons at the root <br/> - `1` represents a single comparison between the key of the root node and the target <br/> - the summation expression represents the **expected** number of comparisons in the next step <br/><br/> **use the assumptions above to simplify the expression** <br/> assumption one: tree is more-or-less balanced <br/> use this assumption to deduce that there are more-or-less equal nodes on either side of the current node and that the comparisons on the left sub-tree are more-or-less equal to those on the right <br/> $\frac{i}{n} \approx \frac{(n - i - 1)}{n}$  <br/>and  $C(i) \approx C(n - i - 1)$ <br/><br/> $C(n) \approx 1 + \frac{2}{n} \sum_{i=0}^{n-1}(C(i))$ <br/><br/> **use the continuous approximation of the expected value over all possible sub-tree sizes to replace the summation item then use the differential equation form and integrate both sides** <br/><br/> $C(n) \approx 1 +  \frac{2}{n}\int_{0}^{n} C(x) \ dx$ <br/><br/> $C'(n) \approx \frac{2}{n} C(n)$ <br/> and $\frac{dC}{C} = \frac{2}{n} dn$  <br/><br/> $\text{ln} \ C(n) = 2 \ \text{ln} \ n + C_1$ <br/><br/> **exponentiate both sides of the expression** <br/> $C(n) = e^{C_1} n^2$ we can express $C(n)$ as $2 \ \text{ln} \ n$ plus a constant that is not $C_1$<br/><br/> $C(n) = 2 \ \text{ln} \ n + C_2$ where $C_2 \neq C_1$<br/><br/> $\text{ln}(n) = log_2(n) \times \text{ln}(2)$ (natural log and base two log are asymptotically equivalent, that is, they grow at the same rate) <br/> and use $O(1)$ to approximate $C_2$ <br/><br/> $\therefore \ C(n) \approx 2 \ \text{ln}(n) \mp O(1) \approx 1.39 \ log_2(n)$
+    * **conclusion: the time complexity of a successful search using the `search` method in the average case is proportional to the height of the BST, that is,** <br/><br/> $T(n) \in O(log \ n)$ <br/><br/>
+#### 2.1.4. conclusion
+* **best case**
+    * the time complexity of the `search` method in the best case is constant, that is, <br/><br/> $T(n) \in O(1)$ <br/><br/>
+* **worst case**
+    * the time complexity of the `search` method in the worst case is proportional to the number of nodes in the BST, that is, <br/><br/> $T(n) \in O(n)$ <br/><br/>
+* **average case**
+    * the time complexity of an **unsuccessful** search using the `search` method in the average case is proportional to the height of the BST, that is, <br/><br/> $T(n) \in O(log \ n)$ <br/><br/>
+    * the time complexity of a **successful** search using the `search` method in the average case is proportional to the height of the BST, that is, <br/><br/> $T(n) \in O(log \ n)$ <br/><br/>
 
-* 5:10:51
+## 3. the `insert` method
+* **steps**
+    * start at the root node
+    * compare key of current node with target value
+        * explore the left sub-tree if target &lt; key<sub>node<sub>i</sub></sub> , else, explore right sub-tree
+        * stop gracefully if key<sub>node<sub>i</sub></sub> = target (recall: there can be no duplicates in a BST)
+    * insert a new node at `null` position when a leaf node or `null` position is reached
+* **example**
+    * target = 35 and the BST is the following
 
+    ```mermaid
+        %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+        graph TD
+            A((50)) --- B((31))
+            A --- C((66))
+            B --- D((20))
+            B --- E((41))
+            C --- F((60))
+            C --- G((80))
+            E --- H((32))
+            H --- I((34))
+            I --- J((36))
+            F --- K((65))
+            G --- L((75))
+            G --- M((85))
+    ```
+
+    * step one: start at the root node
+        * key = 50
+    * step two: compare key of current node with target value
+        * compare `50` with `35`
+        * 35 &lt; 50, therefore, repeat steps with left child node
+        * key = 31
+        * compare `31` with `35`
+        * 35 &gt; 31, therefore, repeat steps with right child node
+        * key = 41
+        * compare `41` with `35`
+        * 35 &lt; 41, therefore, repeat steps with left child node
+        * key = 32
+        * compare `32` with `35`
+        * 35 &gt; 32, therefore, repeat steps with right child node
+        * key = 34
+        * compare `34` with `35`
+        * 35 &gt; 34, therefore, repeat steps with right child node
+        * key = 36
+        * compare `36` with `35`
+        * 35 &lt; 36, therefore, repeat steps with right child node
+        * key = `null` (we have reached a leaf node); must insert at previous node's left or right
+            * 35 &lt; 36, therefore, point previous node's `left` to a new node with key `35`
+
+    ```mermaid
+        %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+        graph TD
+            A((50)) --- B((31))
+            A --- C((66))
+            B --- D((20))
+            B --- E((41))
+            C --- F((60))
+            C --- G((80))
+            E --- H((32))
+            H --- I((34))
+            I --- J((36))
+            F --- K((65))
+            G --- L((75))
+            G --- M((85))
+            J --- N((35))
+    ``` 
+
+### 3.1. time complexity analysis
+#### 3.1.1. worst case
+* **worst case** occurs when every node in the BST is compared to the target value
+    * see the example above
+* assumptions
+    * there are `n` nodes in the BST
+* comparison op takes constant time; there are `n` nodes, therefore, it will take `n` long to traverse the BST
+* **conclusion: the time complexity of the `insert` method in the worst case is proportional to the number of nodes in the BST, that is,** <br/><br/> $T(n) \in O(n)$ <br/><br/>
+#### 3.1.2. best case
+* **best case** occurs when the new node is inserted in one step
+    * example: it takes one step to make a node with key `52` in the BST above the right child of the root node
+* comparison op takes constant time; there is only one node to check, therefore, it takes constant time to find the target
+* **conclusion: the time complexity of the `insert` method in the best case is constant, that is,** <br/><br/> $T(n) \in O(1)$ <br/><br/>
+#### 3.1.3. average case
+* **average case** depends on the expected number of nodes compared, that is, <br/><br/> $T(n) \propto C(n)$ <br/><br/>
+* assumptions
+    * BST is randomly constructed and it has `n` nodes
+    * said randomly constructed tree is **relatively** balanced and its height is `h` where `h = log(n)`
+* the recurrence relation is given by <br/><br/> $C(n) = 1 + \sum_{i=0}^{n-1}(\frac{i}{n} C(i) + \frac{(n - i - 1)}{n} C(n - i - 1))$ <br/><br/> **where**<br/> - $C(n)$ is the expected number of comparisons at the root <br/> - `1` represents a single comparison between the key of the root node and the target <br/> - the summation expression represents the **expected** number of comparisons in the next step <br/><br/>
+> **muhimu tena sana!** <br/> - the assumptions and calculations made in this scenario follow those of a **successful** search in the average case <br/> - **see sub-section 2.1.3 above** <br/><br/> $C(n) \approx 2 \ \text{ln}(n) \mp O(1) \approx 1.39 \ log_2(n)$ <br/><br/>
+* **conclusion the time complexity of  the `insert` method in the average case is proportional to the height of the BST, that is, <br/><br/> $T(n) \in O(log \ n)$ <br/><br/>**
+#### 3.1.4. conclusion
+* **best case**
+    * the time complexity of the `insert` method in the best case is constant, that is, <br/><br/> $T(n) \in O(1)$ <br/><br/>
+* **worst case**
+    * the time complexity of the `insert` method in the worst case is proportional to the number of nodes in the BST, that is, <br/><br/> $T(n) \in O(n)$ <br/><br/>
+* **average case**
+    * the time complexity of the `insert` method in the average case is proportional to the height of the BST, that is, <br/><br/> $T(n) \in O(log \ n)$ <br/><br/>
+
+## 4. the `delete` method
+* 5:20:22
 
 </div>
 
