@@ -312,7 +312,128 @@ class BST:
     * the time complexity of the `insert` method in the average case is proportional to the height of the BST, that is, <br/><br/> $T(n) \in O(log \ n)$ <br/><br/>
 
 ## 4. the `delete` method
-* 5:20:22
+* there are three scenarios when deleting a node from a BST
+    * case one: target node is a leaf node
+    * case two: target node has one child
+    * case three: target node has two children
+### 4.1. case one: target node is a leaf node
+* deletion op is trivial: set the parent's reference to target node to `null`
+* **example**
+    * target = 36 and the BST is the following
+
+    ```mermaid
+        %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+        graph TD
+            A((50)) --- B((31))
+            A --- C((66))
+            B --- D((20))
+            B --- E((41))
+            C --- F((60))
+            C --- G((80))
+            E --- H((32))
+            H --- I((34))
+            I --- J((36))
+            F --- K((65))
+            G --- L((75))
+    ```
+
+    * step one: use `search` to locate the node whose key is the target
+        * see section 2 above
+    * step two: set the target's reference to said target to null
+        * target = `Node(36)`
+        * parent = `Node(34)`; target is parent's `right` reference
+        * set `Node(34)`'s `right` reference to `null`
+
+            ```plaintext
+                Node {
+                    val: 34
+                    left: null
+                    right: null
+                }
+            ```
+
+    * BST *viz*
+
+     ```mermaid
+        %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+        graph TD
+            A((50)) --- B((31))
+            A --- C((66))
+            B --- D((20))
+            B --- E((41))
+            C --- F((60))
+            C --- G((80))
+            E --- H((32))
+            H --- I((34))
+            F --- K((65))
+            G --- L((75))
+    ```
+
+    > **important!** <br/><br/> - node `36` will be in memory until the next clean-up/garbage collection <br/> - collection may be automatic or manual (`free` method in C, for example) <br/><br/>
+### 4.2. case two: target node has one child
+* replace the target node with its only child by adjusting the parent's refeence to by-pass the node
+    * set parent's reference to the target's child
+* **example**
+    * target = 34 and the BST is the following
+
+    ```mermaid
+        %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+        graph TD
+            A((50)) --- B((31))
+            A --- C((66))
+            B --- D((20))
+            B --- E((41))
+            C --- F((60))
+            C --- G((80))
+            E --- H((32))
+            H --- I((34))
+            I --- J((36))
+            F --- K((65))
+            G --- L((75))
+    ```
+
+    * step one: use `search` to locate the node whose key is the target
+        * see section 2 above
+    * step two: set parent's reference to the target's child
+        * target = `Node(34)`
+        * parent = `Node(32)`; target is parent's `right` reference
+        * child = `Node(36)`; target is parent's `right` reference
+            * `Node(36)` will be `Node(32)`'s `right` reference
+        * set `Node(32)`'s `right` reference to `Node(36)`
+
+            ```plaintext
+                Node {
+                    val: 32
+                    left: null
+                    right: Node(36)
+                }
+            ```
+
+    * BST *viz*
+
+     ```mermaid
+        %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+        graph TD
+            A((50)) --- B((31))
+            A --- C((66))
+            B --- D((20))
+            B --- E((41))
+            C --- F((60))
+            C --- G((80))
+            E --- H((32))
+            H --- J((36))
+            F --- K((65))
+            G --- L((75))
+    ```
+
+    > **important!** <br/><br/> - node `34` will be in memory until the next clean-up/garbage collection <br/><br/>
+### 4.3. case three: target node has two children
+* find the *in-order* successor or predecessor
+    * *in-order* successor is the smallest node in the right sub-tree
+    * *in-order* predecessor is the largest node in the left sub-tree
+* copy its value to the target node
+* delete said *in-order* successor or predecessor
+* **steps**
 
 </div>
 
