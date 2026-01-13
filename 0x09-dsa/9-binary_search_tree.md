@@ -430,10 +430,142 @@ class BST:
 ### 4.3. case three: target node has two children
 * find the *in-order* successor or predecessor
     * *in-order* successor is the smallest node in the right sub-tree
+        * right &rarr; left &rarr; left (keep left until you get to a node with no left child)
     * *in-order* predecessor is the largest node in the left sub-tree
-* copy its value to the target node
+        * * left &rarr; right &rarr; right (keep right until you get to a node with no right child)
+* copy said successor or predecessor's value to the target node
 * delete said *in-order* successor or predecessor
-* **steps**
+* **example 1**
+    * target = 66 and the BST is the following
+
+    ```mermaid
+        %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+        graph TD
+            A((50)) --- B((31))
+            A --- C((66))
+            B --- D((20))
+            B --- E((41))
+            C --- F((60))
+            C --- G((80))
+            E --- H((32))
+            H --- I((34))
+            I --- J((36))
+            F --- K((65))
+            G --- L((75))
+    ```
+
+    * step one: use `search` to locate the node whose key is the target
+        * see section 2 above
+    * step two: find the *in-order* successor or predecessor
+        * **in-order successor** is `75`
+        * **in-order predecessor** is `65`
+        * pick whichever you like; here we will pick `75`
+    * step three: copy said successor or predecessor's value to the target node
+
+        ```mermaid
+            %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+            graph TD
+                A((50)) --- B((31))
+                A --- C((75))
+                B --- D((20))
+                B --- E((41))
+                C --- F((60))
+                C --- G((80))
+                E --- H((32))
+                H --- I((34))
+                I --- J((36))
+                F --- K((65))
+                G --- L((75))
+        ```
+    
+    * step four: delete said successor or predecessor
+        * case one deletion since `75` is a leaf node
+
+        ```mermaid
+            %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+            graph TD
+                A((50)) --- B((31))
+                A --- C((75))
+                B --- D((20))
+                B --- E((41))
+                C --- F((60))
+                C --- G((80))
+                E --- H((32))
+                H --- I((34))
+                I --- J((36))
+                F --- K((65))
+        ```
+
+* **example 2**
+    * target = 31 and the BST is the following
+
+    ```mermaid
+        %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+        graph TD
+            A((50)) --- B((31))
+            A --- C((66))
+            B --- D((20))
+            B --- E((41))
+            C --- F((60))
+            C --- G((80))
+            E --- H((32))
+            H --- I((34))
+            I --- J((36))
+            F --- K((65))
+            G --- L((75))
+    ```
+
+    * step one: use `search` to locate the node whose key is the target
+        * see section 2 above
+    * step two: find the *in-order* successor or predecessor
+        * **in-order successor** is `32`
+        * **in-order predecessor** is `20`
+        * pick whichever you like; here we will pick `32`
+    * step three: copy said successor or predecessor's value to the target node
+
+        ```mermaid
+            %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+            graph TD
+                A((50)) --- B((32))
+                A --- C((66))
+                B --- D((20))
+                B --- E((41))
+                C --- F((60))
+                C --- G((80))
+                E --- H((32))
+                H --- I((34))
+                I --- J((36))
+                F --- K((65))
+                G --- L((75))
+        ```
+    
+    * step four: delete said successor or predecessor
+        * case two deletion since `32` is a node with one child
+
+         ```mermaid
+            %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+            graph TD
+                A((50)) --- B((32))
+                A --- C((66))
+                B --- D((20))
+                B --- E((41))
+                C --- F((60))
+                C --- G((80))
+                E --- I((34))
+                I --- J((36))
+                F --- K((65))
+                G --- L((75))
+        ```
+
+> **successor vs predecessor choice** <br/><br/> - no strict rule mandates one over the other; both maintain BST order since the successor exceeds the target and the predecessor falls below it <br/> - use the in-order successor when implementations or conventions favour it (example: LeetCode problem 450 where going right then left minimises code changes for many standard recursive deletion algorithms) <br/> - use  the in-order predecessor symmetrically when the left subtree is shallower or to balance traversal depth <br/> - there is no strict/significant performance difference in average case based on your choice
+
+​
+This approach often simplifies attaching the target's left subtree to the successor.
+​
+
+
+​
+Choose based on code simplicity or subtree structure, with successor more common in tutorials.
 
 </div>
 
