@@ -59,11 +59,11 @@
 ### 1.1. pseudo-code for a node
 ```plaintext
     class Node:
-        declare integer, `val`
+        declare integer, `key`
         declare Node, `left` and `right`
 
         Function Node(num):
-            val = num
+            key = num
             left = null
             right = null
 ```
@@ -103,8 +103,34 @@ class BST:
         
         return node
     
-    Function Delete(target):
-        ...
+    Function Delete(target): // public
+        return delete(root, target)
+    
+    Function delete(node, target): // private
+        if node is NULL:
+            return NULL
+        
+        // search for node to delete
+        if target < node.key:
+            node.left = delete(node.left, target)
+        else if target > node.key:
+            node.right = delete(node.right, target)
+        else:
+            if node.left == NULL: // cases 1 and 2
+                return node.right
+            else if node.right: // case 3
+                return node.left
+            successor = minValue(node.right)
+            node.key = successor.key
+            node.right = delete(node.right, successor.key)
+
+        return node
+
+    Function minValue(node):
+        while node.left:
+            node = node.left
+        
+        return node
     
 ```
 
@@ -337,8 +363,7 @@ class BST:
             G --- L((75))
     ```
 
-    * step one: use `search` to locate the node whose key is the target
-        * see section 2 above
+    * step one: locate the node whose key is the target
     * step two: set the target's reference to said target to null
         * target = `Node(36)`
         * parent = `Node(34)`; target is parent's `right` reference
@@ -392,8 +417,7 @@ class BST:
             G --- L((75))
     ```
 
-    * step one: use `search` to locate the node whose key is the target
-        * see section 2 above
+    * step one: locate the node whose key is the target
     * step two: set parent's reference to the target's child
         * target = `Node(34)`
         * parent = `Node(32)`; target is parent's `right` reference
@@ -432,7 +456,7 @@ class BST:
     * *in-order* successor is the smallest node in the right sub-tree
         * right &rarr; left &rarr; left (keep left until you get to a node with no left child)
     * *in-order* predecessor is the largest node in the left sub-tree
-        * * left &rarr; right &rarr; right (keep right until you get to a node with no right child)
+        * left &rarr; right &rarr; right (keep right until you get to a node with no right child)
 * copy said successor or predecessor's value to the target node
 * delete said *in-order* successor or predecessor
 * **example 1**
@@ -454,8 +478,7 @@ class BST:
             G --- L((75))
     ```
 
-    * step one: use `search` to locate the node whose key is the target
-        * see section 2 above
+    * step one: locate the node whose key is the target
     * step two: find the *in-order* successor or predecessor
         * **in-order successor** is `75`
         * **in-order predecessor** is `65`
@@ -515,8 +538,7 @@ class BST:
             G --- L((75))
     ```
 
-    * step one: use `search` to locate the node whose key is the target
-        * see section 2 above
+    * step one: locate the node whose key is the target
     * step two: find the *in-order* successor or predecessor
         * **in-order successor** is `32`
         * **in-order predecessor** is `20`
@@ -557,15 +579,41 @@ class BST:
                 G --- L((75))
         ```
 
-> **successor vs predecessor choice** <br/><br/> - no strict rule mandates one over the other; both maintain BST order since the successor exceeds the target and the predecessor falls below it <br/> - use the in-order successor when implementations or conventions favour it (example: LeetCode problem 450 where going right then left minimises code changes for many standard recursive deletion algorithms) <br/> - use  the in-order predecessor symmetrically when the left subtree is shallower or to balance traversal depth <br/> - there is no strict/significant performance difference in average case based on your choice
+> **successor vs predecessor choice** <br/><br/> - no strict rule mandates one over the other; both maintain BST order since the successor exceeds the target and the predecessor falls below it <br/> - use the in-order successor when implementations or conventions favour it (example: LeetCode problem 450 where going right then left minimises code changes for many standard recursive deletion algorithms) <br/> - use  the in-order predecessor symmetrically when the left subtree is shallower or to balance traversal depth <br/> - there is no strict/significant performance difference in average case based on your choice <br/><br/>
 
-​
-This approach often simplifies attaching the target's left subtree to the successor.
-​
+### 4.4. time complexity
+#### 4.4.1. worst case
+* **worst case** occurs when every node in the BST is compared to the target value
+* assumptions
+    * there are `n` nodes in the BST
+* comparison op takes constant time; there are `n` nodes, therefore, it will take `n` long to traverse the BST
+* **conclusion: the time complexity of the `delete` method in the worst case is proportional to the number of nodes in the BST, that is,** <br/><br/> $T(n) \in O(n)$ <br/><br/>
+#### 4.4.2. best case
+* **best case** occurs when the target node is deleted in one step
+    * example: it takes one step to delete a root node in a BST that has two nodes in total
+* assumptions
+    * the search op takes relatively constant time
+* comparison op takes constant time; there is only one node to check, therefore, it takes constant time to find the target
+* **conclusion: the time complexity of the `delete` method in the best case is constant, that is,** <br/><br/> $T(n) \in O(1)$ <br/><br/>
+#### 4.4.3. average case
+* **average case** depends on the expected number of nodes compared, that is, <br/><br/> $T(n) \propto C(n)$ <br/><br/>
+* assumptions
+    * BST is randomly constructed and it has `n` nodes
+    * said randomly constructed tree is **relatively** balanced and its height is `h` where `h = log(n)`
+* the recurrence relation is given by <br/><br/> $C(n) = 1 + \sum_{i=0}^{n-1}(\frac{i}{n} C(i) + \frac{(n - i - 1)}{n} C(n - i - 1))$ <br/><br/> **where**<br/> - $C(n)$ is the expected number of comparisons at the root <br/> - `1` represents a single comparison between the key of the root node and the target <br/> - the summation expression represents the **expected** number of comparisons in the next step <br/><br/>
+> ***muito* freaking *importante*!** <br/> - the assumptions and calculations made in this scenario follow those of a **successful** search in the average case <br/> - **see sub-section 2.1.3 above** <br/><br/> $C(n) \approx 2 \ \text{ln}(n) \mp O(1) \approx 1.39 \ log_2(n)$ <br/><br/>
+* **conclusion the time complexity of  the `delete` method in the average case is proportional to the height of the BST, that is, <br/><br/> $T(n) \in O(log \ n)$ <br/><br/>**
+#### 4.4.4. conclusion
+* **best case**
+    * the time complexity of the `delete` method in the best case is constant, that is, <br/><br/> $T(n) \in O(1)$ <br/><br/>
+* **worst case**
+    * the time complexity of the `delete` method in the worst case is proportional to the number of nodes in the BST, that is, <br/><br/> $T(n) \in O(n)$ <br/><br/>
+* **average case**
+    * the time complexity of the `delete` method in the average case is proportional to the height of the BST, that is, <br/><br/> $T(n) \in O(log \ n)$ <br/><br/>
 
+## 5. traversal
+* 5:35:00
 
-​
-Choose based on code simplicity or subtree structure, with successor more common in tutorials.
 
 </div>
 
