@@ -485,39 +485,39 @@ class BST:
         * pick whichever you like; here we will pick `75`
     * step three: copy said successor or predecessor's value to the target node
 
-        ```mermaid
-            %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
-            graph TD
-                A((50)) --- B((31))
-                A --- C((75))
-                B --- D((20))
-                B --- E((41))
-                C --- F((60))
-                C --- G((80))
-                E --- H((32))
-                H --- I((34))
-                I --- J((36))
-                F --- K((65))
-                G --- L((75))
-        ```
+    ```mermaid
+        %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+        graph TD
+            A((50)) --- B((31))
+            A --- C((75))
+            B --- D((20))
+            B --- E((41))
+            C --- F((60))
+            C --- G((80))
+            E --- H((32))
+            H --- I((34))
+            I --- J((36))
+            F --- K((65))
+            G --- L((75))
+    ```
     
     * step four: delete said successor or predecessor
         * case one deletion since `75` is a leaf node
 
-        ```mermaid
-            %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
-            graph TD
-                A((50)) --- B((31))
-                A --- C((75))
-                B --- D((20))
-                B --- E((41))
-                C --- F((60))
-                C --- G((80))
-                E --- H((32))
-                H --- I((34))
-                I --- J((36))
-                F --- K((65))
-        ```
+    ```mermaid
+        %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+        graph TD
+            A((50)) --- B((31))
+            A --- C((75))
+            B --- D((20))
+            B --- E((41))
+            C --- F((60))
+            C --- G((80))
+            E --- H((32))
+            H --- I((34))
+            I --- J((36))
+            F --- K((65))
+    ```
 
 * **example 2**
     * target = 31 and the BST is the following
@@ -545,39 +545,39 @@ class BST:
         * pick whichever you like; here we will pick `32`
     * step three: copy said successor or predecessor's value to the target node
 
-        ```mermaid
-            %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
-            graph TD
-                A((50)) --- B((32))
-                A --- C((66))
-                B --- D((20))
-                B --- E((41))
-                C --- F((60))
-                C --- G((80))
-                E --- H((32))
-                H --- I((34))
-                I --- J((36))
-                F --- K((65))
-                G --- L((75))
-        ```
+    ```mermaid
+        %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+        graph TD
+            A((50)) --- B((32))
+            A --- C((66))
+            B --- D((20))
+            B --- E((41))
+            C --- F((60))
+            C --- G((80))
+            E --- H((32))
+            H --- I((34))
+            I --- J((36))
+            F --- K((65))
+            G --- L((75))
+    ```
     
     * step four: delete said successor or predecessor
         * case two deletion since `32` is a node with one child
 
-         ```mermaid
-            %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
-            graph TD
-                A((50)) --- B((32))
-                A --- C((66))
-                B --- D((20))
-                B --- E((41))
-                C --- F((60))
-                C --- G((80))
-                E --- I((34))
-                I --- J((36))
-                F --- K((65))
-                G --- L((75))
-        ```
+    ```mermaid
+        %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+        graph TD
+            A((50)) --- B((32))
+            A --- C((66))
+            B --- D((20))
+            B --- E((41))
+            C --- F((60))
+            C --- G((80))
+            E --- I((34))
+            I --- J((36))
+            F --- K((65))
+            G --- L((75))
+    ```
 
 > **successor vs predecessor choice** <br/><br/> - no strict rule mandates one over the other; both maintain BST order since the successor exceeds the target and the predecessor falls below it <br/> - use the in-order successor when implementations or conventions favour it (example: LeetCode problem 450 where going right then left minimises code changes for many standard recursive deletion algorithms) <br/> - use  the in-order predecessor symmetrically when the left subtree is shallower or to balance traversal depth <br/> - there is no strict/significant performance difference in average case based on your choice <br/><br/>
 
@@ -611,8 +611,312 @@ class BST:
 * **average case**
     * the time complexity of the `delete` method in the average case is proportional to the height of the BST, that is, <br/><br/> $T(n) \in O(log \ n)$ <br/><br/>
 
-## 5. traversal
-* 5:35:00
+## 5. in-order traversal
+### 5.1. pseudo-code
+
+```plaintext
+    // assume type `Node` is already defined
+    // assume a BST wose root is a variable, `root`, of type `Node` exists
+    // see sub-section 1.2 above
+
+    Function InOrderTraversal:
+        if node == NULL;
+            return
+        
+        InOrderTraversal(node.left)
+        visit(node)
+        InOrderTraversal(node.right)
+
+    Function visit: // print key, append said key to an array etc...
+        ...
+
+    // call the function
+    InOrderTraversal()
+```
+
+### 5.2. steps
+* start at root node
+* traverse left sub-tree recursively
+* visit/process current node
+* traverse right sub-tree recursively
+
+### 5.3. example
+* traverse the following BST and append the keys to an array
+
+```mermaid
+    %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+    graph TD
+        A((50)) --- B((31))
+        A --- C((75))
+        B --- D((20))
+        B --- E((41))
+        C --- F((60))
+        C --- G((80))
+        E --- H((32))
+        H --- I((34))
+        I --- J((36))
+        F --- K((65))
+```
+
+* have an empty array of size `n` where `n` is hte number of nodes in the BST
+    * `n` = 13
+    * array *viz*
+
+    |key||||||||||||||
+    |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+    |idx|0|1|2|3|4|5|6|7|8|9|10|11|12|
+* call `InOrderTraversal(50)`
+    * call `InOrderTraversal(31)`
+        * call `InOrderTraversal(20)`
+            * call `visit(20)`
+                * append key 20 to array
+        * call `visit(31)`
+            * append key 31 to array
+    * call `InOrderTraversal(41)`
+        * call `InOrderTraversal(32)`
+            * call `visit(32)`
+                * append key 32 to array
+        * call `InOrderTraversal(34)`
+            * call `visit(34)`
+                * append key 34 to array
+        * call `InOrderTraversal(36)`
+            * call `visit(36)`
+                * append key 36 to array
+        * call `visit(41)`
+            * append key 41 to array
+    * call `visit(50)`
+        * append key 50 to array
+    * call `InOrderTraversal(66)`
+        * call `InOrderTraversal(60)`
+            * call `visit(60)`
+                * append key 60 to array
+        * call `InOrderTraversal(65)`
+            * call `visit(65)`
+                * append key 65 to array
+        * call `visit(66)`
+            * append key 66 to array
+    * call `InOrderTraversal(80)`
+        * call `InOrderTraversal(75)`
+            * call `visit(75)`
+                * append key 75 to array
+        * call `InOrderTraversal(85)`
+            * call `visit(85)`
+                * append key 85 to array
+        * call `visit(80)`
+            * append key 80 to array
+    * job done; array *viz*
+
+    |key|20|31|32|34|36|41|50|60|65|66|75|80|85|
+    |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+    |idx|0|1|2|3|4|5|6|7|8|9|10|11|12|
+
+> **in-order sorting creates a sorted (ascending order) array**
+## 6. pre-order traversal
+### 6.1. pseudo-code
+
+```plaintext
+    // assume type `Node` is already defined
+    // assume a BST wose root is a variable, `root`, of type `Node` exists
+    // see sub-section 1.2 above
+
+    Function PreOrderTraversal:
+        if node == NULL;
+            return
+        
+        visit(node)
+        PreOrderTraversal(node.left)
+        PreOrderTraversal(node.right)
+
+    Function visit: // print key, append said key to an array etc...
+        ...
+
+    // call the function
+    PreOrderTraversal()
+```
+
+### 6.2. steps
+* start at root node
+* visit/process current node
+* traverse left sub-tree recursively
+* traverse right sub-tree recursively
+
+### 6.3. example
+* traverse the following BST and append the keys to an array
+
+```mermaid
+    %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+    graph TD
+        A((50)) --- B((31))
+        A --- C((75))
+        B --- D((20))
+        B --- E((41))
+        C --- F((60))
+        C --- G((80))
+        E --- H((32))
+        H --- I((34))
+        I --- J((36))
+        F --- K((65))
+```
+
+* have an empty array of size `n` where `n` is hte number of nodes in the BST
+    * `n` = 13
+    * array *viz*
+
+    |key||||||||||||||
+    |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+    |idx|0|1|2|3|4|5|6|7|8|9|10|11|12|
+* call `PreOrderTraversal(50)`
+    * call `visit(50)`
+        * append key 50 to array
+    * call `PreOrderTraversal(31)`
+        * call `visit(31)`
+            * append key 31 to array
+        * call `PreOrderTraversal(20)`
+            * call `visit(20)`
+                * append key 20 to array
+    * call `PreOrderTraversal(41)`
+        * call `visit(41)`
+            * append key 41 to array
+        * call `PreOrderTraversal(32)`
+            * call `visit(32)`
+                * append key 32 to array
+        * call `PreOrderTraversal(34)`
+            * call `visit(34)`
+                * append key 34 to array
+        * call `PreOrderTraversal(36)`
+            * call `visit(36)`
+                * append key 36 to array
+    * call `PreOrderTraversal(66)`
+        * call `visit(66)`
+            * append key 66 to array
+        * call `PreOrderTraversal(60)`
+            * call `visit(60)`
+                * append key 60 to array
+        * call `PreOrderTraversal(65)`
+            * call `visit(65)`
+                * append key 65 to array
+    * call `PreOrderTraversal(80)`
+        * call `visit(80)`
+            * append key 80 to array
+        * call `PreOrderTraversal(75)`
+            * call `visit(75)`
+                * append key 75 to array
+        * call `PreOrderTraversal(85)`
+            * call `visit(85)`
+                * append key 85 to array
+    * job done; array *viz*
+
+    |key|50|31|20|41|32|34|36|60|66|60|80|75|85|
+    |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+    |idx|0|1|2|3|4|5|6|7|8|9|10|11|12|           
+    
+> **useful when you need to capture the tree structure for later reconstruction and/or process root-first tasks**
+
+## 7. post-order traversal
+### 7.1. pseudo-code
+
+```plaintext
+    // assume type `Node` is already defined
+    // assume a BST wose root is a variable, `root`, of type `Node` exists
+    // see sub-section 1.2 above
+
+    Function PostOrderTraversal:
+        if node == NULL;
+            return
+        
+        PostOrderTraversal(node.left)
+        PostrderTraversal(node.right)
+        visit(node)
+
+    Function visit: // print key, append said key to an array etc...
+        ...
+
+    // call the function
+    PostrderTraversal()
+```
+
+### 7.2. steps
+* start at root node
+* traverse left sub-tree recursively
+* traverse right sub-tree recursively
+* visit/process current node
+
+### 7.3. example
+* traverse the following BST and append the keys to an array
+
+```mermaid
+    %%{ init: { 'flowchart': { 'curve': 'stepAfter' } } }%%
+    graph TD
+        A((50)) --- B((31))
+        A --- C((75))
+        B --- D((20))
+        B --- E((41))
+        C --- F((60))
+        C --- G((80))
+        E --- H((32))
+        H --- I((34))
+        I --- J((36))
+        F --- K((65))
+```
+
+* have an empty array of size `n` where `n` is hte number of nodes in the BST
+    * `n` = 13
+    * array *viz*
+
+    |key||||||||||||||
+    |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+    |idx|0|1|2|3|4|5|6|7|8|9|10|11|12|
+* call `PostOrderTraversal(50)`
+    * call `PostOrderTraversal(31)`
+        * call `PostOrderTraversal(20)`
+            * call `visit(20)`
+                * append key 20 to array
+            * call `PostOrderTraversal(41)`
+                * call `PostOrderTraversal(32)`
+                    * call `PostOrderTraversal(34)`
+                        * call `PostOrderTraversal(36)`
+                            * call `visit(36)`
+                                * append key 36 to array
+                        * call `visit(34)`
+                            * append key 34 to array
+                    * call `visit(32)`
+                        * append key 32 to array
+                * call `visit(41)`
+                    * append key 41 to array
+            * call `visit(31)`
+                * append key 31 to array   
+    * call `PostOrderTraversal(66)`
+        * call `PostOrderTraversal(60)`
+            * call `PostOrderTraversal(65)`
+                * call `visit(65)`
+                    * append key 65 to array
+            * call `visit(60)`
+                * append key 60 to array 
+        * call `PostOrderTraversal(80)`
+            * call `PostOrderTraversal(75)`
+                * call `visit(75)`
+                    * append key 75 to array
+            * call `PostOrderTraversal(85)`
+                * call `visit(85)`
+                    * append key 85 to array
+            * call `visit(80)`
+                * append key 80 to array   
+        * call `visit(66)`
+            * append key 66 to array
+    * call `visit(50)`
+            * append key 50 to array
+    * job done; array *viz*
+
+    |key|20|36|34|32|41|31|65|60|75|85|80|66|50|
+    |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+    |idx|0|1|2|3|4|5|6|7|8|9|10|11|12|  
+
+> **useful for tear-down and/or bottom-up tasks**
+
+## 8. time complexity of traversal methods
+* is the same regardless of method because algo needs to visit all the nodes once and only once
+    * node look-up takes constant time; there are `n` nodes, therefore, it will take `n` long to traverse the BST
+* **conclusion: the time complexity of the any method in the worst, best and average case is proportional to the number of nodes in the BST, that is,** <br/><br/> $T(n) \in O(n)$ <br/><br/>
 
 
 </div>
