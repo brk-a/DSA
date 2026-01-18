@@ -31,7 +31,7 @@
 * find out the cost of each op
 * compute the total cost
 * divide total cost by `n`
-### example: incrementing a binary counter
+### 1.2. example: incrementing a binary counter
 * say we have an n-bit binary counter initialised to all zeroes
 * said counter supports `Increment()` op that adds one to the counter *viz*: flip the rightmost bit to one if it is zero &rarr; O(1), else, flip said bit to zero and propagate the carry to the left by flipping more bits
     * each flip is a cost of the `Increment()` op
@@ -72,10 +72,96 @@
         * total cost is approximately $2n \in O(n)$
         * there are $n$ ops
         * divide the cost by the number of ops <br/><br> $\frac{O(n)}{n} = O(1)$ <br/><br/>
-        * the amortised time complexity is constant <br/><br/> $\text{amortised time complexity} \in O(1)$ <br/><br/>
+        * **conclusion: the amortised time complexity is constant** <br/><br/> $\text{amortised time complexity} \in O(1)$ <br/><br/>
 ## 2. accounting method
-* 5:55:21
+### 2.0. pre-amble
+* some ops appear to steal time from the algo; others appear to be doing nothing
+* what if we could assign a *"fair"* cost to each op?
+* as it happens, we can; enter the *accounting method*...
+### 2.1. WTF if the accounting method?
+* an approach to amortised analysis where we analyse the overall cost of a sequence of ops by assigning **"credits"** to each op
+* the idea is to spread out the cost of the expensive ops to multiple cheaper one; the end result is that the costs are "fairly" distributed
+### 2.2. steps
+* **step one:** define a cost scheme
+    * define an amortised cost (a fixed cost) to each type of op
+    * maintain an *"account"* or *"credit"*
+    * save extra cost as credit when an op is overcharged
+    * use said credit when an expensive op occurs
+* **step two:** check validity of said scheme
+    * charge said amortised cost to each op
+    * if cost<sub>amortised</sub> &gt; cost<sub>actual</sub>, op is overcharged; store the difference as credit
+    * if cost<sub>amortised</sub> &lt; cost<sub>actual</sub>, op is expensive; withdraw stored credits to make up for the difference
+    * make sure $\sum \text{amortised cost} \geq \sum \text{actual cost}$ always, else, go back to step one
+* **step three:** calculate average cost per op
+    * $\text{cost}_{average} = \frac{\sum \text{cost}_{amortised}}{\text{no. of ops}}$
+### 2.3. example: stack ops
+* say you have a stack, `S`, of length `n` that has the following (in first-to-last order): 1, 4, 3, 8, 6, 2
+    * here, `n` = 6
+* there are two main ops in a stack: `push` and `pop`
+    * `push` adds one element to the top of the stack
+    * `pop` removes one element; the one at the top of the stack (LIFO; this is the defining feature of a stack)
+* there is one other op relevant to thei example: `multipop`
+    * `multipop` simply pops at most `k` elements while the stack is not empty
+
+    ```plaintext
+        // assume a stack, `Stack`, with method `Pop` exists 
+        Function MultiPop(S, k):
+            while S is not empty && k > 0:
+                Pop(S)
+                k -= 1
+    ```
+
+* apply the steps...
+    * **step one:** define a cost scheme
+        * this is the cost schedule of each op
+
+        |op type|purpose|cost|
+        |:---|:---|:---|
+        |Push(S, x)|add a single element, `x`, to S|O(1)|
+        |Pop(S)|remove a single element, `x`, from the top of S|O(1)|
+        |MultiPop(S, k)|pop at most `k` elements from the top of S|O(min(\|S\|, k))|
+
+        * we can tell that the worst-case scenario will be $T(n) \in O(n)$ because of $max(|S|) = n$
+            * however, this only occurs when `MultiPop(S, n)` is called when `S` is full
+            * a full stack means that `Push(S, x)` was called at least `n` times 
+        * define a cost scheme
+
+            |op type|actual cost|amortised cost|reason for amortised cost|
+            |:---|:---:|:---:|:---|
+            |Push(S, x)|1|2|`Pop` and `MultiPop` will have zero cost on an empty stack|
+            |Pop(S)|1|0|*ex nihilo nihil fit*|
+            |MultiPop(S, k)|min(\|S\|, k)|0|*ditto*|
+    * **step two:** check validity of said scheme
+        * charge/credit table
+
+            |op type|charge|credit|total credit|
+            |:---|:---:|:---:|:---:|
+            |Push(S, 1)|2|1|1|
+            |Push(S, 4)|2|1|2|
+            |Push(S, 3)|2|1|3|
+            |Push(S, 8)|2|1|4|
+            |Push(S, 6)|2|1|5|
+            |Push(S, 2)|2|1|6|
+            |Pop(S)|0|-1|5|
+            |MultiPop(S, 4)|0|-4|1|
+            |MultiPop(S, 3)|0|-1|0|
+
+        * the actual-amortised cost table *viz*
+
+            |op type|total actual cost|total amortised cost|
+            |:---|:---:|:---:|
+            |Push(S, x)|n|2n|
+            |Pop(S) / MultiPop(S, k)|n|0|
+            |Total|2n|2n|
+
+        * we see clearly that $\sum \text{amortised cost} \geq \sum \text{actual cost}$ because 2n &ge; 2n
+        
+        * **conslusion: charging 2 to `Push` and zero to `Pop` and `MultiPop` works because the total credit never goes below zero and the sum of amortised cost is &ge; that of actual cost; cost scheme is valid** ✅
+    * **step three:** calculate average cost per op
+        * $\text{cost}_{average} = \frac{\sum \text{cost}_{amortised}}{\text{no. of ops}}$ <br/><br/> we know that $(n+1) \leq \ \text{total no. of ops} \ \leq 2n$ <br/>calculate avg cost for both extremes <br/><br/> 1. $\frac{2n}{n+1} \approx 2$ <br/><br/> 2. $\frac{2n}{2n} = 1$ <br/><br/> the average cost in both scenarios is a constant (a number independent of $n$), therefore, average cost is in $O(1)$ <br/><br/>
+        * **conclusion: the amortised time complexity is constant** <br/><br/> $\text{amortised time complexity} \in O(1)$ <br/><br/>
 ## 3. potential method
+* 6:08:43
 
 </div>
 
