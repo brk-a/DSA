@@ -19,8 +19,10 @@ def count_vowel_recursive(word: str) -> list[tuple[str, int]]:
 
     VOWELS = "aeiou"
     n = len(word)
+
+    # TODO: recurse
     
-    return [("Working on it", -1)]
+    return [("Working on it", -1)] # TODO: return proper values
 
 if __name__ == "__main__":
     tests = [
