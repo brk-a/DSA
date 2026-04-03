@@ -83,7 +83,7 @@ if __name__ == "__main__":
         },
     ]
 
-    print("=================== 46. Minimum increment operations to make array elements equal even/odd problem ===================")
+    print("=================== 47. Minimum increment operations to make array elements equal even/odd problem ===================")
     for name, func in [("brute force", minimum_increment_ops_elems_odd_even_brute_force), ("prefix-suffix", minimum_increment_ops_elems_odd_even_prefix_suffix)]:
         print(f"=================== method: {name} ===================")
         for test in tests:
