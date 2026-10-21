@@ -1,0 +1,7 @@
+settings.json
+.vscode
+
+.env
+.env*
+
+.class
